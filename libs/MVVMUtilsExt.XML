@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MVVMUtilsExt</name>
+    </assembly>
+    <members>
+        <member name="P:MVVMUtils.EventToCommand.Command">
+            <summary>
+            Default null
+            </summary>
+        </member>
+        <member name="P:MVVMUtils.EventToCommand.CommandParameter">
+            <summary>
+            Default null
+            </summary>
+        </member>
+        <member name="P:MVVMUtils.EventToCommand.ToggleIsEnabled">
+            <summary>
+            Default false
+            </summary>
+        </member>
+        <member name="P:MVVMUtils.EventToCommand.HandleRouted">
+            <summary>
+            Default HowHandleRouted.DontHandle
+            </summary>
+        </member>
+        <member name="P:MVVMUtils.EventToCommand.PassEventArgs">
+            <summary>
+            Default false
+            </summary>
+        </member>
+        <member name="F:MVVMUtils.EventToCommand.HowHandleRouted.DontHandle">
+            <summary>
+            Don't handle event by setting e.Handled to true
+            </summary>
+        </member>
+        <member name="F:MVVMUtils.EventToCommand.HowHandleRouted.HandleBefore">
+            <summary>
+            Handle event before executing command by setting e.Handled to true
+            </summary>
+        </member>
+        <member name="F:MVVMUtils.EventToCommand.HowHandleRouted.HandleAfter">
+            <summary>
+            Handle event after executing command by setting e.Handled to true
+            </summary>
+        </member>
+    </members>
+</doc>

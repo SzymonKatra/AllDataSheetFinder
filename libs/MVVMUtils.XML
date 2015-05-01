@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MVVMUtils</name>
+    </assembly>
+    <members>
+        <member name="T:MVVMUtils.Collections.PerItemObservableCollection`1">
+            <summary>
+            Collection which can notify about changed propety of item in this collection via event in class
+            </summary>
+            <typeparam name="T">Type</typeparam>
+        </member>
+        <member name="T:MVVMUtils.Collections.SynchronizedObservableCollection`2">
+            <summary>
+            ObservableCollection which is synchronised with Model collection.
+            Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+            To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
+            </summary>
+            <typeparam name="T">ViewModel type</typeparam>
+            <typeparam name="M">Model type</typeparam>
+        </member>
+        <member name="T:MVVMUtils.Collections.SynchronizedObservableCollection`3">
+            <summary>
+            ObservableCollection which is synchronised with Model collection.
+            Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+            To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
+            </summary>
+            <typeparam name="T">ViewModel type</typeparam>
+            <typeparam name="M">Model type</typeparam>
+            <typeparam name="MC">Model collection</typeparam>
+        </member>
+        <member name="P:MVVMUtils.Collections.SynchronizedObservableCollection`3.ModelCollection">
+            <summary>
+            Shouldn't be used to modify collection. If it required, first modify collecion(Model) and call ResynchronizeWithModel method.
+            Should be used to get new model collection to set it in backend.
+            </summary>
+        </member>
+        <member name="T:MVVMUtils.Collections.SynchronizedPerItemObservableCollection`2">
+            <summary>
+            ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class.
+            Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+            To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
+            </summary>
+            <typeparam name="T">ViewModel type</typeparam>
+            <typeparam name="M">Model type</typeparam>
+        </member>
+        <member name="T:MVVMUtils.Collections.SynchronizedPerItemObservableCollection`3">
+            <summary>
+            ObservableCollection which is synchronised with Model collection and can notify about changed property of item in this collection via event in class.
+            Remember that synchronization is only in one-way. Changes made in ViewModel appears in Model but not vice versa.
+            To synchronize ViewModel with Model use ResynchronizeWithModel method, but in general you should make changes only in ViewModel.
+            </summary>
+            <typeparam name="T">ViewModel type</typeparam>
+            <typeparam name="M">Model type</typeparam>
+            <typeparam name="MC">Model collection</typeparam>
+        </member>
+        <member name="T:MVVMUtils.Database.DatabaseContext`2">
+            <summary>
+            This class works good with fastJSON
+            </summary>
+            <typeparam name="VM">ViewModel type</typeparam>
+            <typeparam name="M">Model type</typeparam>
+        </member>
+        <member name="T:MVVMUtils.IModelExposable`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="M">Model type</typeparam>
+        </member>
+        <member name="T:MVVMUtils.MessageBoxSuper">
+            <summary>
+            Interaction logic for MessageBoxSuper.xaml
+            </summary>
+            <summary>
+            MessageBoxSuper
+            </summary>
+        </member>
+        <member name="M:MVVMUtils.MessageBoxSuper.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:MVVMUtils.SelectionParser">
+            <summary>
+            Utility for parsing user-typed ranges.
+            Uses comma (,) and semicolon (;) for separating ranges
+            Uses dash (-) for specifing ranges
+            
+            Examples:
+            1-3;5-103
+            </summary>
+        </member>
+    </members>
+</doc>
