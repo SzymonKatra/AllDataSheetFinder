@@ -29,7 +29,7 @@ namespace AllDataSheetFinder
         }
         public static MessageBoxSuperButton MessageBox(object viewModel, string text, MessageBoxSuperPredefinedButtons buttons)
         {
-            return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("lang_AppName"), buttons);
+            return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("StringAppName"), buttons);
         }
     }
 }
