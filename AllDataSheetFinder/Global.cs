@@ -17,7 +17,18 @@ namespace AllDataSheetFinder
             set { m_dialogs = value; }
         }
 
-        public Global()
+        private static MainViewModel m_main;
+        public static MainViewModel Main
+        {
+            get { return m_main; }
+            set
+            {
+                if (m_main != null) throw new InvalidOperationException("Main already set");
+                m_main = value;
+            }
+        }
+
+        static Global()
         {
             m_dialogs = new DialogService();
         }

@@ -23,6 +23,13 @@ namespace AllDataSheetFinder
         public MainWindow()
         {
             InitializeComponent();
+
+            MainViewModel main = new MainViewModel();
+            Global.Main = main;
+
+            this.DataContext = main;
+
+            Global.Dialogs.Register(this, main);
         }
     }
 }
