@@ -13,5 +13,8 @@ namespace AllDataSheetFinder.SiteParser
         public string PartName;
         public string PartDescription;
         public string DatasheetSiteLink;
+
+        public string DatasheetPdfSiteLink;
+        public string DirectDatasheetLink;
     }
 }

@@ -39,6 +39,17 @@ namespace AllDataSheetFinder
             {
                 Console.WriteLine(item.PartName + " - " + item.PartDescription + " - " + item.Manufacturer + " - " + item.ManufacturerImageLink + " - " + item.DatasheetSiteLink);
             }
+
+            PartInfo p = x[0];
+
+            SiteActions.FindDatasheetDirectLink(ref p);
+
+            Console.WriteLine(p.DirectDatasheetLink);
+
+            System.Net.WebClient cli = new System.Net.WebClient();
+            cli.Headers.Add("user-agent", "AllDataSheetFinder");
+            cli.Headers.Add("Referer", p.DatasheetPdfSiteLink);
+            cli.DownloadFile(p.DirectDatasheetLink, @"C:\Users\Szymon\Desktop\datasheetl293d.pdf");
         }
         private bool CanSearch(object param)
         {
