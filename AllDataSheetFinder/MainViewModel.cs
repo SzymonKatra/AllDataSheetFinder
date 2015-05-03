@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.IO;
 using MVVMUtils;
-using AllDataSheetFinder.SiteParser;
 
 namespace AllDataSheetFinder
 {
@@ -29,27 +29,24 @@ namespace AllDataSheetFinder
             get { return m_searchCommand; }
         }
 
-        private void Search(object param)
+        private async void Search(object param)
         {
-            //string x = SiteActions.Search(m_searchField);
-            //Console.WriteLine(x);
-            var x = SiteActions.Search(m_searchField);
-            Console.WriteLine(x.Count);
-            foreach (var item in x)
+            var x = await AllDataSheetPart.SearchAsync(m_searchField);
+            Console.WriteLine("znaleziono");
+            await Task.Run(() => 
             {
-                Console.WriteLine(item.PartName + " - " + item.PartDescription + " - " + item.Manufacturer + " - " + item.ManufacturerImageLink + " - " + item.DatasheetSiteLink);
-            }
-
-            PartInfo p = x[0];
-
-            SiteActions.FindDatasheetDirectLink(ref p);
-
-            Console.WriteLine(p.DirectDatasheetLink);
-
-            System.Net.WebClient cli = new System.Net.WebClient();
-            cli.Headers.Add("user-agent", "AllDataSheetFinder");
-            cli.Headers.Add("Referer", p.DatasheetPdfSiteLink);
-            cli.DownloadFile(p.DirectDatasheetLink, @"C:\Users\Szymon\Desktop\datasheetl293d.pdf");
+                using (Stream stream = x.ElementAt(0).DownloadDatasheet())
+                {
+                    using (FileStream file = new FileStream(@"C:\Users\Szymon\Desktop\ds.pdf", FileMode.OpenOrCreate))
+                    {
+                        byte[] buffer = new byte[4096];
+                        int len;
+                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
+                    }
+                }
+            });
+            Console.WriteLine("pobrano");
+            
         }
         private bool CanSearch(object param)
         {

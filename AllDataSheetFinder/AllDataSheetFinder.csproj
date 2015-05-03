@@ -70,8 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="SiteParser\PartInfo.cs" />
-    <Compile Include="SiteParser\SiteActions.cs" />
+    <Compile Include="AllDataSheetPart.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
