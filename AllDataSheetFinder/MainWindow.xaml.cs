@@ -24,6 +24,8 @@ namespace AllDataSheetFinder
         {
             InitializeComponent();
 
+            Global.InitializeAll();
+
             MainViewModel main = new MainViewModel();
             Global.Main = main;
 

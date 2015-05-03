@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using MVVMUtils;
 
 namespace AllDataSheetFinder
@@ -15,7 +16,10 @@ namespace AllDataSheetFinder
         public MainViewModel()
         {
             m_searchCommand = new RelayCommand(Search, CanSearch);
+            m_openPdfCommand = new RelayCommand(OpenPdf);
         }
+
+        private int m_downloadingCount = 0;
 
         private bool m_searching = false;
         public bool Searching
@@ -50,6 +54,12 @@ namespace AllDataSheetFinder
             get { return m_searchCommand; }
         }
 
+        private RelayCommand m_openPdfCommand;
+        public ICommand OpenPdfCommand
+        {
+            get { return m_openPdfCommand; }
+        }
+
         private async void Search(object param)
         {
             Searching = true;
@@ -70,6 +80,56 @@ namespace AllDataSheetFinder
         private bool CanSearch(object param)
         {
             return !string.IsNullOrWhiteSpace(m_searchField) && !m_searching;
+        }
+
+        private async void OpenPdf(object param)
+        {
+            if (m_selectedResult == null) return;
+            string code = m_selectedResult.Code;
+            string pdfPath = Global.BuildSavedDatasheetPath(code);
+            if (File.Exists(pdfPath))
+            {
+                Process.Start(pdfPath);
+                return;
+            }
+
+            pdfPath = Global.BuildCachedDatasheetPath(code);
+            if (File.Exists(pdfPath))
+            {
+                Process.Start(pdfPath);
+                return;
+            }
+            else
+            {
+                Stream stream = null;
+                try
+                {
+                    m_downloadingCount++;
+                    Mouse.OverrideCursor = Cursors.AppStarting;
+
+                    stream = await m_selectedResult.GetDatasheetStreamAsync();
+                    await Task.Run(() =>
+                        {
+                            using (FileStream file = new FileStream(pdfPath, FileMode.OpenOrCreate))
+                            {
+                                byte[] buffer = new byte[4096];
+                                int len;
+                                while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
+                            }
+                        });
+                    Process.Start(pdfPath);
+                }
+                catch
+                {
+                    Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
+                }
+                finally
+                {
+                    if (stream != null) stream.Close();
+                    m_downloadingCount--;
+                    if (m_downloadingCount <= 0) Mouse.OverrideCursor = null;
+                }
+            }
         }
     }
 }

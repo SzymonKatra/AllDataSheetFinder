@@ -46,6 +46,25 @@ namespace AllDataSheetFinder
             set { m_datasheetSiteLink = value; }
         }
 
+        public string Code
+        {
+            get
+            {
+                Uri uri = new Uri(m_datasheetSiteLink);
+                string[] segments = uri.Segments;
+                if (segments.Length < 3) return string.Format("{0}_{1}_{2}", m_name.Replace(' ', '-'), m_manufacturer.Replace(' ', '-'), m_datasheetSiteLink.GetHashCode().ToString());
+                string nameSegment = segments[segments.Length - 1];
+                string manufacturerSegment = segments[segments.Length - 2];
+                string numberSegment = segments[segments.Length - 3];
+
+                nameSegment = nameSegment.Remove(nameSegment.Length - 5); // remove ".html"
+                manufacturerSegment = manufacturerSegment.Remove(manufacturerSegment.Length - 1); // remove slash
+                numberSegment = numberSegment.Remove(numberSegment.Length - 1); // remove slash
+
+                return string.Format("{0}_{1}_{2}", nameSegment, manufacturerSegment, numberSegment);
+            }
+        }
+
         private const string SiteAddress = "http://www.alldatasheet.com/view.jsp";
         private const string SearchParameter = "Searchword";
 

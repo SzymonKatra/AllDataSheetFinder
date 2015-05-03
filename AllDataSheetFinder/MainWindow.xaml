@@ -1,6 +1,8 @@
 ﻿<Window x:Class="AllDataSheetFinder.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:e="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
         Title="{DynamicResource StringAppName}" Height="350" Width="525"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -8,18 +10,23 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
-            
+
             <TextBox Style="{StaticResource StyleSearchField}" Grid.Column="0" Text="{Binding SearchField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
-        
-        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
+
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <e:EventToCommand Command="{Binding OpenPdfCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource StringManufacturer}" Binding="{Binding Manufacturer}"/>
                 <DataGridTextColumn Header="{DynamicResource StringPartName}" Binding="{Binding Name}"/>
