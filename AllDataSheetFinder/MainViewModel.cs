@@ -5,15 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
+using System.Collections.ObjectModel;
 using MVVMUtils;
 
 namespace AllDataSheetFinder
 {
-    public class MainViewModel : ObservableObject
+    public sealed class MainViewModel : ObservableObject
     {
         public MainViewModel()
         {
             m_searchCommand = new RelayCommand(Search, CanSearch);
+        }
+
+        private bool m_searching = false;
+        public bool Searching
+        {
+            get { return m_searching; }
+            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); }
         }
 
         private string m_searchField;
@@ -21,6 +29,19 @@ namespace AllDataSheetFinder
         {
             get { return m_searchField; }
             set { m_searchField = value; RaisePropertyChanged("SearchField"); m_searchCommand.RaiseCanExecuteChanged(); }
+        }
+
+        private ObservableCollection<AllDataSheetPart> m_searchResults = new ObservableCollection<AllDataSheetPart>();
+        public ObservableCollection<AllDataSheetPart> SearchResults
+        {
+            get { return m_searchResults; }
+        }
+
+        private AllDataSheetPart m_selectedResult;
+        public AllDataSheetPart SelectedResult
+        {
+            get { return m_selectedResult; }
+            set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
         }
 
         private RelayCommand m_searchCommand;
@@ -31,26 +52,24 @@ namespace AllDataSheetFinder
 
         private async void Search(object param)
         {
-            var x = await AllDataSheetPart.SearchAsync(m_searchField);
-            Console.WriteLine("znaleziono");
-            await Task.Run(() => 
+            Searching = true;
+
+            try
             {
-                using (Stream stream = x.ElementAt(0).DownloadDatasheet())
-                {
-                    using (FileStream file = new FileStream(@"C:\Users\Szymon\Desktop\ds.pdf", FileMode.OpenOrCreate))
-                    {
-                        byte[] buffer = new byte[4096];
-                        int len;
-                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
-                    }
-                }
-            });
-            Console.WriteLine("pobrano");
-            
+                List<AllDataSheetPart> results = await AllDataSheetPart.SearchAsync(m_searchField);
+                m_searchResults.Clear();
+                foreach (var item in results) m_searchResults.Add(item);
+            }
+            catch
+            {
+                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
+            }
+
+            Searching = false;
         }
         private bool CanSearch(object param)
         {
-            return !string.IsNullOrWhiteSpace(m_searchField);
+            return !string.IsNullOrWhiteSpace(m_searchField) && !m_searching;
         }
     }
 }

@@ -116,12 +116,12 @@ namespace AllDataSheetFinder
                 yield return part;
             }
         }
-        public static Task<IEnumerable<AllDataSheetPart>> SearchAsync(string value)
+        public static Task<List<AllDataSheetPart>> SearchAsync(string value)
         {
-            return Task.Run(() => { return Search(value); });
+            return Task.Run(() => Search(value).ToList());
         }
 
-        public Stream DownloadDatasheet()
+        public Stream GetDatasheetStream()
         {
             List<string> responseHeaders = new List<string>();
 
@@ -182,11 +182,20 @@ namespace AllDataSheetFinder
                 //    }
                 //}
         }
-        public Stream DownloadManufacturerImage()
+        public Task<Stream> GetDatasheetStreamAsync()
+        {
+            return Task.Run(() => GetDatasheetStream());
+        }
+
+        public Stream GetManufacturerImageStream()
         {
             HttpWebRequest request = CreateDefaultRequest(m_manufacturerImageLink);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
+        }
+        public Task<Stream> GetManufacturerImageStreamAsync()
+        {
+            return Task.Run(() => GetManufacturerImageStream());
         }
 
         private static bool IsAttributeValueLike(HtmlNode node, string name, string value)

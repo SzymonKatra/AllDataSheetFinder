@@ -18,5 +18,13 @@
             <TextBox Style="{StaticResource StyleSearchField}" Grid.Column="0" Text="{Binding SearchField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
+        
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{DynamicResource StringManufacturer}" Binding="{Binding Manufacturer}"/>
+                <DataGridTextColumn Header="{DynamicResource StringPartName}" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="{DynamicResource StringPartDescription}" Binding="{Binding Description}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

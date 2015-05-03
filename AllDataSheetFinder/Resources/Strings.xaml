@@ -3,5 +3,10 @@
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     
     <s:String x:Key="StringSearch">Search</s:String>
+    <s:String x:Key="StringSearchError" xml:space="preserve">An error occurred while searching.
+Please check your internet connection.</s:String>
+    <s:String x:Key="StringManufacturer">Manufacturer</s:String>
+    <s:String x:Key="StringPartName">Part name</s:String>
+    <s:String x:Key="StringPartDescription">Description</s:String>
     
 </ResourceDictionary>
