@@ -71,10 +71,13 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="AllDataSheetPart.cs" />
+    <Compile Include="AllDataSheetSearchContext.cs" />
+    <Compile Include="AllDataSheetSearchResult.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BitmapImageLoadingInfo.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="MainViewModel.cs" />
@@ -96,6 +99,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

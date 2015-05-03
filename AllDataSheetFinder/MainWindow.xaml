@@ -9,6 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -28,10 +29,37 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{DynamicResource StringManufacturer}" Binding="{Binding Manufacturer}"/>
-                <DataGridTextColumn Header="{DynamicResource StringPartName}" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="{DynamicResource StringPartDescription}" Binding="{Binding Description}"/>
+                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding Image}" Width="150" Height="50"/>
+                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Part.Manufacturer}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="{DynamicResource StringPartName}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Name}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Button Grid.Row="2" DockPanel.Dock="Bottom" Content="more" Command="{Binding MoreCommand}"/>
     </Grid>
 </Window>

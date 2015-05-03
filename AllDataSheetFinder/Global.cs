@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.IO;
 using System.Xml.Serialization;
+using System.Windows.Media.Imaging;
 using MVVMUtils;
 
 namespace AllDataSheetFinder
@@ -42,6 +43,12 @@ namespace AllDataSheetFinder
                 if (s_main != null) throw new InvalidOperationException("Main already set");
                 s_main = value;
             }
+        }
+
+        private static Dictionary<string, BitmapImageLoadingInfo> s_cachedImages = new Dictionary<string, BitmapImageLoadingInfo>();
+        public static Dictionary<string, BitmapImageLoadingInfo> CachedImages
+        {
+            get { return s_cachedImages; }
         }
 
         static Global()

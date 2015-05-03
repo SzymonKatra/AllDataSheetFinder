@@ -65,16 +65,80 @@ namespace AllDataSheetFinder
             }
         }
 
-        private const string SiteAddress = "http://www.alldatasheet.com/view.jsp";
+        private const string SiteAddress = "http://www.alldatasheet.com/view_datasheet.jsp";
         private const string SearchParameter = "Searchword";
 
-        public static IEnumerable<AllDataSheetPart> Search(string value)
+        public static AllDataSheetSearchResult Search(string value)
         {
-            string result = ReadResponseString(CreateDefaultRequest(SiteAddress + "?" + SearchParameter + "=" + value));
+            string url = SiteAddress + "?" + SearchParameter + "=" + value;
+            HttpWebRequest request = CreateDefaultRequest(url);
+            string result = ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
 
+            var matchingTables = from node in document.DocumentNode.Descendants("table")
+                                 where IsAttributeValueLike(node, "width", "95%") && IsAttributeValueLike(node, "border", "0") &&
+                                       IsAttributeValueLike(node, "cellpadding", "0") && IsAttributeValueLike(node, "cellspacing", "0") &&
+                                       IsAttributeValueLike(node, "class", "main") && IsAttributeValueLike(node, "align", "center")
+                                 select node;
+
+            HtmlNode tdNode = matchingTables.ElementAt(1).Element("tr").Element("td");
+            List<char> text = tdNode.InnerText.Substring(tdNode.InnerText.LastIndexOf('(')).ToList();
+            text.RemoveAll(x => !char.IsDigit(x) && x != '/');
+            string pages = string.Concat(text); // current/total
+            string[] tokens = pages.Split('/');
+
+            int totalPages = int.Parse(tokens[1]);
+
+            AllDataSheetSearchContext searchContext = new AllDataSheetSearchContext(value, totalPages);
+            searchContext.NextPage = 2;
+            searchContext.Referer = url;
+
+            AllDataSheetSearchResult ret = new AllDataSheetSearchResult();
+            ret.Parts = FilterResults(document);
+            ret.SearchContext = searchContext;
+
+            return ret;
+        }
+        public static AllDataSheetSearchResult Search(AllDataSheetSearchContext searchContext)
+        {
+            if (searchContext.NextPage > searchContext.TotalPages)
+            {
+                AllDataSheetSearchResult ret = new AllDataSheetSearchResult();
+                ret.Parts = null;
+                ret.SearchContext = searchContext;
+                return ret;
+            }
+
+            string url = SiteAddress + "?" + SearchParameter + "=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage;
+            HttpWebRequest request = CreateDefaultRequest(url);
+            request.Referer = searchContext.Referer;
+            string result = ReadResponseString(request);
+
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(result);
+
+            searchContext.NextPage++;
+            searchContext.Referer = url;
+
+            AllDataSheetSearchResult sret = new AllDataSheetSearchResult();
+            sret.Parts = FilterResults(document);
+            sret.SearchContext = searchContext;
+
+            return sret;
+        }
+        public static Task<AllDataSheetSearchResult> SearchAsync(string value)
+        {
+            return Task.Run(() => Search(value));
+        }
+        public static Task<AllDataSheetSearchResult> SearchAsync(AllDataSheetSearchContext searchContext)
+        {
+            return Task.Run(() => Search(searchContext));
+        }
+
+        private static List<AllDataSheetPart> FilterResults(HtmlDocument document)
+        {
             HtmlNode rootNode = document.DocumentNode;
             HtmlNode htmlNode = rootNode.Element("html");
             HtmlNode bodyNode = htmlNode.Element("body");
@@ -89,6 +153,8 @@ namespace AllDataSheetFinder
             HtmlNode tableNode = tableWithElementsNodes.ElementAt(0);
 
             IEnumerable<HtmlNode> tableRows = from node in tableNode.Elements("tr") where IsAttributeValueLike(node, "class", "nv_td") select node;
+
+            List<AllDataSheetPart> parts = new List<AllDataSheetPart>();
 
             AllDataSheetPart previous = new AllDataSheetPart();
 
@@ -132,12 +198,9 @@ namespace AllDataSheetFinder
                 }
 
                 previous = part;
-                yield return part;
+                parts.Add(part);
             }
-        }
-        public static Task<List<AllDataSheetPart>> SearchAsync(string value)
-        {
-            return Task.Run(() => Search(value).ToList());
+            return parts;
         }
 
         public Stream GetDatasheetStream()

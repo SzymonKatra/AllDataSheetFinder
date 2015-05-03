@@ -17,9 +17,11 @@ namespace AllDataSheetFinder
         {
             m_searchCommand = new RelayCommand(Search, CanSearch);
             m_openPdfCommand = new RelayCommand(OpenPdf);
+            m_moreCommand = new RelayCommand(More);
         }
 
-        private int m_downloadingCount = 0;
+        private int m_openingCount = 0;
+        private AllDataSheetSearchContext m_searchContext;
 
         private bool m_searching = false;
         public bool Searching
@@ -35,14 +37,14 @@ namespace AllDataSheetFinder
             set { m_searchField = value; RaisePropertyChanged("SearchField"); m_searchCommand.RaiseCanExecuteChanged(); }
         }
 
-        private ObservableCollection<AllDataSheetPart> m_searchResults = new ObservableCollection<AllDataSheetPart>();
-        public ObservableCollection<AllDataSheetPart> SearchResults
+        private ObservableCollection<PartHandler> m_searchResults = new ObservableCollection<PartHandler>();
+        public ObservableCollection<PartHandler> SearchResults
         {
             get { return m_searchResults; }
         }
 
-        private AllDataSheetPart m_selectedResult;
-        public AllDataSheetPart SelectedResult
+        private PartHandler m_selectedResult;
+        public PartHandler SelectedResult
         {
             get { return m_selectedResult; }
             set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
@@ -60,21 +62,40 @@ namespace AllDataSheetFinder
             get { return m_openPdfCommand; }
         }
 
+        private RelayCommand m_moreCommand;
+        public ICommand MoreCommand
+        {
+            get { return m_moreCommand; }
+        }
+
+        private void AddResults(List<AllDataSheetPart> results)
+        {
+            foreach (var item in results)
+            {
+                PartHandler handler = new PartHandler(item);
+                handler.LoadImage();
+                m_searchResults.Add(handler);
+            }
+        }
+
         private async void Search(object param)
         {
             Searching = true;
+            Mouse.OverrideCursor = Cursors.AppStarting;
 
             try
             {
-                List<AllDataSheetPart> results = await AllDataSheetPart.SearchAsync(m_searchField);
+                AllDataSheetSearchResult result = await AllDataSheetPart.SearchAsync(m_searchField);
+                m_searchContext = result.SearchContext;
                 m_searchResults.Clear();
-                foreach (var item in results) m_searchResults.Add(item);
+                AddResults(result.Parts);
             }
             catch
             {
                 Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
             }
 
+            Mouse.OverrideCursor = null;
             Searching = false;
         }
         private bool CanSearch(object param)
@@ -85,51 +106,41 @@ namespace AllDataSheetFinder
         private async void OpenPdf(object param)
         {
             if (m_selectedResult == null) return;
-            string code = m_selectedResult.Code;
-            string pdfPath = Global.BuildSavedDatasheetPath(code);
-            if (File.Exists(pdfPath))
+            try
             {
-                Process.Start(pdfPath);
-                return;
+                m_openingCount++;
+                Mouse.OverrideCursor = Cursors.AppStarting;
+                await m_selectedResult.OpenPdf();
+            }
+            catch
+            {
+                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
+            }
+            finally
+            {
+                m_openingCount--;
+                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+            }
+        }
+
+        private async void More(object param)
+        {
+            Searching = true;
+            Mouse.OverrideCursor = Cursors.AppStarting;
+
+            try
+            {
+                AllDataSheetSearchResult result = await AllDataSheetPart.SearchAsync(m_searchContext);
+                m_searchContext = result.SearchContext;
+                AddResults(result.Parts);
+            }
+            catch
+            {
+                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
             }
 
-            pdfPath = Global.BuildCachedDatasheetPath(code);
-            if (File.Exists(pdfPath))
-            {
-                Process.Start(pdfPath);
-                return;
-            }
-            else
-            {
-                Stream stream = null;
-                try
-                {
-                    m_downloadingCount++;
-                    Mouse.OverrideCursor = Cursors.AppStarting;
-
-                    stream = await m_selectedResult.GetDatasheetStreamAsync();
-                    await Task.Run(() =>
-                        {
-                            using (FileStream file = new FileStream(pdfPath, FileMode.OpenOrCreate))
-                            {
-                                byte[] buffer = new byte[4096];
-                                int len;
-                                while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
-                            }
-                        });
-                    Process.Start(pdfPath);
-                }
-                catch
-                {
-                    Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
-                }
-                finally
-                {
-                    if (stream != null) stream.Close();
-                    m_downloadingCount--;
-                    if (m_downloadingCount <= 0) Mouse.OverrideCursor = null;
-                }
-            }
+            Mouse.OverrideCursor = null;
+            Searching = false;
         }
     }
 }

@@ -6,7 +6,17 @@
     </Style> 
     
     <Style x:Key="StyleSearchField" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleCommonMargin}">
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <Style x:Key="StyleTextDataGridResult" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="10,5,10,5"/>
+        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
     
 </ResourceDictionary>
