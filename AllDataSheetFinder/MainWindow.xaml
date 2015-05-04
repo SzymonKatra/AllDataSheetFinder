@@ -6,7 +6,13 @@
         xmlns:e="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
         xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
         Title="{DynamicResource StringAppName}" Height="600" Width="800"
+        Background="White"
         WindowStartupLocation="CenterScreen">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <e:EventToCommand Command="{Binding SaveFavouritesCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -20,18 +26,13 @@
             </Grid.ColumnDefinitions>
 
             <TextBox Style="{StaticResource StyleSearchField}" Grid.Column="0" Text="{Binding SearchField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
+            <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="1" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageSearch}" Text="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
         <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <e:EventToCommand Command="{Binding OpenPdfCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White">
             <my:DataGridAppend.AppendControl>
-                <Button Style="{StaticResource StyleCommonMargin}" Height="40" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Content="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Row="1" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
             </my:DataGridAppend.AppendControl>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
@@ -73,14 +74,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{DynamicResource StringPartName}" Width="20*">
+                <DataGridTemplateColumn Header="{DynamicResource StringPartName}" Width="15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="55*">
+                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="50*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
@@ -90,7 +91,74 @@
                 <DataGridTemplateColumn Width="10*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}"/>
+                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}">
+                                <my:ImageButton.Style>
+                                    <Style TargetType="{x:Type my:ImageButton}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True"/>
+                                                    <Condition Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsSaved}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavourite}"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="False"/>
+                                                    <Condition Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsSaved}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True"/>
+                                                    <Condition Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsSaved}}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="False"/>
+                                                    <Condition Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsSaved}}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavourite}"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </my:ImageButton.Style>
+                            </my:ImageButton>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="10*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
+                                <my:ImageButton.Style>
+                                    <Style TargetType="{x:Type my:ImageButton}">
+                                        <Style.Triggers>
+                                            
+                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="True">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="False">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdf}"/>
+                                            </DataTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </my:ImageButton.Style>
+                            </my:ImageButton>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

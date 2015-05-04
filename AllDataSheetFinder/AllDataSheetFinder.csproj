@@ -66,7 +66,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
+    <Compile Include="SavedPart.cs" />
+    <Compile Include="StringExt.cs" />
     <Page Include="Controls\DataGridAppendResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ImageButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,7 +91,11 @@
     <Compile Include="BitmapImageLoadingInfo.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Controls\DataGridAppend.cs" />
+    <Compile Include="Controls\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\IsDownloadingConverter.cs" />
+    <Compile Include="Converters\PartDatasheetStateToIsSavedConverter.cs" />
     <Compile Include="Converters\PartDatasheetStateToColorConverter.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="MainViewModel.cs" />
@@ -93,6 +104,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Images.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +153,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\more.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\favourite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\pdf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\pdf_filled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\favourite_filled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -50,18 +50,7 @@ namespace AllDataSheetFinder
         {
             get
             {
-                Uri uri = new Uri(m_datasheetSiteLink);
-                string[] segments = uri.Segments;
-                if (segments.Length < 3) return string.Format("{0}_{1}_{2}", m_name.Replace(' ', '-'), m_manufacturer.Replace(' ', '-'), m_datasheetSiteLink.GetHashCode().ToString());
-                string nameSegment = segments[segments.Length - 1];
-                string manufacturerSegment = segments[segments.Length - 2];
-                string numberSegment = segments[segments.Length - 3];
-
-                nameSegment = nameSegment.Remove(nameSegment.Length - 5); // remove ".html"
-                manufacturerSegment = manufacturerSegment.Remove(manufacturerSegment.Length - 1); // remove slash
-                numberSegment = numberSegment.Remove(numberSegment.Length - 1); // remove slash
-
-                return string.Format("{0}_{1}_{2}", nameSegment, manufacturerSegment, numberSegment);
+                return BuildCodeFromLink(m_datasheetSiteLink, m_name, m_manufacturer, m_datasheetSiteLink.GetHashCode().ToString());
             }
         }
 
@@ -352,6 +341,35 @@ namespace AllDataSheetFinder
                 }
             }
             return result;
+        }
+
+        public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)
+        {
+            Uri uri = new Uri(link);
+            string[] segments = uri.Segments;
+            if (segments.Length < 3) return BuildCode(name, manufacturer, link.GetHashCode().ToString());
+            string nameSegment = segments[segments.Length - 1];
+            string manufacturerSegment = segments[segments.Length - 2];
+            string numberSegment = segments[segments.Length - 3];
+
+            nameSegment = nameSegment.Remove(nameSegment.Length - 5); // remove ".html"
+            manufacturerSegment = manufacturerSegment.Remove(manufacturerSegment.Length - 1); // remove slash
+            numberSegment = numberSegment.Remove(numberSegment.Length - 1); // remove slash
+
+            return BuildCode(nameSegment, manufacturerSegment, numberSegment);
+        }
+        public static string BuildCode(string name, string manufacturer, string hash)
+        {
+            name = ToValidCodeForm(name);
+            manufacturer = ToValidCodeForm(manufacturer);
+            hash = ToValidCodeForm(hash);
+
+            return string.Format("{0}_{1}_{2}", name, manufacturer, hash);
+        }
+
+        private static string ToValidCodeForm(string value)
+        {
+            return value.Replace(' ', '-').RemoveAll(x => !char.IsLetterOrDigit(x));
         }
     }
 }

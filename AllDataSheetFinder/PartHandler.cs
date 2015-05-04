@@ -126,6 +126,28 @@ namespace AllDataSheetFinder
                 File.Copy(Global.BuildCachedDatasheetPath(code), Global.BuildSavedDatasheetPath(code));
             }
             CheckState();
+
+            Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
+
+            Global.SavedParts.Add(SavedPart.FromAllDataSheetPart(m_part));
+        }
+
+        public void RemovePdf()
+        {
+            if (State != PartDatasheetState.Saved) throw new InvalidOperationException("Pdf is not in saved state");
+
+            for (int i = 0; i < Global.SavedParts.Count; i++)
+            {
+                string code = AllDataSheetPart.BuildCodeFromLink(Global.SavedParts[i].DatasheetSiteLink, Global.SavedParts[i].Name,Global.SavedParts[i].Manufacturer,Global.SavedParts[i].DatasheetSiteLink.GetHashCode().ToString());
+                if (code == this.Part.Code)
+                {
+                    Global.SavedParts.RemoveAt(i);
+                    File.Delete(Global.BuildSavedDatasheetPath(code));
+                    break;
+                }
+            }
+
+            CheckState();
         }
     
         private async Task DownloadPdf(string pdfPath)

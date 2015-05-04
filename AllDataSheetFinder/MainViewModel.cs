@@ -19,6 +19,7 @@ namespace AllDataSheetFinder
             m_openPdfCommand = new RelayCommand(OpenPdf);
             m_loadMoreResultCommand = new RelayCommand(LoadMoreResults, CanLoadMoreResult);
             m_addToFavouritesCommand = new RelayCommand(AddToFavourites);
+            m_saveFavouritesCommand = new RelayCommand(SaveFavourites);
         }
 
         private int m_openingCount = 0;
@@ -73,6 +74,12 @@ namespace AllDataSheetFinder
         public ICommand AddToFavouritesCommand
         {
             get { return m_addToFavouritesCommand; }
+        }
+
+        private RelayCommand m_saveFavouritesCommand;
+        public ICommand SaveFavouritesCommand
+        {
+            get { return m_saveFavouritesCommand; }
         }
 
         public bool LoadMoreVisible
@@ -162,6 +169,14 @@ namespace AllDataSheetFinder
         private async void AddToFavourites(object param)
         {
             if (m_selectedResult == null) return;
+
+            if (m_selectedResult.State == PartDatasheetState.Saved)
+            {
+                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+                m_selectedResult.RemovePdf();
+                return;
+            }
+
             try
             {
                 m_openingCount++;
@@ -177,6 +192,11 @@ namespace AllDataSheetFinder
                 m_openingCount--;
                 if (m_openingCount <= 0) Mouse.OverrideCursor = null;
             }
+        }
+
+        private void SaveFavourites(object param)
+        {
+            Global.SaveSavedParts();
         }
     }
 }

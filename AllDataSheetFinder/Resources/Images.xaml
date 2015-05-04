@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <BitmapImage x:Key="ImageSearch" UriSource="Images\search.png"/>
+    <BitmapImage x:Key="ImageMore" UriSource="Images\more.png"/>
+    <BitmapImage x:Key="ImageFavourite" UriSource="Images\favourite.png"/>
+    <BitmapImage x:Key="ImageFavouriteFilled" UriSource="Images\favourite_filled.png"/>
+    <BitmapImage x:Key="ImageSettings" UriSource="Images\settings.png"/>
+    <BitmapImage x:Key="ImagePdf" UriSource="Images\pdf.png"/>
+    <BitmapImage x:Key="ImagePdfFilled" UriSource="Images\pdf_filled.png"/>
+    
+</ResourceDictionary>

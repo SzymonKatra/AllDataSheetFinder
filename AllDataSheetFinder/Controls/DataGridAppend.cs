@@ -22,7 +22,7 @@ namespace AllDataSheetFinder.Controls
             this.Template = (ControlTemplate)Application.Current.TryFindResource("TemplateDataGridAppend");
         }
 
-        public static DependencyProperty AppendControlProperty = DependencyProperty.Register("AppendControl", typeof(object), typeof(DataGridAppend), new PropertyMetadata(null));
+        public static readonly DependencyProperty AppendControlProperty = DependencyProperty.Register("AppendControl", typeof(object), typeof(DataGridAppend), new PropertyMetadata(null));
         public object AppendControl
         {
             get { return GetValue(AppendControlProperty); }

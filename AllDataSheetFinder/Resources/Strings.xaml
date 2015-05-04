@@ -11,5 +11,7 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringDownloadError">An error occurred while downloading datasheet</s:String>
     <s:String x:Key="StringLoadMoreResults">Load more</s:String>
     <s:String x:Key="StringAddToFavourites">Favourite</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Do you really want to remove this datasheet from favourites?</s:String>
+    <s:String x:Key="StringOpen">Open</s:String>
     
 </ResourceDictionary>

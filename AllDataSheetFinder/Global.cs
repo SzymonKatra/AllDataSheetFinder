@@ -18,8 +18,10 @@ namespace AllDataSheetFinder
         public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
         public static readonly string SavedDatasheetsDirectory = "SavedDatasheets";
         public static readonly string ConfigFile = "config.xml";
+        public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
 
-        private static XmlSerializer s_serializer = new XmlSerializer(typeof(Config));
+        private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
+        private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<SavedPart>));
 
         private static Config s_configuration;
         public static Config Configuration
@@ -49,6 +51,12 @@ namespace AllDataSheetFinder
         public static Dictionary<string, BitmapImageLoadingInfo> CachedImages
         {
             get { return s_cachedImages; }
+        }
+
+        private static List<SavedPart> s_savedParts = new List<SavedPart>();
+        public static List<SavedPart> SavedParts
+        {
+            get { return s_savedParts; }
         }
 
         static Global()
@@ -93,6 +101,28 @@ namespace AllDataSheetFinder
                     if (size < Configuration.MaxDatasheetsCacheSize) break;
                 }
             }
+
+            LoadSavedParts();
+
+            Dictionary<SavedPart, string> codes = new Dictionary<SavedPart,string>();
+            foreach (var item in SavedParts)
+            {
+                codes.Add(item, AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString()));
+            }
+
+            List<SavedPart> toRemove = new List<SavedPart>();
+            foreach (var item in codes)
+            {
+                if (!File.Exists(BuildSavedDatasheetPath(item.Value))) toRemove.Add(item.Key);
+            }
+            foreach (var item in toRemove) SavedParts.Remove(item);
+
+            foreach (string file in Directory.EnumerateFiles(AppDataPath + Path.DirectorySeparatorChar + SavedDatasheetsDirectory))
+            {
+                if (Path.GetExtension(file) != ".pdf") continue;
+                string code = Path.GetFileNameWithoutExtension(file);
+                if (!codes.ContainsValue(code)) File.Delete(file);
+            }
         }
 
         public static void CreateDirectoriesIfNeeded()
@@ -116,13 +146,27 @@ namespace AllDataSheetFinder
             }
             else
             {
-                using (FileStream file = new FileStream(path, FileMode.Open)) s_configuration = (Config)s_serializer.Deserialize(file);
+                using (FileStream file = new FileStream(path, FileMode.Open)) s_configuration = (Config)s_serializerConfig.Deserialize(file);
             }
         }
         public static void SaveConfiguration()
         {
             string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
-            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) s_serializer.Serialize(file, s_configuration);
+            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) s_serializerConfig.Serialize(file, s_configuration);
+        }
+
+        public static void LoadSavedParts()
+        {
+            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            if (File.Exists(path))
+            {
+                using (FileStream file = new FileStream(path, FileMode.Open)) s_savedParts = (List<SavedPart>)s_serialzierSavedParts.Deserialize(file);
+            }
+        }
+        public static void SaveSavedParts()
+        {
+            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) s_serialzierSavedParts.Serialize(file, s_savedParts);
         }
 
         public static string BuildSavedDatasheetPath(string code)
