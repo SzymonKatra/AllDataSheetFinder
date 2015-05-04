@@ -8,6 +8,9 @@
                 <ResourceDictionary Source="Resources\Styles.xaml"/>
                 <ResourceDictionary Source="Resources\Strings.xaml"/>
                 <ResourceDictionary Source="Resources\StringsCommon.xaml"/>
+                <ResourceDictionary Source="Resources\Converters.xaml"/>
+                
+                <ResourceDictionary Source="Controls\DataGridAppendResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

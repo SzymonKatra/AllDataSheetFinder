@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:e="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
+        xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
         Title="{DynamicResource StringAppName}" Height="350" Width="525"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -22,12 +22,24 @@
             <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
-        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
+        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <e:EventToCommand Command="{Binding OpenPdfCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <my:DataGridAppend.AppendControl>
+                <Button Height="20" Content="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+            </my:DataGridAppend.AppendControl>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer">
                     <DataGridTemplateColumn.CellTemplate>
@@ -58,8 +70,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </DataGrid>
-
-        <Button Grid.Row="2" DockPanel.Dock="Bottom" Content="more" Command="{Binding MoreCommand}"/>
+        </my:DataGridAppend>
     </Grid>
 </Window>

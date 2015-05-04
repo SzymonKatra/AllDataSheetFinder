@@ -27,6 +27,13 @@ namespace AllDataSheetFinder
             set { m_image = value; RaisePropertyChanged("Image"); }
         }
 
+        private PartDatasheetState m_state;
+        public PartDatasheetState State
+        {
+            get { return m_state; }
+            set { m_state = value; RaisePropertyChanged("State"); }
+        }
+
         public string ImageFileName
         {
             get
@@ -39,26 +46,47 @@ namespace AllDataSheetFinder
         public PartHandler(AllDataSheetPart part)
         {
             m_part = part;
+            CheckState();
         }
 
-        public async Task OpenPdf()
+        private void CheckState()
         {
             string code = m_part.Code;
             string pdfPath = Global.BuildSavedDatasheetPath(code);
             if (File.Exists(pdfPath))
             {
-                Process.Start(pdfPath);
+                State = PartDatasheetState.Saved;
                 return;
             }
 
             pdfPath = Global.BuildCachedDatasheetPath(code);
             if (File.Exists(pdfPath))
             {
-                Process.Start(pdfPath);
+                State = PartDatasheetState.Cached;
                 return;
+            }
+        }
+
+        public async Task OpenPdf()
+        {
+            if (State == PartDatasheetState.Downloading) return;
+            CheckState();
+
+            string code = m_part.Code;
+            if (State == PartDatasheetState.Saved)
+            {
+                string pdfPath = Global.BuildSavedDatasheetPath(code);
+                Process.Start(pdfPath);
+            }
+            else if (State == PartDatasheetState.Cached)
+            {
+                string pdfPath = Global.BuildCachedDatasheetPath(code);
+                Process.Start(pdfPath);
             }
             else
             {
+                State = PartDatasheetState.Downloading;
+                string pdfPath = Global.BuildCachedDatasheetPath(code);
                 Stream stream = null;
                 try
                 {
@@ -77,6 +105,7 @@ namespace AllDataSheetFinder
                 finally
                 {
                     if (stream != null) stream.Close();
+                    CheckState();
                 }
             }
         }

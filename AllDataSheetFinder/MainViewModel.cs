@@ -17,7 +17,7 @@ namespace AllDataSheetFinder
         {
             m_searchCommand = new RelayCommand(Search, CanSearch);
             m_openPdfCommand = new RelayCommand(OpenPdf);
-            m_moreCommand = new RelayCommand(More);
+            m_loadMoreResultCommand = new RelayCommand(LoadMoreResults, CanLoadMoreResult);
         }
 
         private int m_openingCount = 0;
@@ -27,7 +27,7 @@ namespace AllDataSheetFinder
         public bool Searching
         {
             get { return m_searching; }
-            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); }
+            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); m_loadMoreResultCommand.RaiseCanExecuteChanged(); }
         }
 
         private string m_searchField;
@@ -62,10 +62,10 @@ namespace AllDataSheetFinder
             get { return m_openPdfCommand; }
         }
 
-        private RelayCommand m_moreCommand;
-        public ICommand MoreCommand
+        private RelayCommand m_loadMoreResultCommand;
+        public ICommand LoadMoreResultsCommand
         {
-            get { return m_moreCommand; }
+            get { return m_loadMoreResultCommand; }
         }
 
         private void AddResults(List<AllDataSheetPart> results)
@@ -123,7 +123,7 @@ namespace AllDataSheetFinder
             }
         }
 
-        private async void More(object param)
+        private async void LoadMoreResults(object param)
         {
             Searching = true;
             Mouse.OverrideCursor = Cursors.AppStarting;
@@ -141,6 +141,10 @@ namespace AllDataSheetFinder
 
             Mouse.OverrideCursor = null;
             Searching = false;
+        }
+        private bool CanLoadMoreResult(object param)
+        {
+            return !Searching && m_searchContext != null && m_searchContext.CanLoadMore;
         }
     }
 }

@@ -66,34 +66,29 @@ namespace AllDataSheetFinder
         }
 
         private const string SiteAddress = "http://www.alldatasheet.com/view_datasheet.jsp";
-        private const string SearchParameter = "Searchword";
 
         public static AllDataSheetSearchResult Search(string value)
         {
-            string url = SiteAddress + "?" + SearchParameter + "=" + value;
+            string url = SiteAddress + "?" + "Searchword=" + value + "&sPage=1&sField=4";
             HttpWebRequest request = CreateDefaultRequest(url);
             string result = ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
 
-            var matchingTables = from node in document.DocumentNode.Descendants("table")
-                                 where IsAttributeValueLike(node, "width", "95%") && IsAttributeValueLike(node, "border", "0") &&
-                                       IsAttributeValueLike(node, "cellpadding", "0") && IsAttributeValueLike(node, "cellspacing", "0") &&
-                                       IsAttributeValueLike(node, "class", "main") && IsAttributeValueLike(node, "align", "center")
-                                 select node;
+            int totalPages;
+            AllDataSheetSearchContext.SearchOption option;
+            FilterSearchMode(document, out totalPages, out option);
 
-            HtmlNode tdNode = matchingTables.ElementAt(1).Element("tr").Element("td");
-            List<char> text = tdNode.InnerText.Substring(tdNode.InnerText.LastIndexOf('(')).ToList();
-            text.RemoveAll(x => !char.IsDigit(x) && x != '/');
-            string pages = string.Concat(text); // current/total
-            string[] tokens = pages.Split('/');
-
-            int totalPages = int.Parse(tokens[1]);
-
-            AllDataSheetSearchContext searchContext = new AllDataSheetSearchContext(value, totalPages);
-            searchContext.NextPage = 2;
-            searchContext.Referer = url;
+            AllDataSheetSearchContext searchContext = new AllDataSheetSearchContext(value);
+            searchContext.NextPage = 1;
+            searchContext.TotalPages = totalPages;
+            if (option != AllDataSheetSearchContext.SearchOption.Match)
+            {
+                searchContext.UsedOptions.Add(AllDataSheetSearchContext.SearchOption.Match);
+                searchContext.Option = option;
+            }
+            searchContext.Next(url);          
 
             AllDataSheetSearchResult ret = new AllDataSheetSearchResult();
             ret.Parts = FilterResults(document);
@@ -103,7 +98,7 @@ namespace AllDataSheetFinder
         }
         public static AllDataSheetSearchResult Search(AllDataSheetSearchContext searchContext)
         {
-            if (searchContext.NextPage > searchContext.TotalPages)
+            if (!searchContext.CanLoadMore)
             {
                 AllDataSheetSearchResult ret = new AllDataSheetSearchResult();
                 ret.Parts = null;
@@ -111,22 +106,49 @@ namespace AllDataSheetFinder
                 return ret;
             }
 
-            string url = SiteAddress + "?" + SearchParameter + "=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage;
-            HttpWebRequest request = CreateDefaultRequest(url);
-            request.Referer = searchContext.Referer;
-            string result = ReadResponseString(request);
+            while (true)
+            {
+                string url = SiteAddress + "?" + "Searchword=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage + "&sField=" + (int)searchContext.Option;
+                HttpWebRequest request = CreateDefaultRequest(url);
+                request.Referer = searchContext.Referer;
+                string result = ReadResponseString(request);
 
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(result);
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(result);
 
-            searchContext.NextPage++;
-            searchContext.Referer = url;
+                if (searchContext.NextPage == 1)
+                {
+                    int totalPages;
+                    AllDataSheetSearchContext.SearchOption option;
+                    FilterSearchMode(document, out totalPages, out option);
+                    searchContext.TotalPages = totalPages;
+                    if (searchContext.Option != option)
+                    {
+                        if (!searchContext.UsedOptions.Contains(searchContext.Option)) searchContext.UsedOptions.Add(searchContext.Option);
+                        searchContext.Option = option;
+                    }
+                }
 
-            AllDataSheetSearchResult sret = new AllDataSheetSearchResult();
-            sret.Parts = FilterResults(document);
-            sret.SearchContext = searchContext;
+                AllDataSheetSearchResult sret = new AllDataSheetSearchResult();
+                if (searchContext.UsedOptions.Contains(searchContext.Option))
+                {
+                    sret.Parts = new List<AllDataSheetPart>();
+                    if (searchContext.CanLoadMore)
+                    {
+                        searchContext.Next(url);
+                        continue;
+                    }
+                }
+                else
+                {
+                    sret.Parts = FilterResults(document);
+                }
+                sret.SearchContext = searchContext;
 
-            return sret;
+                searchContext.Next(url);
+
+                return sret;
+            }
         }
         public static Task<AllDataSheetSearchResult> SearchAsync(string value)
         {
@@ -201,6 +223,27 @@ namespace AllDataSheetFinder
                 parts.Add(part);
             }
             return parts;
+        }
+        private static void FilterSearchMode(HtmlDocument document, out int totalPages, out AllDataSheetSearchContext.SearchOption option)
+        {
+            var matchingTables = from node in document.DocumentNode.Descendants("table")
+                                 where IsAttributeValueLike(node, "width", "95%") && IsAttributeValueLike(node, "border", "0") &&
+                                       IsAttributeValueLike(node, "cellpadding", "0") && IsAttributeValueLike(node, "cellspacing", "0") &&
+                                       IsAttributeValueLike(node, "class", "main") && IsAttributeValueLike(node, "align", "center")
+                                 select node;
+
+            HtmlNode tdNode = matchingTables.ElementAt(1).Element("tr").Element("td");
+            List<char> text = tdNode.InnerText.Substring(tdNode.InnerText.LastIndexOf('(')).ToList();
+            text.RemoveAll(x => !char.IsDigit(x) && x != '/');
+            string pages = string.Concat(text); // current/total
+            string[] tokens = pages.Split('/');
+
+            totalPages = int.Parse(tokens[1]);
+            string upperInnerText = tdNode.InnerText.ToUpper();
+            option = AllDataSheetSearchContext.SearchOption.Match;
+            if (upperInnerText.Contains("START")) option = AllDataSheetSearchContext.SearchOption.StartsWith;
+            else if (upperInnerText.Contains("END")) option = AllDataSheetSearchContext.SearchOption.EndsWith;
+            else if (upperInnerText.Contains("INCLUDED")) option = AllDataSheetSearchContext.SearchOption.Included;
         }
 
         public Stream GetDatasheetStream()
