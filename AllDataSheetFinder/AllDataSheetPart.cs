@@ -143,8 +143,8 @@ namespace AllDataSheetFinder
                 {
                     sret.Parts = FilterResults(document);
                 }
-                sret.SearchContext = searchContext;
 
+                sret.SearchContext = searchContext;
                 searchContext.Next(url);
 
                 return sret;

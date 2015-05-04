@@ -10,6 +10,7 @@ namespace AllDataSheetFinder
     {
         NotDownloaded,
         Downloading,
+        DownloadingAndOpening,
         Cached,
         Saved
     }

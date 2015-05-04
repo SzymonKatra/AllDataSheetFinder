@@ -4,25 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace AllDataSheetFinder.Converters
 {
-    public class PartDatasheetStateToColorConverter : IValueConverter
+    public class IsDownloadingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             PartDatasheetState state = (PartDatasheetState)value;
-
-            switch(state)
-            {
-                case PartDatasheetState.Downloading:
-                case PartDatasheetState.Saved: return Colors.Orange;
-
-                case PartDatasheetState.DownloadingAndOpening:
-                case PartDatasheetState.Cached: return Colors.LightGreen;
-                default: return Colors.White;
-            }
+            return state == PartDatasheetState.Downloading || state == PartDatasheetState.DownloadingAndOpening;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

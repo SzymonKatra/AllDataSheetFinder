@@ -84,6 +84,7 @@
     <Compile Include="BitmapImageLoadingInfo.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Controls\DataGridAppend.cs" />
+    <Compile Include="Converters\IsDownloadingConverter.cs" />
     <Compile Include="Converters\PartDatasheetStateToColorConverter.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="MainViewModel.cs" />

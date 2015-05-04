@@ -18,6 +18,7 @@ namespace AllDataSheetFinder
             m_searchCommand = new RelayCommand(Search, CanSearch);
             m_openPdfCommand = new RelayCommand(OpenPdf);
             m_loadMoreResultCommand = new RelayCommand(LoadMoreResults, CanLoadMoreResult);
+            m_addToFavouritesCommand = new RelayCommand(AddToFavourites);
         }
 
         private int m_openingCount = 0;
@@ -27,7 +28,7 @@ namespace AllDataSheetFinder
         public bool Searching
         {
             get { return m_searching; }
-            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); m_loadMoreResultCommand.RaiseCanExecuteChanged(); }
+            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); m_loadMoreResultCommand.RaiseCanExecuteChanged(); RaisePropertyChanged("LoadMoreVisible"); }
         }
 
         private string m_searchField;
@@ -66,6 +67,17 @@ namespace AllDataSheetFinder
         public ICommand LoadMoreResultsCommand
         {
             get { return m_loadMoreResultCommand; }
+        }
+
+        private RelayCommand m_addToFavouritesCommand;
+        public ICommand AddToFavouritesCommand
+        {
+            get { return m_addToFavouritesCommand; }
+        }
+
+        public bool LoadMoreVisible
+        {
+            get { return m_searchContext != null && m_searchContext.CanLoadMore; }
         }
 
         private void AddResults(List<AllDataSheetPart> results)
@@ -145,6 +157,26 @@ namespace AllDataSheetFinder
         private bool CanLoadMoreResult(object param)
         {
             return !Searching && m_searchContext != null && m_searchContext.CanLoadMore;
+        }
+
+        private async void AddToFavourites(object param)
+        {
+            if (m_selectedResult == null) return;
+            try
+            {
+                m_openingCount++;
+                Mouse.OverrideCursor = Cursors.AppStarting;
+                await m_selectedResult.SavePdf();
+            }
+            catch
+            {
+                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
+            }
+            finally
+            {
+                m_openingCount--;
+                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+            }
         }
     }
 }

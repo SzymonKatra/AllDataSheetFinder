@@ -69,8 +69,15 @@ namespace AllDataSheetFinder
 
         public async Task OpenPdf()
         {
-            if (State == PartDatasheetState.Downloading) return;
-            CheckState();
+            if (State == PartDatasheetState.DownloadingAndOpening) return;
+            if (State == PartDatasheetState.Downloading)
+            {
+                State = PartDatasheetState.DownloadingAndOpening;
+                await Task.Run(() =>
+                {
+                    while (State != PartDatasheetState.Saved) Task.Delay(100);
+                });
+            }
 
             string code = m_part.Code;
             if (State == PartDatasheetState.Saved)
@@ -85,31 +92,64 @@ namespace AllDataSheetFinder
             }
             else
             {
-                State = PartDatasheetState.Downloading;
+                State = PartDatasheetState.DownloadingAndOpening;
                 string pdfPath = Global.BuildCachedDatasheetPath(code);
-                Stream stream = null;
-                try
-                {
-                    stream = await m_part.GetDatasheetStreamAsync();
-                    await Task.Run(() =>
-                    {
-                        using (FileStream file = new FileStream(pdfPath, FileMode.OpenOrCreate))
-                        {
-                            byte[] buffer = new byte[4096];
-                            int len;
-                            while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
-                        }
-                    });
-                    Process.Start(pdfPath);
-                }
-                finally
-                {
-                    if (stream != null) stream.Close();
-                    CheckState();
-                }
+                await DownloadPdf(pdfPath);
+                Process.Start(pdfPath);
+                CheckState();
             }
         }
+
+        public async Task SavePdf()
+        {
+            if (State == PartDatasheetState.Downloading) return;
+            if (State == PartDatasheetState.DownloadingAndOpening)
+            {
+                await Task.Run(() =>
+                {
+                    while (State != PartDatasheetState.Cached) Task.Delay(100);
+                });
+            }
+
+            string code = m_part.Code;
+
+            if (State == PartDatasheetState.NotDownloaded)
+            {
+                State = PartDatasheetState.Downloading;
+                string pdfPath = Global.BuildSavedDatasheetPath(code);
+                await DownloadPdf(pdfPath);
+                CheckState();
+            }
+
+            if (State == PartDatasheetState.Cached)
+            {
+                File.Copy(Global.BuildCachedDatasheetPath(code), Global.BuildSavedDatasheetPath(code));
+            }
+            CheckState();
+        }
     
+        private async Task DownloadPdf(string pdfPath)
+        {
+            Stream stream = null;
+            try
+            {
+                stream = await m_part.GetDatasheetStreamAsync();
+                await Task.Run(() =>
+                {
+                    using (FileStream file = new FileStream(pdfPath, FileMode.OpenOrCreate))
+                    {
+                        byte[] buffer = new byte[4096];
+                        int len;
+                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
+                    }
+                });
+            }
+            finally
+            {
+                if (stream != null) stream.Close();
+            }
+        }
+
         public async void LoadImage()
         {
             string file = ImageFileName;

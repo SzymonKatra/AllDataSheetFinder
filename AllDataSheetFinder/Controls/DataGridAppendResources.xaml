@@ -33,11 +33,11 @@
                 </ScrollViewer.Template>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                    <ContentPresenter Grid.Row="1" Content="{TemplateBinding AppendControl}"/>
+                    <ContentPresenter Grid.Row="1" VerticalAlignment="Top" Content="{TemplateBinding AppendControl}"/>
                 </Grid>
             </ScrollViewer>
         </Border>

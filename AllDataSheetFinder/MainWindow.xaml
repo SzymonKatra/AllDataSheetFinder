@@ -1,10 +1,11 @@
 ﻿<Window x:Class="AllDataSheetFinder.MainWindow"
+        x:Name="root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:e="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
         xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
-        Title="{DynamicResource StringAppName}" Height="350" Width="525"
+        Title="{DynamicResource StringAppName}" Height="600" Width="800"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,26 +23,43 @@
             <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
-        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}">
+        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}"
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <e:EventToCommand Command="{Binding OpenPdfCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <my:DataGridAppend.AppendControl>
-                <Button Height="20" Content="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                <Button Style="{StaticResource StyleCommonMargin}" Height="40" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Content="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
             </my:DataGridAppend.AppendControl>
             <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
                     <Setter Property="Background">
                         <Setter.Value>
                             <SolidColorBrush Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}"/>
                         </Setter.Value>
                     </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterIsDownloading}}" Value="True">       
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard x:Name="StoryboardBegin">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="Transparent" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterIsDownloading}}" Value="False">
+                            <DataTrigger.EnterActions>
+                                <StopStoryboard BeginStoryboardName="StoryboardBegin"/>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer">
+                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -55,17 +73,24 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{DynamicResource StringPartName}">
+                <DataGridTemplateColumn Header="{DynamicResource StringPartName}" Width="20*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}">
+                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="55*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="10*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

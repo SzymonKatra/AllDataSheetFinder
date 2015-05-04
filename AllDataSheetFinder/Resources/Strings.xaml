@@ -10,5 +10,6 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringPartDescription">Description</s:String>
     <s:String x:Key="StringDownloadError">An error occurred while downloading datasheet</s:String>
     <s:String x:Key="StringLoadMoreResults">Load more</s:String>
+    <s:String x:Key="StringAddToFavourites">Favourite</s:String>
     
 </ResourceDictionary>
