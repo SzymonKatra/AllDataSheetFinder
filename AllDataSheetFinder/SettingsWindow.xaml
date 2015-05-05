@@ -1,0 +1,39 @@
+﻿<Window x:Class="AllDataSheetFinder.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
+        xmlns:v="clr-namespace:AllDataSheetFinder.Validation"
+        Title="{DynamicResource StringSettings}" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="64"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxCacheSize}"/>
+            
+            <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                <!--<TextBox.Text>
+                    <Binding Path="MaxCacheSize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:IntegerRule Min="1"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>-->
+            </TextBox>
+        </Grid>
+        
+        <my:OkCancelControl Grid.Row="1" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+    </Grid>
+</Window>

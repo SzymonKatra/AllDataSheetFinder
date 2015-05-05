@@ -66,14 +66,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\OkCancelControl.xaml.cs">
+      <DependentUpon>OkCancelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
     <Compile Include="SavedPart.cs" />
+    <Compile Include="SettingsViewModel.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StringExt.cs" />
+    <Compile Include="Validation\IntegerRule.cs" />
+    <Compile Include="Validation\ValidationRuleWithResult.cs" />
     <Page Include="Controls\DataGridAppendResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OkCancelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,6 +191,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\favourite_filled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\cancel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -27,6 +27,8 @@
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
 
+            <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="0" ImageSource="{StaticResource ImageSettings}" ImageMargin="3,3,3,3" Text="{DynamicResource StringSettings}" Command="{Binding SettingsCommand}"/>
+            
             <my:ImageButton Grid.Column="1" Text="{DynamicResource StringFavourites}" Command="{Binding ShowFavouritesCommand}">
                 <my:ImageButton.Style>
                     <Style TargetType="{x:Type my:ImageButton}" BasedOn="{StaticResource StyleCommonMargin}">
@@ -37,7 +39,7 @@
                             <DataTrigger Binding="{Binding IsFavouritesMode}" Value="True">
                                 <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
                             </DataTrigger>
-                            <MultiDataTrigger>
+                            <!--<MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True"/>
                                     <Condition Binding="{Binding Searching}" Value="False" />
@@ -45,7 +47,7 @@
                                 <MultiDataTrigger.Setters>
                                     <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
                                 </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
+                            </MultiDataTrigger>-->
                         </Style.Triggers>
                     </Style>
                 </my:ImageButton.Style>
@@ -54,7 +56,7 @@
             <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="3" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageSearch}" Text="{DynamicResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
-        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}"
+        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
                            CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" CanUserResizeColumns="False" VerticalScrollBarVisibility="Visible">
             <my:DataGridAppend.AppendControl>
                 <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Row="1" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
@@ -150,7 +152,7 @@
                                                     <Condition Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsSaved}}" Value="True" />
                                                 </MultiDataTrigger.Conditions>
                                                 <MultiDataTrigger.Setters>
-                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavourite}"/>
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
                                                 </MultiDataTrigger.Setters>
                                             </MultiDataTrigger>
                                             <MultiDataTrigger>

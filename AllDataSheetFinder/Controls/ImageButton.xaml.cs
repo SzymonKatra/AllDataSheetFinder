@@ -53,11 +53,11 @@ namespace AllDataSheetFinder.Controls
             set { SetValue(CommandProperty, value); }
         }
 
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandProperty", typeof(object), typeof(ImageButton), new PropertyMetadata());
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(ImageButton), new PropertyMetadata());
         public object CommandParameter
         {
-            get { return GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+            get { return GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
         }
     }
 }

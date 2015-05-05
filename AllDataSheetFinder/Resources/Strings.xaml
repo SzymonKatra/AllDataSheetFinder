@@ -14,5 +14,11 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Do you really want to remove this datasheet from favourites?</s:String>
     <s:String x:Key="StringOpen">Open</s:String>
     <s:String x:Key="StringFavourites">Favourites</s:String>
+    <s:String x:Key="StringSettings">Settings</s:String>
+    <s:String x:Key="StringInnerError">Inner error</s:String>
+    <s:String x:Key="StringIllegalCharacters">Illegal characters</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Must be in range from {0} to {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Settings</s:String>
+    <s:String x:Key="StringMaxCacheSize">Maximum cache size (MB)</s:String>
     
 </ResourceDictionary>

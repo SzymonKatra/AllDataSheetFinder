@@ -13,6 +13,12 @@ namespace AllDataSheetFinder
 {
     public static class Global
     {
+        static Global()
+        {
+            s_dialogs = new DialogService();
+            s_dialogs.AddMapping(typeof(SettingsViewModel), typeof(SettingsWindow));
+        }
+
         public static readonly string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
         public static readonly string ImagesCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Images";
         public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
@@ -69,11 +75,6 @@ namespace AllDataSheetFinder
         public static object DownloadListLock
         {
             get { return s_downloadListLock; }
-        }
-
-        static Global()
-        {
-            s_dialogs = new DialogService();
         }
 
         public static string GetStringResource(object key)

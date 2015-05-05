@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Windows.Data;
 using MVVMUtils;
 
 namespace AllDataSheetFinder
@@ -21,6 +23,14 @@ namespace AllDataSheetFinder
             m_addToFavouritesCommand = new RelayCommand(AddToFavourites);
             m_saveFavouritesCommand = new RelayCommand(SaveFavourites);
             m_showFavouritesCommand = new RelayCommand(ShowFavourites, CanShowFavourites);
+            m_settingsCommand = new RelayCommand(Settings);
+
+            m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
+            m_filteredResults.Filter = (x) =>
+            {
+                if (!IsFavouritesMode) return true;
+                return ((PartHandler)x).Part.Name.ToUpper().Contains(m_searchField.ToUpper());
+            };
         }
 
         private int m_openingCount = 0;
@@ -45,13 +55,26 @@ namespace AllDataSheetFinder
         public string SearchField
         {
             get { return m_searchField; }
-            set { m_searchField = value; RaisePropertyChanged("SearchField"); m_searchCommand.RaiseCanExecuteChanged(); }
+            set
+            {
+                m_searchField = value;
+                RaisePropertyChanged("SearchField");
+                m_searchCommand.RaiseCanExecuteChanged();
+
+                if (IsFavouritesMode) m_filteredResults.Refresh();
+            }
         }
 
         private ObservableCollection<PartHandler> m_searchResults = new ObservableCollection<PartHandler>();
         public ObservableCollection<PartHandler> SearchResults
         {
             get { return m_searchResults; }
+        }
+
+        private ICollectionView m_filteredResults;
+        public ICollectionView FilteredResults
+        {
+            get { return m_filteredResults; }
         }
 
         private PartHandler m_selectedResult;
@@ -104,6 +127,12 @@ namespace AllDataSheetFinder
             get { return m_showFavouritesCommand; }
         }
 
+        private RelayCommand m_settingsCommand;
+        public ICommand SettingsCommand
+        {
+            get { return m_settingsCommand; }
+        }
+
         public bool LoadMoreVisible
         {
             get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
@@ -122,8 +151,10 @@ namespace AllDataSheetFinder
         private async void Search(object param)
         {
             m_searchResults.Clear();
+            m_searchContext = null;
             IsFavouritesMode = false;
             Searching = true;
+            m_filteredResults.Refresh();
             Mouse.OverrideCursor = Cursors.AppStarting;
 
             try
@@ -239,6 +270,7 @@ namespace AllDataSheetFinder
 
         private void ShowFavourites(object param)
         {
+            SearchField = string.Empty;
             IsFavouritesMode = true;
 
             Global.SavedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
@@ -254,6 +286,12 @@ namespace AllDataSheetFinder
         private bool CanShowFavourites(object param)
         {
             return !Searching;
+        }
+
+        private void Settings(object param)
+        {
+            SettingsViewModel dialogViewModel = new SettingsViewModel();
+            Global.Dialogs.ShowDialog(this, dialogViewModel);
         }
     }
 }

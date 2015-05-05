@@ -37,4 +37,22 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="StyleTextBoxValidated" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleCommonMargin}">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="StyleTextBlockTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleCommonMargin}">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    
+    <Style x:Key="StyleTextBoxInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTextBoxValidated}">
+        <Setter Property="MaxHeight" Value="24"/>
+    </Style>
+
 </ResourceDictionary>

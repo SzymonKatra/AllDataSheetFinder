@@ -8,5 +8,7 @@
     <BitmapImage x:Key="ImageSettings" UriSource="Images\settings.png"/>
     <BitmapImage x:Key="ImagePdf" UriSource="Images\pdf.png"/>
     <BitmapImage x:Key="ImagePdfFilled" UriSource="Images\pdf_filled.png"/>
+    <BitmapImage x:Key="ImageOk" UriSource="Images\ok.png"/>
+    <BitmapImage x:Key="ImageCancel" UriSource="Images\cancel.png"/> 
     
 </ResourceDictionary>
