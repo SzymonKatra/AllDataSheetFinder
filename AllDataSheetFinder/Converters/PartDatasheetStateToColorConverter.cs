@@ -17,10 +17,10 @@ namespace AllDataSheetFinder.Converters
             switch (state)
             {
                 case PartDatasheetState.Downloading:
-                case PartDatasheetState.Saved: return Color.FromRgb(0xFF, 0xE8, 0x9C);
+                case PartDatasheetState.Saved: return Color.FromRgb(0xFF, 0xEE, 0xD1);
 
                 case PartDatasheetState.DownloadingAndOpening:
-                case PartDatasheetState.Cached: return Color.FromRgb(0x85, 0xC6, 0xFF);
+                case PartDatasheetState.Cached: return Color.FromRgb(0xDC, 0xE8, 0xFC);
                 default: return Colors.White;
             }
         }

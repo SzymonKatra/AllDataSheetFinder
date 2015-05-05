@@ -13,5 +13,6 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringAddToFavourites">Favourite</s:String>
     <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Do you really want to remove this datasheet from favourites?</s:String>
     <s:String x:Key="StringOpen">Open</s:String>
+    <s:String x:Key="StringFavourites">Favourites</s:String>
     
 </ResourceDictionary>

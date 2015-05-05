@@ -14,6 +14,7 @@ namespace AllDataSheetFinder
         public string Manufacturer { get; set; }
         public string ManufacturerImageLink { get; set; }
         public string DatasheetSiteLink { get; set; }
+        public DateTime LastUseDate { get; set; }
         public bool Custom { get; set; }
 
         public static SavedPart FromAllDataSheetPart(AllDataSheetPart part)

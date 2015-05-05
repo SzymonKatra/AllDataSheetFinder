@@ -47,11 +47,22 @@ namespace AllDataSheetFinder
         {
             m_part = part;
             CheckState();
+            if (m_part.Code == "INTEL386_INTEL_226542") Console.WriteLine(State);
         }
 
         private void CheckState()
         {
             string code = m_part.Code;
+
+            bool isDownloading;
+            lock(Global.DownloadListLock) isDownloading = Global.DownloadList.ContainsKey(code);
+            if (isDownloading)
+            {
+                lock(Global.DownloadListLock) State = Global.DownloadList[code];
+                CheckGlobalState();
+                return;
+            }
+
             string pdfPath = Global.BuildSavedDatasheetPath(code);
             if (File.Exists(pdfPath))
             {
@@ -65,6 +76,24 @@ namespace AllDataSheetFinder
                 State = PartDatasheetState.Cached;
                 return;
             }
+
+            State = PartDatasheetState.NotDownloaded;
+        }
+
+        private async void CheckGlobalState()
+        {
+            string code = m_part.Code;
+            await Task.Run(() =>
+            {
+                bool contains;
+                lock (Global.DownloadListLock) contains = Global.DownloadList.ContainsKey(code);
+                while (contains)
+                {
+                    Task.Delay(100);
+                    lock (Global.DownloadListLock) contains = Global.DownloadList.ContainsKey(code);
+                }
+            });
+            CheckState();
         }
 
         public async Task OpenPdf()
@@ -83,6 +112,15 @@ namespace AllDataSheetFinder
             if (State == PartDatasheetState.Saved)
             {
                 string pdfPath = Global.BuildSavedDatasheetPath(code);
+                foreach (var item in Global.SavedParts)
+                {
+                    string savedCode = AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString());
+                    if (savedCode == code)
+                    {
+                        item.LastUseDate = DateTime.Now;
+                        break;
+                    }
+                }
                 Process.Start(pdfPath);
             }
             else if (State == PartDatasheetState.Cached)
@@ -153,6 +191,7 @@ namespace AllDataSheetFinder
         private async Task DownloadPdf(string pdfPath)
         {
             Stream stream = null;
+            lock(Global.DownloadListLock) Global.DownloadList.Add(m_part.Code, State);
             try
             {
                 stream = await m_part.GetDatasheetStreamAsync();
@@ -169,6 +208,7 @@ namespace AllDataSheetFinder
             finally
             {
                 if (stream != null) stream.Close();
+                lock(Global.DownloadListLock) Global.DownloadList.Remove(m_part.Code);
             }
         }
 

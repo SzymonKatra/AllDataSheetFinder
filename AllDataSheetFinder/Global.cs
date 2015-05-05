@@ -59,6 +59,18 @@ namespace AllDataSheetFinder
             get { return s_savedParts; }
         }
 
+        private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
+        public static Dictionary<string, PartDatasheetState> DownloadList
+        {
+            get { return s_downloadList; }
+        }
+
+        private static object s_downloadListLock = new object();
+        public static object DownloadListLock
+        {
+            get { return s_downloadListLock; }
+        }
+
         static Global()
         {
             s_dialogs = new DialogService();
@@ -160,7 +172,18 @@ namespace AllDataSheetFinder
             string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
             if (File.Exists(path))
             {
-                using (FileStream file = new FileStream(path, FileMode.Open)) s_savedParts = (List<SavedPart>)s_serialzierSavedParts.Deserialize(file);
+                using (FileStream file = new FileStream(path, FileMode.Open))
+                {
+                    try
+                    {
+                        s_savedParts = (List<SavedPart>)s_serialzierSavedParts.Deserialize(file);
+                    }
+                    catch
+                    {
+                        file.Close();
+                        File.Delete(path);
+                    }
+                }
             }
         }
         public static void SaveSavedParts()

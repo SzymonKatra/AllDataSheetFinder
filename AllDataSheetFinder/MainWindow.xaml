@@ -21,16 +21,41 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64"/>
+                <ColumnDefinition Width="64"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Style="{StaticResource StyleSearchField}" Grid.Column="0" Text="{Binding SearchField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="1" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageSearch}" Text="{StaticResource StringSearch}" Command="{Binding SearchCommand}"/>
+            <my:ImageButton Grid.Column="1" Text="{DynamicResource StringFavourites}" Command="{Binding ShowFavouritesCommand}">
+                <my:ImageButton.Style>
+                    <Style TargetType="{x:Type my:ImageButton}" BasedOn="{StaticResource StyleCommonMargin}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFavouritesMode}" Value="False">
+                                <Setter Property="ImageSource" Value="{StaticResource ImageFavourite}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsFavouritesMode}" Value="True">
+                                <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True"/>
+                                    <Condition Binding="{Binding Searching}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </my:ImageButton.Style>
+            </my:ImageButton>
+            <TextBox x:Name="TextBoxSearch" Style="{StaticResource StyleSearchField}" Grid.Column="2" Text="{Binding SearchField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="TextBoxSearch_PreviewKeyDown"/>
+            <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="3" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageSearch}" Text="{DynamicResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
         <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White">
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" CanUserResizeColumns="False" VerticalScrollBarVisibility="Visible">
             <my:DataGridAppend.AppendControl>
                 <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Row="1" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
             </my:DataGridAppend.AppendControl>
@@ -60,13 +85,13 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="15*">
+                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50"/>
-                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Image Source="{Binding Image}" Width="150" Height="50"/>
                                 <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Part.Manufacturer}"/>
@@ -81,14 +106,38 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="50*">
+                <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="85*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="10*">
+                <DataGridTemplateColumn Width="64">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
+                                <my:ImageButton.Style>
+                                    <Style TargetType="{x:Type my:ImageButton}">
+                                        <Style.Triggers>
+
+                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="True">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="False">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdf}"/>
+                                            </DataTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </my:ImageButton.Style>
+                            </my:ImageButton>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}">
@@ -131,30 +180,6 @@
                                                     <Setter Property="ImageSource" Value="{StaticResource ImageFavourite}"/>
                                                 </MultiDataTrigger.Setters>
                                             </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </my:ImageButton.Style>
-                            </my:ImageButton>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="10*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
-                                <my:ImageButton.Style>
-                                    <Style TargetType="{x:Type my:ImageButton}">
-                                        <Style.Triggers>
-                                            
-                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="True">
-                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="False">
-                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdf}"/>
-                                            </DataTrigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
-                                            </Trigger>
                                         </Style.Triggers>
                                     </Style>
                                 </my:ImageButton.Style>

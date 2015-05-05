@@ -17,9 +17,10 @@ namespace AllDataSheetFinder
         {
             m_searchCommand = new RelayCommand(Search, CanSearch);
             m_openPdfCommand = new RelayCommand(OpenPdf);
-            m_loadMoreResultCommand = new RelayCommand(LoadMoreResults, CanLoadMoreResult);
+            m_loadMoreResultCommand = new RelayCommand(LoadMoreResults, CanLoadMoreResults);
             m_addToFavouritesCommand = new RelayCommand(AddToFavourites);
             m_saveFavouritesCommand = new RelayCommand(SaveFavourites);
+            m_showFavouritesCommand = new RelayCommand(ShowFavourites, CanShowFavourites);
         }
 
         private int m_openingCount = 0;
@@ -29,7 +30,15 @@ namespace AllDataSheetFinder
         public bool Searching
         {
             get { return m_searching; }
-            set { m_searching = value; RaisePropertyChanged("Searching"); m_searchCommand.RaiseCanExecuteChanged(); m_loadMoreResultCommand.RaiseCanExecuteChanged(); RaisePropertyChanged("LoadMoreVisible"); }
+            set
+            {
+                m_searching = value;
+                RaisePropertyChanged("Searching");
+                m_searchCommand.RaiseCanExecuteChanged();
+                m_loadMoreResultCommand.RaiseCanExecuteChanged();
+                m_showFavouritesCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged("LoadMoreVisible");
+            }
         }
 
         private string m_searchField;
@@ -50,6 +59,13 @@ namespace AllDataSheetFinder
         {
             get { return m_selectedResult; }
             set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
+        }
+
+        private bool m_isFavouritesMode = false;
+        public bool IsFavouritesMode
+        {
+            get { return m_isFavouritesMode; }
+            set { m_isFavouritesMode = value; RaisePropertyChanged("IsFavouritesMode"); RaisePropertyChanged("LoadMoreVisible"); m_loadMoreResultCommand.RaiseCanExecuteChanged(); }
         }
 
         private RelayCommand m_searchCommand;
@@ -82,9 +98,15 @@ namespace AllDataSheetFinder
             get { return m_saveFavouritesCommand; }
         }
 
+        private RelayCommand m_showFavouritesCommand;
+        public ICommand ShowFavouritesCommand
+        {
+            get { return m_showFavouritesCommand; }
+        }
+
         public bool LoadMoreVisible
         {
-            get { return m_searchContext != null && m_searchContext.CanLoadMore; }
+            get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
         }
 
         private void AddResults(List<AllDataSheetPart> results)
@@ -99,6 +121,8 @@ namespace AllDataSheetFinder
 
         private async void Search(object param)
         {
+            m_searchResults.Clear();
+            IsFavouritesMode = false;
             Searching = true;
             Mouse.OverrideCursor = Cursors.AppStarting;
 
@@ -106,7 +130,6 @@ namespace AllDataSheetFinder
             {
                 AllDataSheetSearchResult result = await AllDataSheetPart.SearchAsync(m_searchField);
                 m_searchContext = result.SearchContext;
-                m_searchResults.Clear();
                 AddResults(result.Parts);
             }
             catch
@@ -114,7 +137,7 @@ namespace AllDataSheetFinder
                 Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
             }
 
-            Mouse.OverrideCursor = null;
+            if(m_openingCount <= 0) Mouse.OverrideCursor = null;
             Searching = false;
         }
         private bool CanSearch(object param)
@@ -161,9 +184,9 @@ namespace AllDataSheetFinder
             Mouse.OverrideCursor = null;
             Searching = false;
         }
-        private bool CanLoadMoreResult(object param)
+        private bool CanLoadMoreResults(object param)
         {
-            return !Searching && m_searchContext != null && m_searchContext.CanLoadMore;
+            return !Searching && !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore;
         }
 
         private async void AddToFavourites(object param)
@@ -174,6 +197,21 @@ namespace AllDataSheetFinder
             {
                 if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
                 m_selectedResult.RemovePdf();
+                if (IsFavouritesMode)
+                {
+                    SavedPart toRemove = null;
+                    foreach (var item in Global.SavedParts)
+                    {
+                        string code = AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString());
+                        if (code == m_selectedResult.Part.Code)
+                        {
+                            toRemove = item;
+                            break;
+                        }
+                    }
+                    if (toRemove != null) Global.SavedParts.Remove(toRemove);
+                    m_searchResults.Remove(m_selectedResult);
+                }
                 return;
             }
 
@@ -197,6 +235,25 @@ namespace AllDataSheetFinder
         private void SaveFavourites(object param)
         {
             Global.SaveSavedParts();
+        }
+
+        private void ShowFavourites(object param)
+        {
+            IsFavouritesMode = true;
+
+            Global.SavedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
+            
+            m_searchResults.Clear();
+            foreach (var item in Global.SavedParts)
+            {
+                PartHandler handler = new PartHandler(item.ToAllDataSheetPart());
+                handler.LoadImage();
+                m_searchResults.Add(handler);
+            }
+        }
+        private bool CanShowFavourites(object param)
+        {
+            return !Searching;
         }
     }
 }
