@@ -19,6 +19,15 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringIllegalCharacters">Illegal characters</s:String>
     <s:String x:Key="StringFormatMustBeInRange">Must be in range from {0} to {1}</s:String>
     <s:String x:Key="StringSettingsTitle">Settings</s:String>
-    <s:String x:Key="StringMaxCacheSize">Maximum cache size (MB)</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maximum datasheets cache size (MB)</s:String>
+    <s:String x:Key="StringClearDatasheetsCache">Clear datasheets cache</s:String>
+    <s:String x:Key="StringClearImagesCache">Clear images cache</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Do you rellay want to clear datasheets cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Do you really want to clear images cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Do you really want to clear favourites datasheets?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Current datasheets cache size: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Current images cache size: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Current favourites size: {0} MB</s:String>
+    <s:String x:Key="StringClear">Clear</s:String>
     
 </ResourceDictionary>

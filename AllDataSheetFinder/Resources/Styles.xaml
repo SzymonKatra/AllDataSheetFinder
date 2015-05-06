@@ -47,7 +47,7 @@
     
     <Style x:Key="StyleTextBlockTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleCommonMargin}">
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
     

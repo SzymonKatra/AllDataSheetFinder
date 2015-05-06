@@ -27,6 +27,7 @@ namespace AllDataSheetFinder
             this.Width = SystemParameters.PrimaryScreenWidth * 0.6;
             this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
             this.Loaded += MainWindow_Loaded;
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
 
             Global.InitializeAll();
 
@@ -36,6 +37,11 @@ namespace AllDataSheetFinder
             this.DataContext = main;
 
             Global.Dialogs.Register(this, main);
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearch.Focus();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
