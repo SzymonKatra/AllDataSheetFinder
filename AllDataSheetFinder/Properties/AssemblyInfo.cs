@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AllDataSheetFinder")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tool for downloading and organizing datasheets from alldatasheet.com site")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Szymon Katra")]
 [assembly: AssemblyProduct("AllDataSheetFinder")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

@@ -12,6 +12,8 @@ using System.IO;
 using AllDataSheetFinder.Controls;
 using System.Globalization;
 using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace AllDataSheetFinder
 {
@@ -67,6 +69,29 @@ namespace AllDataSheetFinder
                 pair = new LanguagePair(tokens[1]);
                 m_availableLanguages.Add(pair);
                 if (pair.Name == Global.Configuration.Language) m_selectedLanguage = pair;
+            }
+        }
+
+        private FileVersionInfo m_fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+        public string Author
+        {
+            get
+            {
+                return m_fileVersionInfo.CompanyName;
+            }
+        }
+        public string Version
+        {
+            get
+            {
+                return m_fileVersionInfo.ProductVersion;
+            }
+        }
+        public string License
+        {
+            get
+            {
+                return Global.GetStringResource("StringLicense");
             }
         }
 

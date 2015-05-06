@@ -29,5 +29,8 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringClear">Clear</s:String>
     <s:String x:Key="StringDefault">Default</s:String>
     <s:String x:Key="StringLanguage">Language</s:String>
+    <s:String x:Key="StringFormatLicense">License: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Author: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
     
 </ResourceDictionary>

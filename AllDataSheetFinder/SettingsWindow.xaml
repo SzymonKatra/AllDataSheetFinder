@@ -8,6 +8,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="64"/>
         </Grid.RowDefinitions>
         
@@ -63,6 +66,10 @@
             
         </Grid>
         
-        <my:OkCancelControl Grid.Row="1" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+        <TextBlock Grid.Row="1" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Author, StringFormat={StaticResource StringFormatAuthor}}"/>
+        <TextBlock Grid.Row="2" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding License, StringFormat={StaticResource StringFormatLicense}}"/>
+        <TextBlock Grid.Row="3" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Version, StringFormat={StaticResource StringFormatVersion}}"/>
+        
+        <my:OkCancelControl Grid.Row="4" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>
 </Window>

@@ -29,5 +29,8 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringClear">Wyczyść</s:String>
     <s:String x:Key="StringDefault">Domyślny</s:String>
     <s:String x:Key="StringLanguage">Język</s:String>
+    <s:String x:Key="StringFormatLicense">Licencja: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Wersja: {0}</s:String>
     
 </ResourceDictionary>
