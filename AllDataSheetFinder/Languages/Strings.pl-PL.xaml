@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="StringSearch">Szukaj</s:String>
+    <s:String x:Key="StringSearchError" xml:space="preserve">Wystąpił błąd podczas wyszukiwania.
+Sprawdź swoje połączenie internetowe.</s:String>
+    <s:String x:Key="StringManufacturer">Producent</s:String>
+    <s:String x:Key="StringPartName">Nazwa części</s:String>
+    <s:String x:Key="StringPartDescription">Opis</s:String>
+    <s:String x:Key="StringDownloadError">Wystąpił błąd podczas pobierania dokumentacji</s:String>
+    <s:String x:Key="StringLoadMoreResults">Załaduj więcej</s:String>
+    <s:String x:Key="StringAddToFavourites">Ulubione</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Czy na pewno chcesz usunąć tą dokumentację z ulubionych?</s:String>
+    <s:String x:Key="StringOpen">Otwórz</s:String>
+    <s:String x:Key="StringFavourites">Ulubione</s:String>
+    <s:String x:Key="StringSettings">Ustawienia</s:String>
+    <s:String x:Key="StringInnerError">Wewnętrzny błąd</s:String>
+    <s:String x:Key="StringIllegalCharacters">Niedozwolone znaki</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Musi być w zakresie od {0} do {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Ustawienia</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maks. rozm. przechowywanych dokumentacji (MB)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Czy na pewno chcesz wyczyścić pamięć podręczną dokumentacji?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Czy na pewno chcesz wyczyścić pamięć podręczną obrazków?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Czy na pewno chcesz usunąć ulubione dokumentacje?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Aktualny rozmiar przechowywanych dokumentacji: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Aktualny rozmiar przechowywanych obrazków: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Aktualny rozmiar ulubionych: {0} MB</s:String>
+    <s:String x:Key="StringClear">Wyczyść</s:String>
+    <s:String x:Key="StringDefault">Domyślny</s:String>
+    <s:String x:Key="StringLanguage">Język</s:String>
+    <s:String x:Key="StringFormatLicense">Licencja: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Wersja: {0}</s:String>
+    
+</ResourceDictionary>

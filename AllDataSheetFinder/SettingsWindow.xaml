@@ -1,0 +1,75 @@
+﻿<Window x:Class="AllDataSheetFinder.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
+        xmlns:v="clr-namespace:AllDataSheetFinder.Validation"
+        Title="{DynamicResource StringSettings}" Height="400" Width="450"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="64"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>           
+            <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Column="0" Text="{Binding CurrentDatasheetsCacheSize, StringFormat={StaticResource StringFormatCurrentDatasheetsCacheSize}}"/>
+                <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearDatasheetsCacheCommand}"/>
+            </Grid>
+            
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Column="0" Text="{Binding CurrentImagesCacheSize, StringFormat={StaticResource StringFormatCurrentImagesCacheSize}}"/>
+                <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearImagesCacheCommand}"/>
+            </Grid>
+
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Column="0" Text="{Binding CurrentSavedDatasheetsSize, StringFormat={StaticResource StringFormatCurrentSavedDatasheetsSize}}"/>
+                <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearSavedDatasheetsCommand}"/>
+            </Grid>
+
+            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
+            <ComboBox Grid.Column="1" Grid.Row="4" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
+            
+        </Grid>
+        
+        <TextBlock Grid.Row="1" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Author, StringFormat={StaticResource StringFormatAuthor}}"/>
+        <TextBlock Grid.Row="2" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding License, StringFormat={StaticResource StringFormatLicense}}"/>
+        <TextBlock Grid.Row="3" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Version, StringFormat={StaticResource StringFormatVersion}}"/>
+        
+        <my:OkCancelControl Grid.Row="4" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
+    </Grid>
+</Window>

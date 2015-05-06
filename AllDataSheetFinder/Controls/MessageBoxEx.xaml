@@ -1,0 +1,44 @@
+﻿<Window x:Class="AllDataSheetFinder.Controls.MessageBoxEx"
+        x:Name="root"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
+        Title="{Binding Caption}" SizeToContent="WidthAndHeight" MinWidth="300" MinHeight="150"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="64"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Text="{Binding Message}" Margin="30,20,30,20"/>
+        <ItemsControl Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding Buttons}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <my:ImageButton Margin="5,5,5,5" ImageMargin="3,3,3,3" Command="{Binding DataContext.ClickCommand, ElementName=root}" CommandParameter="{Binding}">
+                        <my:ImageButton.Style>
+                            <Style TargetType="{x:Type my:ImageButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding}" Value="Ok">
+                                        <Setter Property="ImageSource" Value="{StaticResource ImageOk}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding}" Value="Yes">
+                                        <Setter Property="ImageSource" Value="{StaticResource ImageOk}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding}" Value="No">
+                                         <Setter Property="ImageSource" Value="{StaticResource ImageCancel}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </my:ImageButton.Style>
+                    </my:ImageButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</Window>

@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:my="clr-namespace:AllDataSheetFinder.Converters">
+    <my:PartDatasheetStateToColorConverter x:Key="ConverterPartDatasheetStateToColor"/>
+    <my:IsDownloadingConverter x:Key="ConverterIsDownloading"/>
+    <my:PartDatasheetStateToIsSavedConverter x:Key="ConverterPartDatasheetStateToIsSaved"/>
+    <my:PartDatasheetStateToIsAvailableConverter x:Key="ConverterPartDatasheetStateToIsAvailable"/>
+    <BooleanToVisibilityConverter x:Key="ConverterBooleanToVisibility"/>
+</ResourceDictionary>

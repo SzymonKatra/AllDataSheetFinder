@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="AllDataSheetFinder.Controls.OkCancelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="64" d:DesignWidth="300">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <my:ImageButton Style="{StaticResource StyleCommonMargin}" ImageSource="{StaticResource ImageOk}" ImageMargin="3,3,3,3" Command="{Binding CommandOk}" CommandParameter="{Binding CommandParameterOk}"/>
+            <my:ImageButton Style="{StaticResource StyleCommonMargin}" ImageSource="{StaticResource ImageCancel}" ImageMargin="3,3,3,3" Command="{Binding CommandCancel}" CommandParameter="{Binding CommandParameterCancel}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

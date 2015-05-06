@@ -23,6 +23,39 @@ namespace AllDataSheetFinder
         public MainWindow()
         {
             InitializeComponent();
+
+            this.Width = SystemParameters.PrimaryScreenWidth * 0.6;
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
+            this.Loaded += MainWindow_Loaded;
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
+
+            Global.InitializeAll();
+
+            MainViewModel main = new MainViewModel();
+            Global.Main = main;
+
+            this.DataContext = main;
+
+            Global.Dialogs.Register(this, main);
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBoxSearch.Focus();
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            TextBoxSearch.Focus();
+        }
+
+        private void TextBoxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                MainViewModel vm = (MainViewModel)this.DataContext;
+                if (vm.SearchCommand.CanExecute(null)) vm.SearchCommand.Execute(null);
+            }
         }
     }
 }

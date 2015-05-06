@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="StringSearch">Search</s:String>
+    <s:String x:Key="StringSearchError" xml:space="preserve">An error occurred while searching.
+Please check your internet connection.</s:String>
+    <s:String x:Key="StringManufacturer">Manufacturer</s:String>
+    <s:String x:Key="StringPartName">Part name</s:String>
+    <s:String x:Key="StringPartDescription">Description</s:String>
+    <s:String x:Key="StringDownloadError">An error occurred while downloading datasheet</s:String>
+    <s:String x:Key="StringLoadMoreResults">Load more</s:String>
+    <s:String x:Key="StringAddToFavourites">Favourite</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Do you really want to remove this datasheet from favourites?</s:String>
+    <s:String x:Key="StringOpen">Open</s:String>
+    <s:String x:Key="StringFavourites">Favourites</s:String>
+    <s:String x:Key="StringSettings">Settings</s:String>
+    <s:String x:Key="StringInnerError">Inner error</s:String>
+    <s:String x:Key="StringIllegalCharacters">Illegal characters</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Must be in range from {0} to {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Settings</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maximum datasheets cache size (MB)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Do you rellay want to clear datasheets cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Do you really want to clear images cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Do you really want to clear favourites datasheets?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Current datasheets cache size: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Current images cache size: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Current favourites size: {0} MB</s:String>
+    <s:String x:Key="StringClear">Clear</s:String>
+    <s:String x:Key="StringDefault">Default</s:String>
+    <s:String x:Key="StringLanguage">Language</s:String>
+    <s:String x:Key="StringFormatLicense">License: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Author: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
+    
+</ResourceDictionary>
