@@ -47,7 +47,6 @@ namespace AllDataSheetFinder
         {
             m_part = part;
             CheckState();
-            if (m_part.Code == "INTEL386_INTEL_226542") Console.WriteLine(State);
         }
 
         private void CheckState()
