@@ -10,5 +10,6 @@ namespace AllDataSheetFinder
     public class Config
     {
         public long MaxDatasheetsCacheSize { get; set; }
+        public string Language { get; set; }
     }
 }

@@ -197,7 +197,7 @@ namespace AllDataSheetFinder
                 stream = await m_part.GetDatasheetStreamAsync();
                 await Task.Run(() =>
                 {
-                    using (FileStream file = new FileStream(pdfPath, FileMode.OpenOrCreate))
+                    using (FileStream file = new FileStream(pdfPath, FileMode.Create))
                     {
                         byte[] buffer = new byte[4096];
                         int len;
@@ -248,7 +248,7 @@ namespace AllDataSheetFinder
                 {
                     Stream stream = m_part.GetManufacturerImageStream();
 
-                    FileStream fileStream = new FileStream(imagePath, FileMode.OpenOrCreate);
+                    FileStream fileStream = new FileStream(imagePath, FileMode.Create);
                     try
                     {
                         byte[] buffer = new byte[1024];

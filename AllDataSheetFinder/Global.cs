@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Windows.Media.Imaging;
 using MVVMUtils;
 using AllDataSheetFinder.Controls;
+using System.Globalization;
 
 namespace AllDataSheetFinder
 {
@@ -26,9 +27,12 @@ namespace AllDataSheetFinder
         public static readonly string SavedDatasheetsDirectory = "SavedDatasheets";
         public static readonly string ConfigFile = "config.xml";
         public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
+        public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
         private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<SavedPart>));
+
+        private static ResourceDictionary s_stringsDictionary;
 
         private static Config s_configuration;
         public static Config Configuration
@@ -92,10 +96,57 @@ namespace AllDataSheetFinder
             return mbox.Result;
         }
 
+        public static void ApplyLanguage()
+        {
+            ApplyLanguage(Configuration.Language);
+        }
+        public static void ApplyLanguage(string language)
+        {
+            if (language == "en-US")
+            {
+                s_stringsDictionary.Source = new Uri(@"Resources\Strings.xaml", UriKind.Relative);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(language))
+            {
+                string path = LanguagesDirectory + Path.DirectorySeparatorChar + "Strings." + CultureInfo.CurrentCulture.Name + ".xaml";
+                if (File.Exists(path))
+                {
+                    s_stringsDictionary.Source = new Uri(path, UriKind.Absolute);
+                }
+                else
+                {
+                    s_stringsDictionary.Source = new Uri(@"Resources\Strings.xaml", UriKind.Relative);
+                }
+                return;
+            }
+
+            foreach (string langPath in Directory.EnumerateFiles(LanguagesDirectory))
+            {
+                string file = Path.GetFileName(langPath);
+                string[] tokens = file.Split('.');
+                if (tokens.Length < 2) continue;
+                if (tokens[1].Contains(language))
+                {    
+                    s_stringsDictionary.BeginInit();
+                    s_stringsDictionary.Source = new Uri(langPath, UriKind.Absolute);
+                    s_stringsDictionary.EndInit();
+                    return;
+                }
+            }
+
+            s_stringsDictionary.Source = new Uri(@"Resources\Strings.xaml", UriKind.Relative);
+        }
+
         public static void InitializeAll()
         {
             CreateDirectoriesIfNeeded();
             LoadConfiguration();
+
+            s_stringsDictionary = Application.Current.Resources.MergedDictionaries.Where(x => x.Source.ToString().Contains(@"Resources\Strings.xaml")).ElementAt(0);
+
+            ApplyLanguage();
 
             string datasheetCachePath = AppDataPath + Path.DirectorySeparatorChar + DatasheetsCacheDirectory;
             DirectoryInfo dir = new DirectoryInfo(datasheetCachePath);
@@ -160,17 +211,30 @@ namespace AllDataSheetFinder
             {
                 s_configuration = new Config();
                 s_configuration.MaxDatasheetsCacheSize = 100 * 1024 * 1024; // 100 MiB
+                s_configuration.Language = string.Empty;
                 SaveConfiguration();
             }
             else
             {
-                using (FileStream file = new FileStream(path, FileMode.Open)) s_configuration = (Config)s_serializerConfig.Deserialize(file);
+                using (FileStream file = new FileStream(path, FileMode.Open))
+                {
+                    try
+                    {
+                        s_configuration = (Config)s_serializerConfig.Deserialize(file);
+                    }
+                    catch
+                    {
+                        file.Close();
+                        File.Delete(path);
+                        LoadConfiguration();
+                    }
+                }
             }
         }
         public static void SaveConfiguration()
         {
             string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
-            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) s_serializerConfig.Serialize(file, s_configuration);
+            using (FileStream file = new FileStream(path, FileMode.Create)) s_serializerConfig.Serialize(file, s_configuration);
         }
 
         public static void LoadSavedParts()
@@ -195,7 +259,7 @@ namespace AllDataSheetFinder
         public static void SaveSavedParts()
         {
             string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
-            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate)) s_serialzierSavedParts.Serialize(file, s_savedParts);
+            using (FileStream file = new FileStream(path, FileMode.Create)) s_serialzierSavedParts.Serialize(file, s_savedParts);
         }
 
         public static string BuildSavedDatasheetPath(string code)

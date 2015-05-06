@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
         xmlns:v="clr-namespace:AllDataSheetFinder.Validation"
-        Title="{DynamicResource StringSettings}" Height="400" Width="400"
+        Title="{DynamicResource StringSettings}" Height="400" Width="450"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,19 +13,19 @@
         
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="35"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>
-            
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>           
             <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             
             <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
@@ -57,6 +57,9 @@
                 <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Column="0" Text="{Binding CurrentSavedDatasheetsSize, StringFormat={StaticResource StringFormatCurrentSavedDatasheetsSize}}"/>
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearSavedDatasheetsCommand}"/>
             </Grid>
+
+            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
+            <ComboBox Grid.Column="1" Grid.Row="4" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
             
         </Grid>
         

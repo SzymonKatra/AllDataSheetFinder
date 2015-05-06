@@ -10,11 +10,40 @@ using MVVMUtils;
 using AllDataSheetFinder.Validation;
 using System.IO;
 using AllDataSheetFinder.Controls;
+using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace AllDataSheetFinder
 {
     public class SettingsViewModel : ObservableObject, IDataErrorInfo
     {
+        public class LanguagePair
+        {
+            public string Name { get; set; }
+            public string DisplayName
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(Name)) return Global.GetStringResource("StringDefault");
+
+                    try
+                    {
+                        CultureInfo culture = new CultureInfo(Name);
+                        return culture.NativeName;
+                    }
+                    catch
+                    {
+                        return Name;
+                    }
+                }
+            }
+
+            public LanguagePair(string name)
+            {
+                Name = name;
+            }
+        }
+
         public SettingsViewModel()
         {
             m_okCommand = new RelayCommand(Ok, CanOk);
@@ -24,6 +53,21 @@ namespace AllDataSheetFinder
             m_clearSavedDatasheetsCommand = new RelayCommand(ClearSavedDatasheets);
 
             m_maxCacheSize = (Global.Configuration.MaxDatasheetsCacheSize / (1024 * 1024)).ToString();
+
+            LanguagePair pair = new LanguagePair(string.Empty);
+            m_availableLanguages.Add(pair);
+            m_selectedLanguage = pair;
+            pair = new LanguagePair("en-US");
+            if (Global.Configuration.Language == pair.Name) m_selectedLanguage = pair;
+            m_availableLanguages.Add(pair);
+            foreach (var langPath in Directory.EnumerateFiles(Global.LanguagesDirectory))
+            {
+                string[] tokens = Path.GetFileName(langPath).Split('.');
+                if (tokens.Length < 2) continue;
+                pair = new LanguagePair(tokens[1]);
+                m_availableLanguages.Add(pair);
+                if (pair.Name == Global.Configuration.Language) m_selectedLanguage = pair;
+            }
         }
 
         public int CurrentDatasheetsCacheSize
@@ -88,9 +132,27 @@ namespace AllDataSheetFinder
             get { return m_clearSavedDatasheetsCommand; }
         }
 
+        private ObservableCollection<LanguagePair> m_availableLanguages = new ObservableCollection<LanguagePair>();
+        public ObservableCollection<LanguagePair> AvailableLanguages
+        {
+            get { return m_availableLanguages; }
+        }
+
+        private LanguagePair m_selectedLanguage;
+        public LanguagePair SelectedLanguage
+        {
+            get { return m_selectedLanguage; }
+            set { m_selectedLanguage = value; RaisePropertyChanged("SelectedLanguage"); }
+        }
+
         private void Ok(object param)
         {
             Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSizeValue * 1024 * 1024;
+            if (Global.Configuration.Language != m_selectedLanguage.Name)
+            {
+                Global.Configuration.Language = m_selectedLanguage.Name;
+                Global.ApplyLanguage();
+            }
             Global.SaveConfiguration();
 
             Global.Dialogs.Close(this);
