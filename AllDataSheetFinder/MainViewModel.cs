@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Data;
 using MVVMUtils;
+using AllDataSheetFinder.Controls;
 
 namespace AllDataSheetFinder
 {
@@ -165,7 +166,7 @@ namespace AllDataSheetFinder
             }
             catch
             {
-                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
+                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxExPredefinedButtons.Ok);
             }
 
             if(m_openingCount <= 0) Mouse.OverrideCursor = null;
@@ -187,7 +188,7 @@ namespace AllDataSheetFinder
             }
             catch
             {
-                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
+                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxExPredefinedButtons.Ok);
             }
             finally
             {
@@ -209,7 +210,7 @@ namespace AllDataSheetFinder
             }
             catch
             {
-                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxSuperPredefinedButtons.OK);
+                Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxExPredefinedButtons.Ok);
             }
 
             Mouse.OverrideCursor = null;
@@ -226,7 +227,7 @@ namespace AllDataSheetFinder
 
             if (m_selectedResult.State == PartDatasheetState.Saved)
             {
-                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
                 m_selectedResult.RemovePdf();
                 if (IsFavouritesMode)
                 {
@@ -254,7 +255,7 @@ namespace AllDataSheetFinder
             }
             catch
             {
-                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxSuperPredefinedButtons.OK);
+                Global.MessageBox(this, Global.GetStringResource("StringDownloadError"), MessageBoxExPredefinedButtons.Ok);
             }
             finally
             {

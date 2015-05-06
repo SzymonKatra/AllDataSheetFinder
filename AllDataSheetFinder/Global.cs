@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Windows.Media.Imaging;
 using MVVMUtils;
+using AllDataSheetFinder.Controls;
 
 namespace AllDataSheetFinder
 {
@@ -82,9 +83,13 @@ namespace AllDataSheetFinder
             object result = Application.Current.TryFindResource(key);
             return (result == null ? key + " NOT FOUND - RESOURCE ERROR" : (string)result);
         }
-        public static MessageBoxSuperButton MessageBox(object viewModel, string text, MessageBoxSuperPredefinedButtons buttons)
+        public static MessageBoxExButton MessageBox(object viewModel, string text, MessageBoxExPredefinedButtons buttons)
         {
-            return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("StringAppName"), buttons);
+            //return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("StringAppName"), buttons);
+            MessageBoxEx mbox = new MessageBoxEx(text, GetStringResource("StringAppName"), buttons);
+            mbox.Owner = Dialogs.GetWindow(viewModel);
+            mbox.ShowDialog();
+            return mbox.Result;
         }
 
         public static void InitializeAll()

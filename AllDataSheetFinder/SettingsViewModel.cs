@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using MVVMUtils;
 using AllDataSheetFinder.Validation;
 using System.IO;
+using AllDataSheetFinder.Controls;
 
 namespace AllDataSheetFinder
 {
@@ -106,7 +107,7 @@ namespace AllDataSheetFinder
 
         private void ClearDatasheetsCache(object param)
         {
-            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearDatasheetsCache"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearDatasheetsCache"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
 
             foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.DatasheetsCacheDirectory))
             {
@@ -118,7 +119,7 @@ namespace AllDataSheetFinder
 
         private void ClearImagesCache(object param)
         {
-            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearImagesCache"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearImagesCache"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
 
             foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory))
             {
@@ -130,7 +131,7 @@ namespace AllDataSheetFinder
 
         private void ClearSavedDatasheets(object param)
         {
-            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearSavedDatasheets"), MessageBoxSuperPredefinedButtons.YesNo) != MessageBoxSuperButton.Yes) return;
+            if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantClearSavedDatasheets"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
 
             foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory))
             {
