@@ -44,12 +44,11 @@ namespace AllDataSheetFinder
             }
         }
 
-        private bool m_downloadingMoreInfo = false;
-        private bool m_moreInfoAvailable = false;
-        public bool MoreInfoAvailable
+        private PartMoreInfoState m_moreInfoState = PartMoreInfoState.NotAvailable;
+        public PartMoreInfoState MoreInfoState
         {
-            get { return m_moreInfoAvailable; }
-            set { m_moreInfoAvailable = value; }
+            get { return m_moreInfoState; }
+            set { m_moreInfoState = value; RaisePropertyChanged("MoreInfoState"); }
         }
 
         private string m_datasheetPdfSite;
@@ -230,7 +229,7 @@ namespace AllDataSheetFinder
             lock(Global.DownloadListLock) Global.DownloadList.Add(m_part.Code, State);
             try
             {
-                if (!m_moreInfoAvailable) await RequestMoreInfo();
+                if (m_moreInfoState != PartMoreInfoState.Available) await RequestMoreInfo();
                 stream = await m_part.GetDatasheetStreamAsync(m_datasheetPdfSite);
                 await Task.Run(() =>
                 {
@@ -317,16 +316,16 @@ namespace AllDataSheetFinder
 
         public async Task RequestMoreInfo()
         {
-            if (m_downloadingMoreInfo)
+            if (MoreInfoState == PartMoreInfoState.Downloading)
             {
                 await Task.Run(() => 
                 {
-                    while (m_downloadingMoreInfo) Task.Delay(100);
+                    while (MoreInfoState == PartMoreInfoState.Downloading) Task.Delay(100);
                 });
                 return;
             }
 
-            m_downloadingMoreInfo = true;
+            MoreInfoState = PartMoreInfoState.Downloading;
 
             AllDataSheetPart.MoreInfo moreInfo = await m_part.RequestMoreInfoAsync();
             DatasheetPdfSite = moreInfo.PdfSite;
@@ -343,8 +342,7 @@ namespace AllDataSheetFinder
 
             ManufacturerSite = moreInfo.ManufacturerSite;
 
-            m_moreInfoAvailable = true;
-            m_downloadingMoreInfo = false;
+            MoreInfoState = PartMoreInfoState.Available;
         }
     }
 }
