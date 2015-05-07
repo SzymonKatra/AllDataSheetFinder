@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace AllDataSheetFinder
     {
         public MainWindow()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             InitializeComponent();
 
             this.Width = SystemParameters.PrimaryScreenWidth * 0.6;
@@ -37,6 +40,28 @@ namespace AllDataSheetFinder
             this.DataContext = main;
 
             Global.Dialogs.Register(this, main);
+        }
+
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("====================");
+                sb.AppendLine(DateTime.Now.ToString());
+                sb.AppendLine("====================");
+                sb.AppendLine();
+                sb.AppendLine("Is terminating: " + e.IsTerminating);
+                sb.AppendLine();
+                sb.AppendLine(e.ExceptionObject.ToString());
+                string error = sb.ToString();
+
+                using (StreamWriter writer = new StreamWriter(Global.ErrorLogFileName, true))
+                {
+                    writer.Write(error);
+                }
+            }
+            catch { }
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
