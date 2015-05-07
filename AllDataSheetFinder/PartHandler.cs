@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using MVVMUtils;
+using System.Globalization;
 
 namespace AllDataSheetFinder
 {
@@ -229,7 +230,8 @@ namespace AllDataSheetFinder
             lock(Global.DownloadListLock) Global.DownloadList.Add(m_part.Code, State);
             try
             {
-                stream = await m_part.GetDatasheetStreamAsync();
+                if (!m_moreInfoAvailable) await RequestMoreInfo();
+                stream = await m_part.GetDatasheetStreamAsync(m_datasheetPdfSite);
                 await Task.Run(() =>
                 {
                     using (FileStream file = new FileStream(pdfPath, FileMode.Create))
@@ -311,6 +313,38 @@ namespace AllDataSheetFinder
             
             info.Loaded = true;
             info.Loading = false;
+        }
+
+        public async Task RequestMoreInfo()
+        {
+            if (m_downloadingMoreInfo)
+            {
+                await Task.Run(() => 
+                {
+                    while (m_downloadingMoreInfo) Task.Delay(100);
+                });
+                return;
+            }
+
+            m_downloadingMoreInfo = true;
+
+            AllDataSheetPart.MoreInfo moreInfo = await m_part.RequestMoreInfoAsync();
+            DatasheetPdfSite = moreInfo.PdfSite;
+
+            long multiplier = 1;
+            if (moreInfo.Size.Contains('K')) multiplier = 1024;
+            else if (moreInfo.Size.Contains('M')) multiplier = 1024 * 1024;
+            moreInfo.Size = moreInfo.Size.RemoveAll(x => !char.IsDigit(x) && x != '.');
+            decimal bytes = decimal.Parse(moreInfo.Size, CultureInfo.InvariantCulture);
+            DatasheetSize = (long)decimal.Round(bytes) * multiplier;
+
+            moreInfo.Pages = moreInfo.Pages.RemoveAll(x => !char.IsDigit(x));
+            DatasheetPages = int.Parse(moreInfo.Pages);
+
+            ManufacturerSite = moreInfo.ManufacturerSite;
+
+            m_moreInfoAvailable = true;
+            m_downloadingMoreInfo = false;
         }
     }
 }
