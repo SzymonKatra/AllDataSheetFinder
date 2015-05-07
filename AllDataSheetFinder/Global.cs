@@ -28,6 +28,7 @@ namespace AllDataSheetFinder
         public static readonly string ConfigFile = "config.xml";
         public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
         public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
+        public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
         private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<SavedPart>));
