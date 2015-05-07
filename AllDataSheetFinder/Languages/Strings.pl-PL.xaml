@@ -32,5 +32,6 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringFormatLicense">Licencja: {0}</s:String>
     <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
     <s:String x:Key="StringFormatVersion">Wersja: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">Musisz zrestartować aplikację, aby zobaczyć pełną zmianę języka</s:String>
     
 </ResourceDictionary>

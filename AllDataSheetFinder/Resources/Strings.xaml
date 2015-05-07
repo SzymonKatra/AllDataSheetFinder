@@ -32,5 +32,6 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringFormatLicense">License: {0}</s:String>
     <s:String x:Key="StringFormatAuthor">Author: {0}</s:String>
     <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">You must restart application to see language changes fully</s:String>
     
 </ResourceDictionary>

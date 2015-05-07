@@ -177,6 +177,7 @@ namespace AllDataSheetFinder
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;
                 Global.ApplyLanguage();
+                Global.MessageBox(this, Global.GetStringResource("StringLanguageChangeRestart"), MessageBoxExPredefinedButtons.Ok);
             }
             Global.SaveConfiguration();
 
