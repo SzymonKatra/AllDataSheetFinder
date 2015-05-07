@@ -39,5 +39,6 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringManufacturerSite">Manufacturer site</s:String>
     <s:String x:Key="StringPages">Pages</s:String>
     <s:String x:Key="StringMoreInfo">More information</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Do you want to update more information?</s:String>
     
 </ResourceDictionary>

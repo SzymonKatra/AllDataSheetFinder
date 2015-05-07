@@ -214,7 +214,7 @@ namespace AllDataSheetFinder
 
             Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
 
-            Global.SavedParts.Add(SavedPart.FromAllDataSheetPart(m_part));
+            Global.SavedParts.Add(SavedPart.FromPartHandler(this));
         }
 
         public void RemovePdf()
@@ -355,6 +355,20 @@ namespace AllDataSheetFinder
             ManufacturerSite = moreInfo.ManufacturerSite.RemoveAll(x => char.IsWhiteSpace(x));
 
             MoreInfoState = PartMoreInfoState.Available;
+
+            for (int i = 0; i < Global.SavedParts.Count; i++)
+            {
+                string code = AllDataSheetPart.BuildCodeFromLink(Global.SavedParts[i].DatasheetSiteLink, Global.SavedParts[i].Name, Global.SavedParts[i].Manufacturer, Global.SavedParts[i].DatasheetSiteLink.GetHashCode().ToString());
+                if (code == this.Part.Code)
+                {
+                    SavedPart part = Global.SavedParts[i];
+                    part.DatasheetPdfLink = this.DatasheetPdfSite;
+                    part.DatasheetSize = this.DatasheetSize;
+                    part.DatasheetPages = this.DatasheetPages;
+                    part.ManufacturerSite = this.ManufacturerSite;
+                    break;
+                }
+            }
         }
     }
 }

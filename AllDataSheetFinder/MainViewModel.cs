@@ -286,7 +286,7 @@ namespace AllDataSheetFinder
             m_searchResults.Clear();
             foreach (var item in Global.SavedParts)
             {
-                PartHandler handler = new PartHandler(item.ToAllDataSheetPart());
+                PartHandler handler = item.ToPartHandler();
                 handler.LoadImage();
                 m_searchResults.Add(handler);
             }
@@ -305,6 +305,11 @@ namespace AllDataSheetFinder
         private async void RequestMoreInfo(object param)
         {
             if (m_selectedResult == null) return;
+            if (m_selectedResult.MoreInfoState == PartMoreInfoState.Downloading) return;
+            else if (m_selectedResult.MoreInfoState == PartMoreInfoState.Available)
+            {
+                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantUpdateMoreInfo"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
+            }
 
             try
             {
