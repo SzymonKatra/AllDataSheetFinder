@@ -43,6 +43,35 @@ namespace AllDataSheetFinder
             }
         }
 
+        private bool m_downloadingMoreInfo = false;
+        private bool m_moreInfoAvailable = false;
+        public bool MoreInfoAvailable
+        {
+            get { return m_moreInfoAvailable; }
+            set { m_moreInfoAvailable = value; }
+        }
+
+        private string m_datasheetPdfSite;
+        public string DatasheetPdfSite
+        {
+            get { return m_datasheetPdfSite; }
+            set { m_datasheetPdfSite = value; }
+        }
+
+        private long m_datasheetSize;
+        public long DatasheetSize
+        {
+            get { return m_datasheetSize; }
+            set { m_datasheetSize = value; }
+        }
+
+        private string m_manufacturerSite;
+        public string ManufacturerSite
+        {
+            get { return m_manufacturerSite; }
+            set { m_manufacturerSite = value; }
+        }
+
         public PartHandler(AllDataSheetPart part)
         {
             m_part = part;
