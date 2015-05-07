@@ -110,17 +110,18 @@
                 <DataGridTemplateColumn Width="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <Button Width="48" Height="48" x:Name="ButtonMoreInfo" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}"/>
-                                <Popup PlacementTarget="{Binding ElementName=ButtonMoreInfo}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ButtonMoreInfo, Mode=OneWay}">
+                            <Grid>
+                                <my:ImageButton Width="48" Height="48" x:Name="ButtonMoreInfo" ImageSource="{StaticResource ImageInfo}" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}"/>
+                                <Popup PlacementTarget="{Binding ElementName=ButtonMoreInfo}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ButtonMoreInfo, Mode=OneWay}" PopupAnimation="Fade">
                                     <Border Background="#FFBEE6FD">
                                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
                                             <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{DynamicResource StringLoadMoreInfo}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.NotAvailable}}"/>
-                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{DynamicResource StringLoadingMoreInfo}"  Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.Downloading}}"/>
+                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{DynamicResource StringLoadingMoreInfo}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.Downloading}}"/>
+                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{Binding MoreInfoDisplay}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.Available}}"/>
                                         </StackPanel>
                                     </Border>
                                 </Popup>
-                            </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

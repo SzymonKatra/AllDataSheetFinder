@@ -35,5 +35,9 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringMoreInfoError">An error occurred while requesting more information</s:String>
     <s:String x:Key="StringLoadMoreInfo">Click to load more information</s:String>
     <s:String x:Key="StringLoadingMoreInfo">Requesting more information, please wait...</s:String>
+    <s:String x:Key="StringSize">Size</s:String>
+    <s:String x:Key="StringManufacturerSite">Manufacturer site</s:String>
+    <s:String x:Key="StringPages">Pages</s:String>
+    <s:String x:Key="StringMoreInfo">More information</s:String>
     
 </ResourceDictionary>

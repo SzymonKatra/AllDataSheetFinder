@@ -62,21 +62,33 @@ namespace AllDataSheetFinder
         public long DatasheetSize
         {
             get { return m_datasheetSize; }
-            set { m_datasheetSize = value; RaisePropertyChanged("DatasheetSize"); }
+            set { m_datasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
 
         private int m_datasheetPages;
         public int DatasheetPages
         {
             get { return m_datasheetPages; }
-            set { m_datasheetPages = value; RaisePropertyChanged("DatasheetPages"); }
+            set { m_datasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
 
         private string m_manufacturerSite;
         public string ManufacturerSite
         {
             get { return m_manufacturerSite; }
-            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); }
+            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
+        }
+
+        public string MoreInfoDisplay
+        {
+            get
+            {
+                return string.Format(@"{1}: {2} KB{0}{3}: {4}{0}{5}: {6}",
+                                     Environment.NewLine,
+                                     Global.GetStringResource("StringSize"), DatasheetSize / 1024,
+                                     Global.GetStringResource("StringPages"), DatasheetPages,
+                                     Global.GetStringResource("StringManufacturerSite"), ManufacturerSite);
+            }
         }
 
         public PartHandler(AllDataSheetPart part)
@@ -340,7 +352,7 @@ namespace AllDataSheetFinder
             moreInfo.Pages = moreInfo.Pages.RemoveAll(x => !char.IsDigit(x));
             DatasheetPages = int.Parse(moreInfo.Pages);
 
-            ManufacturerSite = moreInfo.ManufacturerSite;
+            ManufacturerSite = moreInfo.ManufacturerSite.RemoveAll(x => char.IsWhiteSpace(x));
 
             MoreInfoState = PartMoreInfoState.Available;
         }
