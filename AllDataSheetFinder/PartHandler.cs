@@ -55,21 +55,28 @@ namespace AllDataSheetFinder
         public string DatasheetPdfSite
         {
             get { return m_datasheetPdfSite; }
-            set { m_datasheetPdfSite = value; }
+            set { m_datasheetPdfSite = value; RaisePropertyChanged("DatasheetPdfSite"); }
         }
 
         private long m_datasheetSize;
         public long DatasheetSize
         {
             get { return m_datasheetSize; }
-            set { m_datasheetSize = value; }
+            set { m_datasheetSize = value; RaisePropertyChanged("DatasheetSize"); }
+        }
+
+        private int m_datasheetPages;
+        public int DatasheetPages
+        {
+            get { return m_datasheetPages; }
+            set { m_datasheetPages = value; RaisePropertyChanged("DatasheetPages"); }
         }
 
         private string m_manufacturerSite;
         public string ManufacturerSite
         {
             get { return m_manufacturerSite; }
-            set { m_manufacturerSite = value; }
+            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); }
         }
 
         public PartHandler(AllDataSheetPart part)
