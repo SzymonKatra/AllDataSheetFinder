@@ -25,6 +25,7 @@ namespace AllDataSheetFinder
             m_saveFavouritesCommand = new RelayCommand(SaveFavourites);
             m_showFavouritesCommand = new RelayCommand(ShowFavourites, CanShowFavourites);
             m_settingsCommand = new RelayCommand(Settings);
+            m_requestMoreInfoCommand = new RelayCommand(RequestMoreInfo);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
             m_filteredResults.Filter = (x) =>
@@ -134,6 +135,12 @@ namespace AllDataSheetFinder
             get { return m_settingsCommand; }
         }
 
+        private RelayCommand m_requestMoreInfoCommand;
+        public ICommand RequestMoreInfoCommand
+        {
+            get { return m_requestMoreInfoCommand; }
+        }
+
         public bool LoadMoreVisible
         {
             get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
@@ -148,7 +155,7 @@ namespace AllDataSheetFinder
                 m_searchResults.Add(handler);
             }
         }
-
+        
         private async void Search(object param)
         {
             m_searchResults.Clear();
@@ -279,7 +286,7 @@ namespace AllDataSheetFinder
             m_searchResults.Clear();
             foreach (var item in Global.SavedParts)
             {
-                PartHandler handler = new PartHandler(item.ToAllDataSheetPart());
+                PartHandler handler = item.ToPartHandler();
                 handler.LoadImage();
                 m_searchResults.Add(handler);
             }
@@ -293,6 +300,32 @@ namespace AllDataSheetFinder
         {
             SettingsViewModel dialogViewModel = new SettingsViewModel();
             Global.Dialogs.ShowDialog(this, dialogViewModel);
+        }
+
+        private async void RequestMoreInfo(object param)
+        {
+            if (m_selectedResult == null) return;
+            if (m_selectedResult.MoreInfoState == PartMoreInfoState.Downloading) return;
+            else if (m_selectedResult.MoreInfoState == PartMoreInfoState.Available)
+            {
+                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantUpdateMoreInfo"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
+            }
+
+            try
+            {
+                m_openingCount++;
+                Mouse.OverrideCursor = Cursors.AppStarting;
+                await m_selectedResult.RequestMoreInfo();
+            }
+            catch
+            {
+                Global.MessageBox(this, Global.GetStringResource("StringMoreInfoError"), MessageBoxExPredefinedButtons.Ok);
+            }
+            finally
+            {
+                m_openingCount--;
+                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+            }
         }
     }
 }

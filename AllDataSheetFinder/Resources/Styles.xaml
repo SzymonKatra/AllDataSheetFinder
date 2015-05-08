@@ -9,11 +9,14 @@
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
-
-    <Style x:Key="StyleTextDataGridResult" TargetType="{x:Type TextBlock}">
-        <Setter Property="Margin" Value="10,5,10,5"/>
+    
+    <Style x:Key="StyleTextBlockCommon" TargetType="{x:Type TextBlock}">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style x:Key="StyleTextDataGridResult" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleTextBlockCommon}">
+        <Setter Property="Margin" Value="10,5,10,5"/>      
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="TextWrapping" Value="Wrap"/>

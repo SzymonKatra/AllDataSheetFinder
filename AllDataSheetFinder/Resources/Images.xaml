@@ -10,5 +10,6 @@
     <BitmapImage x:Key="ImagePdfFilled" UriSource="Images\pdf_filled.png"/>
     <BitmapImage x:Key="ImageOk" UriSource="Images\ok.png"/>
     <BitmapImage x:Key="ImageCancel" UriSource="Images\cancel.png"/> 
+    <BitmapImage x:Key="ImageInfo" UriSource="Images\info.png"/>
     
 </ResourceDictionary>

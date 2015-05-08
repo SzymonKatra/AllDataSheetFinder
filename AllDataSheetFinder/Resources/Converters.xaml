@@ -5,5 +5,7 @@
     <my:IsDownloadingConverter x:Key="ConverterIsDownloading"/>
     <my:PartDatasheetStateToIsSavedConverter x:Key="ConverterPartDatasheetStateToIsSaved"/>
     <my:PartDatasheetStateToIsAvailableConverter x:Key="ConverterPartDatasheetStateToIsAvailable"/>
+    <my:BooleanToVisibilityInvertedConverter x:Key="ConverterBooleanToVisibilityInverted"/>
+    <my:PartMoreInfoStateToVisibilityConverter x:Key="ConverterPartMoreInfoStateToVisibility"/>
     <BooleanToVisibilityConverter x:Key="ConverterBooleanToVisibility"/>
 </ResourceDictionary>

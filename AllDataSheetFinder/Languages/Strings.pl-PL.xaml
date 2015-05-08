@@ -33,5 +33,13 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
     <s:String x:Key="StringFormatVersion">Wersja: {0}</s:String>
     <s:String x:Key="StringLanguageChangeRestart">Musisz zrestartować aplikację, aby zobaczyć pełną zmianę języka</s:String>
-    
+    <s:String x:Key="StringMoreInfoError">Wystąpił błąd podczas pobierania dodatkowych informacji</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Kliknij, aby pobrać dodatkowe informacje</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Pobieranie dodatkowych informacji, proszę czekać...</s:String>
+    <s:String x:Key="StringSize">Rozmar</s:String>
+    <s:String x:Key="StringManufacturerSite">Strona producenta</s:String>
+    <s:String x:Key="StringPages">Stron</s:String>
+    <s:String x:Key="StringMoreInfo">Dodatkowe informacje</s:String>
+        <s:String x:Key="StringDoYouWantUpdateMoreInfo">Czy chcesz zaktualizować dodatkowe informacje?</s:String>
+
 </ResourceDictionary>

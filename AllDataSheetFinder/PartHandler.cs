@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using MVVMUtils;
+using System.Globalization;
 
 namespace AllDataSheetFinder
 {
@@ -40,6 +41,53 @@ namespace AllDataSheetFinder
             {
                 Uri imageUri = new Uri(m_part.ManufacturerImageLink);
                 return imageUri.Segments[imageUri.Segments.Length - 1];
+            }
+        }
+
+        private PartMoreInfoState m_moreInfoState = PartMoreInfoState.NotAvailable;
+        public PartMoreInfoState MoreInfoState
+        {
+            get { return m_moreInfoState; }
+            set { m_moreInfoState = value; RaisePropertyChanged("MoreInfoState"); }
+        }
+
+        private string m_datasheetPdfSite;
+        public string DatasheetPdfSite
+        {
+            get { return m_datasheetPdfSite; }
+            set { m_datasheetPdfSite = value; RaisePropertyChanged("DatasheetPdfSite"); }
+        }
+
+        private long m_datasheetSize;
+        public long DatasheetSize
+        {
+            get { return m_datasheetSize; }
+            set { m_datasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
+        }
+
+        private int m_datasheetPages;
+        public int DatasheetPages
+        {
+            get { return m_datasheetPages; }
+            set { m_datasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
+        }
+
+        private string m_manufacturerSite;
+        public string ManufacturerSite
+        {
+            get { return m_manufacturerSite; }
+            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
+        }
+
+        public string MoreInfoDisplay
+        {
+            get
+            {
+                return string.Format(@"{1}: {2} KB{0}{3}: {4}{0}{5}: {6}",
+                                     Environment.NewLine,
+                                     Global.GetStringResource("StringSize"), DatasheetSize / 1024,
+                                     Global.GetStringResource("StringPages"), DatasheetPages,
+                                     Global.GetStringResource("StringManufacturerSite"), ManufacturerSite);
             }
         }
 
@@ -166,7 +214,10 @@ namespace AllDataSheetFinder
 
             Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
 
-            Global.SavedParts.Add(SavedPart.FromAllDataSheetPart(m_part));
+            SavedPart part = SavedPart.FromPartHandler(this);
+            part.LastUseDate = DateTime.Now;
+
+            Global.SavedParts.Add(part);
         }
 
         public void RemovePdf()
@@ -193,7 +244,8 @@ namespace AllDataSheetFinder
             lock(Global.DownloadListLock) Global.DownloadList.Add(m_part.Code, State);
             try
             {
-                stream = await m_part.GetDatasheetStreamAsync();
+                if (m_moreInfoState != PartMoreInfoState.Available) await RequestMoreInfo();
+                stream = await m_part.GetDatasheetStreamAsync(m_datasheetPdfSite);
                 await Task.Run(() =>
                 {
                     using (FileStream file = new FileStream(pdfPath, FileMode.Create))
@@ -275,6 +327,51 @@ namespace AllDataSheetFinder
             
             info.Loaded = true;
             info.Loading = false;
+        }
+
+        public async Task RequestMoreInfo()
+        {
+            if (MoreInfoState == PartMoreInfoState.Downloading)
+            {
+                await Task.Run(() => 
+                {
+                    while (MoreInfoState == PartMoreInfoState.Downloading) Task.Delay(100);
+                });
+                return;
+            }
+
+            MoreInfoState = PartMoreInfoState.Downloading;
+
+            AllDataSheetPart.MoreInfo moreInfo = await m_part.RequestMoreInfoAsync();
+            DatasheetPdfSite = moreInfo.PdfSite;
+
+            long multiplier = 1;
+            if (moreInfo.Size.Contains('K')) multiplier = 1024;
+            else if (moreInfo.Size.Contains('M')) multiplier = 1024 * 1024;
+            moreInfo.Size = moreInfo.Size.RemoveAll(x => !char.IsDigit(x) && x != '.');
+            decimal bytes = decimal.Parse(moreInfo.Size, CultureInfo.InvariantCulture);
+            DatasheetSize = (long)decimal.Round(bytes) * multiplier;
+
+            moreInfo.Pages = moreInfo.Pages.RemoveAll(x => !char.IsDigit(x));
+            DatasheetPages = int.Parse(moreInfo.Pages);
+
+            ManufacturerSite = moreInfo.ManufacturerSite.RemoveAll(x => char.IsWhiteSpace(x));
+
+            MoreInfoState = PartMoreInfoState.Available;
+
+            for (int i = 0; i < Global.SavedParts.Count; i++)
+            {
+                string code = AllDataSheetPart.BuildCodeFromLink(Global.SavedParts[i].DatasheetSiteLink, Global.SavedParts[i].Name, Global.SavedParts[i].Manufacturer, Global.SavedParts[i].DatasheetSiteLink.GetHashCode().ToString());
+                if (code == this.Part.Code)
+                {
+                    SavedPart part = Global.SavedParts[i];
+                    part.DatasheetPdfLink = this.DatasheetPdfSite;
+                    part.DatasheetSize = this.DatasheetSize;
+                    part.DatasheetPages = this.DatasheetPages;
+                    part.ManufacturerSite = this.ManufacturerSite;
+                    break;
+                }
+            }
         }
     }
 }
