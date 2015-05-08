@@ -214,7 +214,10 @@ namespace AllDataSheetFinder
 
             Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
 
-            Global.SavedParts.Add(SavedPart.FromPartHandler(this));
+            SavedPart part = SavedPart.FromPartHandler(this);
+            part.LastUseDate = DateTime.Now;
+
+            Global.SavedParts.Add(part);
         }
 
         public void RemovePdf()
