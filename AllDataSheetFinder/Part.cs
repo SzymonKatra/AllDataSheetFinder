@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AllDataSheetFinder
 {
     [Serializable]
-    public class SavedPart
+    public class Part
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -18,12 +18,14 @@ namespace AllDataSheetFinder
         public long DatasheetSize { get; set; }
         public int DatasheetPages { get; set; }
         public string ManufacturerSite { get; set; }
+
         public DateTime LastUseDate { get; set; }
         public bool Custom { get; set; }
+        public string CustomPath { get; set; }
 
-        public static SavedPart FromPartHandler(PartHandler part)
+        public static Part FromPartHandler(PartHandler part)
         {
-            SavedPart result = new SavedPart();
+            Part result = new Part();
             result.Name = part.Part.Name;
             result.Description = part.Part.Description;
             result.Manufacturer = part.Part.Manufacturer;

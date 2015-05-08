@@ -214,7 +214,7 @@ namespace AllDataSheetFinder
 
             Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
 
-            SavedPart part = SavedPart.FromPartHandler(this);
+            Part part = AllDataSheetFinder.Part.FromPartHandler(this);
             part.LastUseDate = DateTime.Now;
 
             Global.SavedParts.Add(part);
@@ -364,7 +364,7 @@ namespace AllDataSheetFinder
                 string code = AllDataSheetPart.BuildCodeFromLink(Global.SavedParts[i].DatasheetSiteLink, Global.SavedParts[i].Name, Global.SavedParts[i].Manufacturer, Global.SavedParts[i].DatasheetSiteLink.GetHashCode().ToString());
                 if (code == this.Part.Code)
                 {
-                    SavedPart part = Global.SavedParts[i];
+                    Part part = Global.SavedParts[i];
                     part.DatasheetPdfLink = this.DatasheetPdfSite;
                     part.DatasheetSize = this.DatasheetSize;
                     part.DatasheetPages = this.DatasheetPages;

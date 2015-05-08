@@ -238,7 +238,7 @@ namespace AllDataSheetFinder
                 m_selectedResult.RemovePdf();
                 if (IsFavouritesMode)
                 {
-                    SavedPart toRemove = null;
+                    Part toRemove = null;
                     foreach (var item in Global.SavedParts)
                     {
                         string code = AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString());

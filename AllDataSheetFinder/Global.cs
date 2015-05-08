@@ -31,7 +31,7 @@ namespace AllDataSheetFinder
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
-        private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<SavedPart>));
+        private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<Part>));
 
         private static ResourceDictionary s_stringsDictionary;
 
@@ -65,8 +65,8 @@ namespace AllDataSheetFinder
             get { return s_cachedImages; }
         }
 
-        private static List<SavedPart> s_savedParts = new List<SavedPart>();
-        public static List<SavedPart> SavedParts
+        private static List<Part> s_savedParts = new List<Part>();
+        public static List<Part> SavedParts
         {
             get { return s_savedParts; }
         }
@@ -174,13 +174,13 @@ namespace AllDataSheetFinder
 
             LoadSavedParts();
 
-            Dictionary<SavedPart, string> codes = new Dictionary<SavedPart,string>();
+            Dictionary<Part, string> codes = new Dictionary<Part,string>();
             foreach (var item in SavedParts)
             {
                 codes.Add(item, AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString()));
             }
 
-            List<SavedPart> toRemove = new List<SavedPart>();
+            List<Part> toRemove = new List<Part>();
             foreach (var item in codes)
             {
                 if (!File.Exists(BuildSavedDatasheetPath(item.Value))) toRemove.Add(item.Key);
@@ -247,7 +247,7 @@ namespace AllDataSheetFinder
                 {
                     try
                     {
-                        s_savedParts = (List<SavedPart>)s_serialzierSavedParts.Deserialize(file);
+                        s_savedParts = (List<Part>)s_serialzierSavedParts.Deserialize(file);
                     }
                     catch
                     {
