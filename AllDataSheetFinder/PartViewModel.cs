@@ -84,17 +84,17 @@ namespace AllDataSheetFinder
         public long DatasheetSize
         {
             get { return m_model.DatasheetSize; }
-            set { m_model.DatasheetSize = value; RaisePropertyChanged("DatasheetSize"); }
+            set { m_model.DatasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public int DatasheetPages
         {
             get { return m_model.DatasheetPages; }
-            set { m_model.DatasheetPages = value; RaisePropertyChanged("DatasheetPages"); }
+            set { m_model.DatasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public string ManufacturerSite
         {
             get { return m_model.ManufacturerSite; }
-            set { m_model.ManufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); }
+            set { m_model.ManufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public DateTime LastUseDate
         {
@@ -323,7 +323,7 @@ namespace AllDataSheetFinder
 
             if (State == PartDatasheetState.Cached)
             {
-                File.Copy(Global.BuildCachedDatasheetPath(code), Global.BuildSavedDatasheetPath(code));
+                File.Move(Global.BuildCachedDatasheetPath(code), Global.BuildSavedDatasheetPath(code));
             }
             CheckState();
 

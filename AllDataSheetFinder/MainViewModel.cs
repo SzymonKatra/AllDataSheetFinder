@@ -34,6 +34,7 @@ namespace AllDataSheetFinder
                 if (!IsFavouritesMode) return true;
                 return ((PartViewModel)x).Name.ToUpper().Contains(m_searchField.ToUpper());
             };
+            m_filteredResults.SortDescriptions.Add(new SortDescription("LastUseDate", ListSortDirection.Descending));
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
             RemoveUnavailableSavedParts();
@@ -256,7 +257,9 @@ namespace AllDataSheetFinder
             {
                 m_openingCount++;
                 Mouse.OverrideCursor = Cursors.AppStarting;
-                await m_selectedResult.SavePdf();
+                PartViewModel part = m_selectedResult;
+                await part.SavePdf();
+                m_savedParts.Add(part);
             }
             catch
             {
@@ -279,7 +282,7 @@ namespace AllDataSheetFinder
             SearchField = string.Empty;
             IsFavouritesMode = true;
 
-            Global.SavedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
+            //m_savedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
             
             m_searchResults.Clear();
             foreach (var item in m_savedParts)
