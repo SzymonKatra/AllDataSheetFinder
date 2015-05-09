@@ -71,18 +71,6 @@ namespace AllDataSheetFinder
             get { return s_savedParts; }
         }
 
-        private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
-        public static Dictionary<string, PartDatasheetState> DownloadList
-        {
-            get { return s_downloadList; }
-        }
-
-        private static object s_downloadListLock = new object();
-        public static object DownloadListLock
-        {
-            get { return s_downloadListLock; }
-        }
-
         public static string GetStringResource(object key)
         {
             object result = Application.Current.TryFindResource(key);
@@ -173,26 +161,6 @@ namespace AllDataSheetFinder
             }
 
             LoadSavedParts();
-
-            Dictionary<Part, string> codes = new Dictionary<Part,string>();
-            foreach (var item in SavedParts)
-            {
-                codes.Add(item, AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString()));
-            }
-
-            List<Part> toRemove = new List<Part>();
-            foreach (var item in codes)
-            {
-                if (!File.Exists(BuildSavedDatasheetPath(item.Value))) toRemove.Add(item.Key);
-            }
-            foreach (var item in toRemove) SavedParts.Remove(item);
-
-            foreach (string file in Directory.EnumerateFiles(AppDataPath + Path.DirectorySeparatorChar + SavedDatasheetsDirectory))
-            {
-                if (Path.GetExtension(file) != ".pdf") continue;
-                string code = Path.GetFileNameWithoutExtension(file);
-                if (!codes.ContainsValue(code)) File.Delete(file);
-            }
         }
 
         public static void CreateDirectoriesIfNeeded()

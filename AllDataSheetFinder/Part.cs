@@ -22,37 +22,5 @@ namespace AllDataSheetFinder
         public DateTime LastUseDate { get; set; }
         public bool Custom { get; set; }
         public string CustomPath { get; set; }
-
-        public static Part FromPartHandler(PartHandler part)
-        {
-            Part result = new Part();
-            result.Name = part.Part.Name;
-            result.Description = part.Part.Description;
-            result.Manufacturer = part.Part.Manufacturer;
-            result.ManufacturerImageLink = part.Part.ManufacturerImageLink;
-            result.DatasheetSiteLink = part.Part.DatasheetSiteLink;
-            result.DatasheetPdfLink = part.DatasheetPdfSite;
-            result.DatasheetSize = part.DatasheetSize;
-            result.DatasheetPages = part.DatasheetPages;
-            result.ManufacturerSite = part.ManufacturerSite;
-            result.Custom = false;
-            return result;
-        }
-        public PartHandler ToPartHandler()
-        {
-            AllDataSheetPart part = new AllDataSheetPart();
-            part.Name = this.Name;
-            part.Description = this.Description;
-            part.Manufacturer = this.Manufacturer;
-            part.ManufacturerImageLink = this.ManufacturerImageLink;
-            part.DatasheetSiteLink = this.DatasheetSiteLink;
-            PartHandler result = new PartHandler(part);           
-            result.DatasheetPdfSite = this.DatasheetPdfLink;
-            result.DatasheetSize = this.DatasheetSize;
-            result.DatasheetPages = this.DatasheetPages;
-            result.ManufacturerSite = this.ManufacturerSite;
-            result.MoreInfoState = PartMoreInfoState.Available;
-            return result;
-        }
     }
 }
