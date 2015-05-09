@@ -19,47 +19,70 @@ namespace AllDataSheetFinder
             public string ManufacturerSite { get; set; }
         }
 
+        protected AllDataSheetPart()
+        {
+        }
+        public AllDataSheetPart(string datasheetSiteLink)
+        {
+            m_datasheetSiteLink = datasheetSiteLink;
+            m_onlyContext = true;
+        }
+
         private string m_manufacturer;
         public string Manufacturer
         {
-            get { return m_manufacturer; }
-            set { m_manufacturer = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_manufacturer;
+            }
+            //set { m_manufacturer = value; }
         }
 
         private string m_manufacturerImageLink;
         public string ManufacturerImageLink
         {
-            get { return m_manufacturerImageLink; }
-            set { m_manufacturerImageLink = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_manufacturerImageLink;
+            }
+            //set { m_manufacturerImageLink = value; }
         }
 
         private string m_name;
         public string Name
         {
-            get { return m_name; }
-            set { m_name = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_name;
+            }
+            //set { m_name = value; }
         }
 
         private string m_description;
         public string Description
         {
-            get { return m_description; }
-            set { m_description = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_description;
+            }
+            //set { m_description = value; }
         }
 
         private string m_datasheetSiteLink;
         public string DatasheetSiteLink
         {
             get { return m_datasheetSiteLink; }
-            set { m_datasheetSiteLink = value; }
+            //set { m_datasheetSiteLink = value; }
         }
 
-        public string Code
+        private bool m_onlyContext = false;
+        public bool OnlyContext
         {
-            get
-            {
-                return BuildCodeFromLink(m_datasheetSiteLink, m_name, m_manufacturer, m_datasheetSiteLink.GetHashCode().ToString());
-            }
+            get { return m_onlyContext; }
         }
 
         private const string SiteAddress = "http://www.alldatasheet.com/view_datasheet.jsp";
@@ -372,35 +395,6 @@ namespace AllDataSheetFinder
                 }
             }
             return result;
-        }
-
-        public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)
-        {
-            Uri uri = new Uri(link);
-            string[] segments = uri.Segments;
-            if (segments.Length < 3) return BuildCode(name, manufacturer, link.GetHashCode().ToString());
-            string nameSegment = segments[segments.Length - 1];
-            string manufacturerSegment = segments[segments.Length - 2];
-            string numberSegment = segments[segments.Length - 3];
-
-            nameSegment = nameSegment.Remove(nameSegment.Length - 5); // remove ".html"
-            manufacturerSegment = manufacturerSegment.Remove(manufacturerSegment.Length - 1); // remove slash
-            numberSegment = numberSegment.Remove(numberSegment.Length - 1); // remove slash
-
-            return BuildCode(nameSegment, manufacturerSegment, numberSegment);
-        }
-        public static string BuildCode(string name, string manufacturer, string hash)
-        {
-            name = ToValidCodeForm(name);
-            manufacturer = ToValidCodeForm(manufacturer);
-            hash = ToValidCodeForm(hash);
-
-            return string.Format("{0}_{1}_{2}", name, manufacturer, hash);
-        }
-
-        private static string ToValidCodeForm(string value)
-        {
-            return value.Replace(' ', '-').RemoveAll(x => !char.IsLetterOrDigit(x));
         }
     }
 }

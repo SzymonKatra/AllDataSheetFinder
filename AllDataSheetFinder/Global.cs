@@ -31,7 +31,7 @@ namespace AllDataSheetFinder
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
-        private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<SavedPart>));
+        private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<Part>));
 
         private static ResourceDictionary s_stringsDictionary;
 
@@ -65,22 +65,10 @@ namespace AllDataSheetFinder
             get { return s_cachedImages; }
         }
 
-        private static List<SavedPart> s_savedParts = new List<SavedPart>();
-        public static List<SavedPart> SavedParts
+        private static List<Part> s_savedParts = new List<Part>();
+        public static List<Part> SavedParts
         {
             get { return s_savedParts; }
-        }
-
-        private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
-        public static Dictionary<string, PartDatasheetState> DownloadList
-        {
-            get { return s_downloadList; }
-        }
-
-        private static object s_downloadListLock = new object();
-        public static object DownloadListLock
-        {
-            get { return s_downloadListLock; }
         }
 
         public static string GetStringResource(object key)
@@ -173,26 +161,6 @@ namespace AllDataSheetFinder
             }
 
             LoadSavedParts();
-
-            Dictionary<SavedPart, string> codes = new Dictionary<SavedPart,string>();
-            foreach (var item in SavedParts)
-            {
-                codes.Add(item, AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString()));
-            }
-
-            List<SavedPart> toRemove = new List<SavedPart>();
-            foreach (var item in codes)
-            {
-                if (!File.Exists(BuildSavedDatasheetPath(item.Value))) toRemove.Add(item.Key);
-            }
-            foreach (var item in toRemove) SavedParts.Remove(item);
-
-            foreach (string file in Directory.EnumerateFiles(AppDataPath + Path.DirectorySeparatorChar + SavedDatasheetsDirectory))
-            {
-                if (Path.GetExtension(file) != ".pdf") continue;
-                string code = Path.GetFileNameWithoutExtension(file);
-                if (!codes.ContainsValue(code)) File.Delete(file);
-            }
         }
 
         public static void CreateDirectoriesIfNeeded()
@@ -247,7 +215,7 @@ namespace AllDataSheetFinder
                 {
                     try
                     {
-                        s_savedParts = (List<SavedPart>)s_serialzierSavedParts.Deserialize(file);
+                        s_savedParts = (List<Part>)s_serialzierSavedParts.Deserialize(file);
                     }
                     catch
                     {

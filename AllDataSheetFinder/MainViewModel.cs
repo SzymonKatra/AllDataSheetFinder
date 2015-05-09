@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Data;
 using MVVMUtils;
+using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
 
 namespace AllDataSheetFinder
@@ -31,8 +32,12 @@ namespace AllDataSheetFinder
             m_filteredResults.Filter = (x) =>
             {
                 if (!IsFavouritesMode) return true;
-                return ((PartHandler)x).Part.Name.ToUpper().Contains(m_searchField.ToUpper());
+                return ((PartViewModel)x).Name.ToUpper().Contains(m_searchField.ToUpper());
             };
+            m_filteredResults.SortDescriptions.Add(new SortDescription("LastUseDate", ListSortDirection.Descending));
+
+            m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
+            RemoveUnavailableSavedParts();
         }
 
         private int m_openingCount = 0;
@@ -67,11 +72,13 @@ namespace AllDataSheetFinder
             }
         }
 
-        private ObservableCollection<PartHandler> m_searchResults = new ObservableCollection<PartHandler>();
-        public ObservableCollection<PartHandler> SearchResults
+        private ObservableCollection<PartViewModel> m_searchResults = new ObservableCollection<PartViewModel>();
+        public ObservableCollection<PartViewModel> SearchResults
         {
             get { return m_searchResults; }
         }
+
+        private SynchronizedObservableCollection<PartViewModel, Part> m_savedParts;
 
         private ICollectionView m_filteredResults;
         public ICollectionView FilteredResults
@@ -79,8 +86,8 @@ namespace AllDataSheetFinder
             get { return m_filteredResults; }
         }
 
-        private PartHandler m_selectedResult;
-        public PartHandler SelectedResult
+        private PartViewModel m_selectedResult;
+        public PartViewModel SelectedResult
         {
             get { return m_selectedResult; }
             set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
@@ -150,9 +157,11 @@ namespace AllDataSheetFinder
         {
             foreach (var item in results)
             {
-                PartHandler handler = new PartHandler(item);
-                handler.LoadImage();
-                m_searchResults.Add(handler);
+                PartViewModel viewModel = PartViewModel.FromAllDataSheetPart(item);
+                PartViewModel found = m_savedParts.FirstOrDefault(x => x.Code == viewModel.Code);
+                if (found != null) viewModel = found;
+                viewModel.LoadImage();
+                m_searchResults.Add(viewModel);
             }
         }
         
@@ -236,19 +245,9 @@ namespace AllDataSheetFinder
             {
                 if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
                 m_selectedResult.RemovePdf();
+                m_savedParts.Remove(m_selectedResult);
                 if (IsFavouritesMode)
                 {
-                    SavedPart toRemove = null;
-                    foreach (var item in Global.SavedParts)
-                    {
-                        string code = AllDataSheetPart.BuildCodeFromLink(item.DatasheetSiteLink, item.Name, item.Manufacturer, item.DatasheetSiteLink.GetHashCode().ToString());
-                        if (code == m_selectedResult.Part.Code)
-                        {
-                            toRemove = item;
-                            break;
-                        }
-                    }
-                    if (toRemove != null) Global.SavedParts.Remove(toRemove);
                     m_searchResults.Remove(m_selectedResult);
                 }
                 return;
@@ -258,7 +257,9 @@ namespace AllDataSheetFinder
             {
                 m_openingCount++;
                 Mouse.OverrideCursor = Cursors.AppStarting;
-                await m_selectedResult.SavePdf();
+                PartViewModel part = m_selectedResult;
+                await part.SavePdf();
+                m_savedParts.Add(part);
             }
             catch
             {
@@ -280,15 +281,12 @@ namespace AllDataSheetFinder
         {
             SearchField = string.Empty;
             IsFavouritesMode = true;
-
-            Global.SavedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
             
             m_searchResults.Clear();
-            foreach (var item in Global.SavedParts)
+            foreach (var item in m_savedParts)
             {
-                PartHandler handler = item.ToPartHandler();
-                handler.LoadImage();
-                m_searchResults.Add(handler);
+                item.LoadImage();
+                m_searchResults.Add(item);
             }
         }
         private bool CanShowFavourites(object param)
@@ -325,6 +323,16 @@ namespace AllDataSheetFinder
             {
                 m_openingCount--;
                 if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+            }
+        }
+
+        private void RemoveUnavailableSavedParts()
+        {
+            foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory))
+            {
+                if (Path.GetExtension(file) != ".pdf") continue;
+                string code = Path.GetFileNameWithoutExtension(file);
+                if (m_savedParts.FirstOrDefault(x => x.Code == code) == null) File.Delete(file);
             }
         }
     }

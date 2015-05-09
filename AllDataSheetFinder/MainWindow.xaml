@@ -88,7 +88,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Image Source="{Binding Image}" Width="150" Height="50"/>
-                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Part.Manufacturer}"/>
+                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Manufacturer}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -96,14 +96,14 @@
                 <DataGridTemplateColumn Header="{DynamicResource StringPartName}" Width="15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Name}"/>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="85*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Description}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

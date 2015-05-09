@@ -76,7 +76,8 @@
     <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
     <Compile Include="Converters\PartMoreInfoStateToVisibilityConverter.cs" />
     <Compile Include="PartMoreInfoState.cs" />
-    <Compile Include="SavedPart.cs" />
+    <Compile Include="Part.cs" />
+    <Compile Include="PartViewModel.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -157,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PartDatasheetState.cs" />
-    <Compile Include="PartHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
