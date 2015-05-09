@@ -41,5 +41,6 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringPages">Stron</s:String>
     <s:String x:Key="StringMoreInfo">Dodatkowe informacje</s:String>
     <s:String x:Key="StringDoYouWantUpdateMoreInfo">Czy chcesz zaktualizować dodatkowe informacje?</s:String>
-
+    <s:String x:Key="StringTags">Tagi</s:String>
+    
 </ResourceDictionary>

@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Globalization;
 using System.Diagnostics;
+using MVVMUtils.Collections;
 
 namespace AllDataSheetFinder
 {
@@ -20,6 +21,10 @@ namespace AllDataSheetFinder
         public PartViewModel(Part model, bool modelValid = true)
         {
             m_model = model;
+            m_tags = new SynchronizedPerItemObservableCollection<ValueViewModel<string>, string>(model.Tags, x => new ValueViewModel<string>(x));
+            m_tags.CollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
+            m_tags.ItemPropertyInCollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
+
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
             {
@@ -36,8 +41,14 @@ namespace AllDataSheetFinder
             result.Manufacturer = part.Manufacturer;
             result.ManufacturerImageLink = part.ManufacturerImageLink;
             result.DatasheetSiteLink = part.DatasheetSiteLink;
+            string[] tokens = result.Description.Split(' ');
+            foreach (var item in tokens)
+            {
+                if (string.IsNullOrWhiteSpace(item)) continue;
+                result.Tags.Add(new ValueViewModel<string>(item.RemoveAll(x => char.IsWhiteSpace(x) || x == ',')));
+            }
             result.Context = part;
-            result.m_moreInfoState = PartMoreInfoState.NotAvailable;
+            result.MoreInfoState = PartMoreInfoState.NotAvailable;
             result.CheckState();
             return result;
         }
@@ -112,6 +123,14 @@ namespace AllDataSheetFinder
             set { m_model.CustomPath = value; RaisePropertyChanged("CustomPath"); }
         }
 
+        private SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> m_tags;
+        public SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> Tags
+        {
+            get { return m_tags; }
+        }
+
+        private const int MaxTagsDisplay = 10;
+
         private PartMoreInfoState m_moreInfoState = PartMoreInfoState.NotAvailable;
         public PartMoreInfoState MoreInfoState
         {
@@ -122,11 +141,21 @@ namespace AllDataSheetFinder
         {
             get
             {
-                return string.Format(@"{1}: {2} KB{0}{3}: {4}{0}{5}: {6}",
+                StringBuilder tagsBuilder = new StringBuilder();
+                int limit = Math.Min(Tags.Count, MaxTagsDisplay);
+                for (int i = 0; i < limit; i++)
+                {
+                    tagsBuilder.Append(Tags[i].Value);
+                    if (i != limit - 1) tagsBuilder.Append(", ");
+                }
+                if (Tags.Count > MaxTagsDisplay) tagsBuilder.Append(", ...");
+
+                return string.Format(@"{1}: {2} KB{0}{3}: {4}{0}{5}: {6}{0}{7}: {8}",
                                      Environment.NewLine,
                                      Global.GetStringResource("StringSize"), DatasheetSize / 1024,
                                      Global.GetStringResource("StringPages"), DatasheetPages,
-                                     Global.GetStringResource("StringManufacturerSite"), ManufacturerSite);
+                                     Global.GetStringResource("StringManufacturerSite"), ManufacturerSite,
+                                     Global.GetStringResource("StringTags"), tagsBuilder.ToString());
             }
         }
 
@@ -326,6 +355,8 @@ namespace AllDataSheetFinder
                 File.Move(Global.BuildCachedDatasheetPath(code), Global.BuildSavedDatasheetPath(code));
             }
             CheckState();
+
+            if (MoreInfoState == PartMoreInfoState.NotAvailable) await RequestMoreInfo();
 
             Debug.Assert(State == PartDatasheetState.Saved, "Pdf is not in saved state after downloading!");
 
