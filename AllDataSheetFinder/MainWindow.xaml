@@ -111,7 +111,18 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <my:ImageButton Width="48" Height="48" x:Name="ButtonMoreInfo" ImageSource="{StaticResource ImageInfo}" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}"/>
+                                <my:ImageButton Width="48" Height="48" x:Name="ButtonMoreInfo" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}">
+                                    <my:ImageButton.Style>
+                                        <Style TargetType="{x:Type my:ImageButton}">
+                                            <Setter Property="ImageSource" Value="{StaticResource ImageInfo}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding MoreInfoState}" Value="{x:Static base:PartMoreInfoState.Available}">
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageInfoFilled}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </my:ImageButton.Style>
+                                </my:ImageButton>
                                 <Popup PlacementTarget="{Binding ElementName=ButtonMoreInfo}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ButtonMoreInfo, Mode=OneWay}" PopupAnimation="Fade">
                                     <Border Background="#FFBEE6FD">
                                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
