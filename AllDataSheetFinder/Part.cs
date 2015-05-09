@@ -9,6 +9,11 @@ namespace AllDataSheetFinder
     [Serializable]
     public class Part
     {
+        public Part()
+        {
+            Tags = new List<string>();
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string Manufacturer { get; set; }
@@ -18,6 +23,8 @@ namespace AllDataSheetFinder
         public long DatasheetSize { get; set; }
         public int DatasheetPages { get; set; }
         public string ManufacturerSite { get; set; }
+
+        public List<string> Tags { get; private set; }
 
         public DateTime LastUseDate { get; set; }
         public bool Custom { get; set; }

@@ -85,6 +85,7 @@
     <Compile Include="StringExt.cs" />
     <Compile Include="Validation\IntegerRule.cs" />
     <Compile Include="Validation\ValidationRuleWithResult.cs" />
+    <Compile Include="ValueViewModel.cs" />
     <Page Include="Controls\DataGridAppendResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

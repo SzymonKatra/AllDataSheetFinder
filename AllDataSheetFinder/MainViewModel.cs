@@ -32,7 +32,21 @@ namespace AllDataSheetFinder
             m_filteredResults.Filter = (x) =>
             {
                 if (!IsFavouritesMode) return true;
-                return ((PartViewModel)x).Name.ToUpper().Contains(m_searchField.ToUpper());
+
+                PartViewModel part = (PartViewModel)x;
+                string[] tokens = m_searchField.ToUpper().Split(' ');
+                string upperName = part.Name.ToUpper();
+
+                foreach (var item in tokens)
+                {
+                    var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
+                    if (result == null)
+                    {
+                        if (!upperName.Contains(item)) return false;
+                    }
+                }
+
+                return true;
             };
             m_filteredResults.SortDescriptions.Add(new SortDescription("LastUseDate", ListSortDirection.Descending));
 
