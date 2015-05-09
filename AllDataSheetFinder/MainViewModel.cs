@@ -281,8 +281,6 @@ namespace AllDataSheetFinder
         {
             SearchField = string.Empty;
             IsFavouritesMode = true;
-
-            //m_savedParts.Sort((x, y) => y.LastUseDate.CompareTo(x.LastUseDate));
             
             m_searchResults.Clear();
             foreach (var item in m_savedParts)
