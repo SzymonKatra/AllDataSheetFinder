@@ -28,7 +28,7 @@ namespace AllDataSheetFinder
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
             {
-                MakeContext();
+                if (!m_model.Custom) MakeContext();
                 CheckState();
             }
         }
@@ -45,6 +45,34 @@ namespace AllDataSheetFinder
             result.Context = part;
             result.MoreInfoState = PartMoreInfoState.NotAvailable;
             result.CheckState();
+            return result;
+        }
+        public static PartViewModel MakeCustom(string originalPath, bool removeFromOriginalPath = false)
+        {
+            string savedDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory;
+            string fileName = Path.GetFileNameWithoutExtension(originalPath);
+            string resultFilePath = Global.BuildSavedDatasheetPath(fileName);
+            int count = 1;
+            while (File.Exists(resultFilePath))
+            {
+                resultFilePath = Global.BuildSavedDatasheetPath(fileName + '(' + count.ToString() + ')');
+                count++;
+            }
+
+            if (removeFromOriginalPath)
+            {
+                File.Move(originalPath, resultFilePath);
+            }
+            else
+            {
+                File.Copy(originalPath, resultFilePath);
+            }
+
+            PartViewModel result = new PartViewModel();
+            result.Description = fileName;
+            result.Custom = true;
+            result.CustomPath = resultFilePath;
+
             return result;
         }
 
@@ -263,6 +291,8 @@ namespace AllDataSheetFinder
         }
         public async Task RequestMoreInfo()
         {
+            if (Custom) throw new InvalidOperationException("Part is custom");
+
             if (MoreInfoState == PartMoreInfoState.Downloading)
             {
                 await Task.Run(() =>
@@ -293,6 +323,12 @@ namespace AllDataSheetFinder
         }
         public async Task OpenPdf()
         {
+            if (Custom)
+            {
+                Process.Start(CustomPath);
+                return;
+            }
+
             if (State == PartDatasheetState.DownloadingAndOpening) return;
             if (State == PartDatasheetState.Downloading)
             {
@@ -326,6 +362,8 @@ namespace AllDataSheetFinder
         }
         public async Task SavePdf()
         {
+            if (Custom) throw new InvalidOperationException("Part is custom");
+
             if (State == PartDatasheetState.Downloading) return;
             if (State == PartDatasheetState.DownloadingAndOpening)
             {
