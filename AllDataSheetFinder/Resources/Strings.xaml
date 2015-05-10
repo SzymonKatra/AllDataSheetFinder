@@ -42,5 +42,8 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringMoreInfo">More information</s:String>
     <s:String x:Key="StringDoYouWantUpdateMoreInfo">Do you want to update more information?</s:String>
     <s:String x:Key="StringTags">Tags</s:String>
+    <s:String x:Key="StringManufacturerLogo">Manufacturer logo</s:String>
+    <s:String x:Key="StringSizeKB">Size (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Edit part</s:String>
     
 </ResourceDictionary>

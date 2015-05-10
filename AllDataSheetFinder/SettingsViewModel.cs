@@ -243,7 +243,7 @@ namespace AllDataSheetFinder
                 switch (columnName)
                 {
                     case "MaxCacheSize":
-                        string r = ProcessValidation(m_maxCacheSizeRule, m_maxCacheSize, ref m_maxCacheSizeValue, out m_maxCacheSizeIsValid);
+                        string r = ValidationRuleWithResult<int>.ProcessValidation(m_maxCacheSizeRule, m_maxCacheSize, ref m_maxCacheSizeValue, out m_maxCacheSizeIsValid);
                         m_okCommand.RaiseCanExecuteChanged();
                         return r;
                 }
@@ -266,16 +266,6 @@ namespace AllDataSheetFinder
             return size;
         }
 
-        private string ProcessValidation<T>(ValidationRuleWithResult<T> rule, object inputValue, ref T outputValue, out bool isValid)
-        {
-            ValidationResult result = rule.Validate(inputValue, System.Globalization.CultureInfo.CurrentCulture);
-
-            isValid = result.IsValid;
-            if (result.IsValid) outputValue = rule.ValidResult;
-
-            string res = result.ErrorContent as string;
-
-            return (res == null ? null : res);
-        }
+        
     }
 }

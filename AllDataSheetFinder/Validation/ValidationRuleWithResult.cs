@@ -16,5 +16,17 @@ namespace AllDataSheetFinder.Validation
             get { return m_validResult; }
             protected set { m_validResult = value; }
         }
+
+        public static string ProcessValidation<T>(ValidationRuleWithResult<T> rule, object inputValue, ref T outputValue, out bool isValid)
+        {
+            ValidationResult result = rule.Validate(inputValue, System.Globalization.CultureInfo.CurrentCulture);
+
+            isValid = result.IsValid;
+            if (result.IsValid) outputValue = rule.ValidResult;
+
+            string res = result.ErrorContent as string;
+
+            return (res == null ? null : res);
+        }
     }
 }
