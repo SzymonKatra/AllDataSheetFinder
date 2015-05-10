@@ -12,15 +12,15 @@ using MVVMUtils.Collections;
 
 namespace AllDataSheetFinder
 {
-    public class PartViewModel : ObservableObject, IModelExposable<Part>, IWorkingCopyAvailable
+    public class PartViewModel : DataViewModelBase<PartViewModel, Part>
     {
         public PartViewModel()
             : this(new Part(), false)
         {
         }
         public PartViewModel(Part model, bool modelValid = true)
+            : base(model)
         {
-            m_model = model;
             m_tags = new SynchronizedPerItemObservableCollection<ValueViewModel<string>, string>(model.Tags, x => new ValueViewModel<string>(x));
             m_tags.CollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
             m_tags.ItemPropertyInCollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
@@ -28,7 +28,7 @@ namespace AllDataSheetFinder
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
             {
-                if (!m_model.Custom) MakeContext();
+                if (!model.Custom) MakeContext();
                 CheckState();
             }
         }
@@ -79,71 +79,65 @@ namespace AllDataSheetFinder
         private static object s_downloadListLock = new object();
         private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
 
-        private Part m_model;
-        public Part Model
-        {
-            get { return m_model; }
-        }
-
         public string Name
         {
-            get { return m_model.Name; }
-            set { m_model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("Code"); }
+            get { return Model.Name; }
+            set { Model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("Code"); }
         }
         public string Description
         {
-            get { return m_model.Description; }
-            set { m_model.Description = value; RaisePropertyChanged("Description"); }
+            get { return Model.Description; }
+            set { Model.Description = value; RaisePropertyChanged("Description"); }
         }
         public string Manufacturer
         {
-            get { return m_model.Manufacturer; }
-            set { m_model.Manufacturer = value; RaisePropertyChanged("Manufacturer"); RaisePropertyChanged("Code"); }
+            get { return Model.Manufacturer; }
+            set { Model.Manufacturer = value; RaisePropertyChanged("Manufacturer"); RaisePropertyChanged("Code"); }
         }
         public string ManufacturerImageLink
         {
-            get { return m_model.ManufacturerImageLink; }
-            set { m_model.ManufacturerImageLink = value; RaisePropertyChanged("ManufacturerImageLink"); RaisePropertyChanged("ImageFileName"); }
+            get { return Model.ManufacturerImageLink; }
+            set { Model.ManufacturerImageLink = value; RaisePropertyChanged("ManufacturerImageLink"); RaisePropertyChanged("ImageFileName"); }
         }
         public string DatasheetSiteLink
         {
-            get { return m_model.DatasheetSiteLink; }
-            set { m_model.DatasheetSiteLink = value; RaisePropertyChanged("DatasheetSiteLink"); RaisePropertyChanged("Code"); }
+            get { return Model.DatasheetSiteLink; }
+            set { Model.DatasheetSiteLink = value; RaisePropertyChanged("DatasheetSiteLink"); RaisePropertyChanged("Code"); }
         }
         public string DatasheetPdfLink
         {
-            get { return m_model.DatasheetPdfLink; }
-            set { m_model.DatasheetPdfLink = value; RaisePropertyChanged("DatasheetPdfLink"); }
+            get { return Model.DatasheetPdfLink; }
+            set { Model.DatasheetPdfLink = value; RaisePropertyChanged("DatasheetPdfLink"); }
         }
         public long DatasheetSize
         {
-            get { return m_model.DatasheetSize; }
-            set { m_model.DatasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
+            get { return Model.DatasheetSize; }
+            set { Model.DatasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public int DatasheetPages
         {
-            get { return m_model.DatasheetPages; }
-            set { m_model.DatasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
+            get { return Model.DatasheetPages; }
+            set { Model.DatasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public string ManufacturerSite
         {
-            get { return m_model.ManufacturerSite; }
-            set { m_model.ManufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
+            get { return Model.ManufacturerSite; }
+            set { Model.ManufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
         }
         public DateTime LastUseDate
         {
-            get { return m_model.LastUseDate; }
-            set { m_model.LastUseDate = value; RaisePropertyChanged("LastUseDate"); }
+            get { return Model.LastUseDate; }
+            set { Model.LastUseDate = value; RaisePropertyChanged("LastUseDate"); }
         }
         public bool Custom
         {
-            get { return m_model.Custom; }
-            set { m_model.Custom = value; RaisePropertyChanged("Custom"); }
+            get { return Model.Custom; }
+            set { Model.Custom = value; RaisePropertyChanged("Custom"); }
         }
         public string CustomPath
         {
-            get { return m_model.CustomPath; }
-            set { m_model.CustomPath = value; RaisePropertyChanged("CustomPath"); }
+            get { return Model.CustomPath; }
+            set { Model.CustomPath = value; RaisePropertyChanged("CustomPath"); }
         }
 
         private SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> m_tags;
@@ -519,17 +513,46 @@ namespace AllDataSheetFinder
             return value.Replace(' ', '-').RemoveAll(x => !char.IsLetterOrDigit(x));
         }
 
-        public int CopyDepth
+        protected override void OnPopCopy(WorkingCopyResult result)
         {
-            get { throw new NotImplementedException(); }
+            ObjectsPack pack = CopyStack.Pop();
+            if (result == WorkingCopyResult.Restore)
+            {
+                this.Name = (string)pack.Read();
+                this.Description = (string)pack.Read();
+                this.Manufacturer = (string)pack.Read();
+                this.ManufacturerImageLink = (string)pack.Read();
+                this.DatasheetSiteLink = (string)pack.Read();
+                this.DatasheetPdfLink = (string)pack.Read();
+                this.DatasheetPages = (int)pack.Read();
+                this.DatasheetSize = (long)pack.Read();
+                this.ManufacturerSite = (string)pack.Read();
+                this.LastUseDate = (DateTime)pack.Read();
+                this.Custom = (bool)pack.Read();
+                this.CustomPath = (string)pack.Read();
+            }
+
+            Tags.PopCopy(result);
         }
-        public void PopCopy(WorkingCopyResult result)
+        protected override void OnPushCopy()
         {
-            throw new NotImplementedException();
-        }
-        public void PushCopy()
-        {
-            throw new NotImplementedException();
+            ObjectsPack pack = new ObjectsPack();
+            pack.Write(this.Name);
+            pack.Write(this.Description);
+            pack.Write(this.Manufacturer);
+            pack.Write(this.ManufacturerImageLink);
+            pack.Write(this.DatasheetSiteLink);
+            pack.Write(this.DatasheetPdfLink);
+            pack.Write(this.DatasheetPages);
+            pack.Write(this.DatasheetSize);
+            pack.Write(this.ManufacturerSite);
+            pack.Write(this.LastUseDate);
+            pack.Write(this.Custom);
+            pack.Write(this.CustomPath);
+
+            CopyStack.Push(pack);
+
+            Tags.PushCopy();
         }
     }
 }
