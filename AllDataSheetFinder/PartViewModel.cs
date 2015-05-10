@@ -41,12 +41,7 @@ namespace AllDataSheetFinder
             result.Manufacturer = part.Manufacturer;
             result.ManufacturerImageLink = part.ManufacturerImageLink;
             result.DatasheetSiteLink = part.DatasheetSiteLink;
-            string[] tokens = result.Description.Split(' ');
-            foreach (var item in tokens)
-            {
-                if (string.IsNullOrWhiteSpace(item)) continue;
-                result.Tags.Add(new ValueViewModel<string>(item.RemoveAll(x => char.IsWhiteSpace(x) || x == ',')));
-            }
+            result.RebuildTags();
             result.Context = part;
             result.MoreInfoState = PartMoreInfoState.NotAvailable;
             result.CheckState();
@@ -444,6 +439,17 @@ namespace AllDataSheetFinder
         {
             m_context = new AllDataSheetPart(DatasheetSiteLink);
             RaisePropertyChanged("IsContextValid");
+        }
+        public void RebuildTags()
+        {
+            Tags.Clear();
+            string[] tokens = Description.Split(' ');
+            foreach (var item in tokens)
+            {
+                string toAdd = item.RemoveAll(x => char.IsWhiteSpace(x) || x == ',');
+                if (string.IsNullOrWhiteSpace(toAdd)) continue;
+                Tags.Add(new ValueViewModel<string>(toAdd));
+            }
         }
 
         public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)
