@@ -75,6 +75,10 @@
     <Compile Include="Converters\BooleanToVisibilityInvertedConverter.cs" />
     <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
     <Compile Include="Converters\PartMoreInfoStateToVisibilityConverter.cs" />
+    <Compile Include="EditPartViewModel.cs" />
+    <Compile Include="EditPartWindow.xaml.cs">
+      <DependentUpon>EditPartWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PartMoreInfoState.cs" />
     <Compile Include="Part.cs" />
     <Compile Include="PartViewModel.cs" />
@@ -106,6 +110,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Include="EditPartWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
