@@ -87,8 +87,10 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StringExt.cs" />
-    <Compile Include="Validation\IntegerRule.cs" />
-    <Compile Include="Validation\ValidationRuleWithResult.cs" />
+    <Compile Include="Validation\IntegerValidator.cs" />
+    <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Validation\Validator.cs" />
+    <Compile Include="Validation\ValidatorCollection.cs" />
     <Compile Include="ValueViewModel.cs" />
     <Page Include="Controls\DataGridAppendResources.xaml">
       <SubType>Designer</SubType>

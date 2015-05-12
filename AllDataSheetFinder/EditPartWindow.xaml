@@ -26,25 +26,25 @@
             </Grid.RowDefinitions>
             
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="0" Grid.Column="0" Text="{DynamicResource StringPartName}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="0" Grid.Column="1" Text="{Binding Name}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="0" Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="1" Grid.Column="0" Text="{DynamicResource StringPartDescription}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="1" Grid.Column="1" Text="{Binding Description}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="1" Grid.Column="1" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="2" Grid.Column="0" Text="{DynamicResource StringManufacturer}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="2" Grid.Column="1" Text="{Binding Manufacturer}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="2" Grid.Column="1" Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="3" Grid.Column="0" Text="{DynamicResource StringManufacturerLogo}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="3" Grid.Column="1" Text="{Binding ManufacturerLogo}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="3" Grid.Column="1" Text="{Binding ManufacturerLogo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="4" Grid.Column="0" Text="{DynamicResource StringManufacturerSite}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="4" Grid.Column="1" Text="{Binding ManufacturerSite}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="4" Grid.Column="1" Text="{Binding ManufacturerSite, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="5" Grid.Column="0" Text="{DynamicResource StringSizeKB}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="5" Grid.Column="1" Text="{Binding Size}"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="5" Grid.Column="1" Text="{Binding Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="6" Grid.Column="0" Text="{DynamicResource StringTags}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="6" Grid.Column="1" Text="{Binding Tags}" AcceptsReturn="True"/>
+            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"/>
         </Grid>
         
         <my:OkCancelControl Grid.Row="1"/>

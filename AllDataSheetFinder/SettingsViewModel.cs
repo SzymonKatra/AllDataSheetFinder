@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace AllDataSheetFinder
 {
-    public class SettingsViewModel : ObservableObject, IDataErrorInfo
+    public class SettingsViewModel : ObservableObject
     {
         public class LanguagePair
         {
@@ -54,7 +54,11 @@ namespace AllDataSheetFinder
             m_clearImagesCacheCommand = new RelayCommand(ClearImagesCache);
             m_clearSavedDatasheetsCommand = new RelayCommand(ClearSavedDatasheets);
 
-            m_maxCacheSize = (Global.Configuration.MaxDatasheetsCacheSize / (1024 * 1024)).ToString();
+            m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
+
+            m_maxCacheSize = new IntegerValidator(0, 100000);
+            m_maxCacheSize.Input = (Global.Configuration.MaxDatasheetsCacheSize / (1024 * 1024)).ToString();
+            m_validators.Add(m_maxCacheSize);
 
             LanguagePair pair = new LanguagePair(string.Empty);
             m_availableLanguages.Add(pair);
@@ -117,14 +121,12 @@ namespace AllDataSheetFinder
             }
         }
 
-        private IntegerRule m_maxCacheSizeRule = new IntegerRule(0, 100000);
-        private int m_maxCacheSizeValue;
-        private bool m_maxCacheSizeIsValid = false;
-        private string m_maxCacheSize;
-        public string MaxCacheSize
+        private ValidatorCollection m_validators;
+
+        private IntegerValidator m_maxCacheSize;
+        public IntegerValidator MaxCacheSize
         {
             get { return m_maxCacheSize; }
-            set { m_maxCacheSize = value; RaisePropertyChanged("MaxCacheSize"); }
         }
 
         private RelayCommand m_okCommand;
@@ -172,7 +174,7 @@ namespace AllDataSheetFinder
 
         private void Ok(object param)
         {
-            Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSizeValue * 1024 * 1024;
+            Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.Result * 1024 * 1024;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;
@@ -186,7 +188,7 @@ namespace AllDataSheetFinder
 
         private bool CanOk(object param)
         {
-            return m_maxCacheSizeIsValid;
+            return m_validators.IsValidAll;
         }
         private void Cancel(object param)
         {
@@ -230,26 +232,6 @@ namespace AllDataSheetFinder
             Global.SaveSavedParts();
 
             RaisePropertyChanged("CurrentSavedDatasheetsSize");
-        }
-
-        public string Error
-        {
-            get { return string.Empty; }
-        }
-        public string this[string columnName]
-        {
-            get
-            {
-                switch (columnName)
-                {
-                    case "MaxCacheSize":
-                        string r = ValidationRuleWithResult<int>.ProcessValidation(m_maxCacheSizeRule, m_maxCacheSize, ref m_maxCacheSizeValue, out m_maxCacheSizeIsValid);
-                        m_okCommand.RaiseCanExecuteChanged();
-                        return r;
-                }
-
-                return string.Empty;
-            }
         }
 
         private long ComputeFilesSize(string path)

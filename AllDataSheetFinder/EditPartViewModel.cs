@@ -18,6 +18,9 @@ namespace AllDataSheetFinder
 
         public EditPartViewModel(PartViewModel part)
         {
+            m_okCommand = new RelayCommand(Ok);
+            m_cancelCommand = new RelayCommand(Cancel);
+
             m_part = part;
         }
 
@@ -27,6 +30,49 @@ namespace AllDataSheetFinder
         public EditPartResult Result
         {
             get { return m_result; }
+        }
+
+        private string m_name;
+        public string Name
+        {
+            get { return m_name; }
+            set { m_name = value; }
+        }
+
+        private string m_description;
+        public string Description
+        {
+            get { return m_description; }
+            set { m_description = value; }
+        }
+
+        private string m_manufacturer;
+        public string Manufacturer
+        {
+            get { return m_manufacturer; }
+            set { m_manufacturer = value; }
+        }
+
+        private string m_manufacturerLogo;
+        public string ManufacturerLogo
+        {
+            get { return m_manufacturerLogo; }
+            set { m_manufacturerLogo = value; }
+        }
+
+        private string m_maufacturerSite;
+        public string MaufacturerSite
+        {
+            get { return m_maufacturerSite; }
+            set { m_maufacturerSite = value; }
+        }
+
+        private int m_sizeValue;
+        private string m_size;
+        public string Size
+        {
+            get { return m_size; }
+            set { m_size = value; }
         }
 
         private RelayCommand m_okCommand;
