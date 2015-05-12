@@ -17,7 +17,7 @@ namespace AllDataSheetFinder.Validation
             protected set { m_validResult = value; }
         }
 
-        public static string ProcessValidation<T>(ValidationRuleWithResult<T> rule, object inputValue, ref T outputValue, out bool isValid)
+        public static string ProcessValidation(ValidationRuleWithResult<T> rule, object inputValue, ref T outputValue, out bool isValid)
         {
             ValidationResult result = rule.Validate(inputValue, System.Globalization.CultureInfo.CurrentCulture);
 
