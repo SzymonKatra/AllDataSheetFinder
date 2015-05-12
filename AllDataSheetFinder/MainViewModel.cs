@@ -48,7 +48,7 @@ namespace AllDataSheetFinder
 
                 return true;
             };
-            m_filteredResults.SortDescriptions.Add(new SortDescription("LastUseDate", ListSortDirection.Descending));
+            m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
             RemoveUnavailableSavedParts();
@@ -94,6 +94,7 @@ namespace AllDataSheetFinder
 
         private SynchronizedObservableCollection<PartViewModel, Part> m_savedParts;
 
+        private SortDescription m_sortDescription = new SortDescription("LastUseDate", ListSortDirection.Descending);
         private ICollectionView m_filteredResults;
         public ICollectionView FilteredResults
         {
@@ -111,7 +112,13 @@ namespace AllDataSheetFinder
         public bool IsFavouritesMode
         {
             get { return m_isFavouritesMode; }
-            set { m_isFavouritesMode = value; RaisePropertyChanged("IsFavouritesMode"); RaisePropertyChanged("LoadMoreVisible"); m_loadMoreResultCommand.RaiseCanExecuteChanged(); }
+            set
+            {
+                m_isFavouritesMode = value;
+                RaisePropertyChanged("IsFavouritesMode");
+                RaisePropertyChanged("LoadMoreVisible");
+                m_loadMoreResultCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private RelayCommand m_searchCommand;
@@ -185,6 +192,7 @@ namespace AllDataSheetFinder
             m_searchContext = null;
             IsFavouritesMode = false;
             Searching = true;
+            m_filteredResults.SortDescriptions.Clear();
             m_filteredResults.Refresh();
             Mouse.OverrideCursor = Cursors.AppStarting;
 
@@ -295,6 +303,8 @@ namespace AllDataSheetFinder
         {
             SearchField = string.Empty;
             IsFavouritesMode = true;
+            m_filteredResults.SortDescriptions.Add(m_sortDescription);
+            m_filteredResults.Refresh();
             
             m_searchResults.Clear();
             foreach (var item in m_savedParts)
