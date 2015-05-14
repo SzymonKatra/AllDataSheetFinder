@@ -7,5 +7,6 @@
     <my:PartDatasheetStateToIsAvailableConverter x:Key="ConverterPartDatasheetStateToIsAvailable"/>
     <my:BooleanToVisibilityInvertedConverter x:Key="ConverterBooleanToVisibilityInverted"/>
     <my:PartMoreInfoStateToVisibilityConverter x:Key="ConverterPartMoreInfoStateToVisibility"/>
+    <my:BooleanNegateConverter x:Key="ConverterBooleanNegate"/>
     <BooleanToVisibilityConverter x:Key="ConverterBooleanToVisibility"/>
 </ResourceDictionary>

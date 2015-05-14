@@ -330,7 +330,12 @@ namespace AllDataSheetFinder
             if (m_selectedResult.MoreInfoState == PartMoreInfoState.Downloading) return;
             else if (m_selectedResult.MoreInfoState == PartMoreInfoState.Available)
             {
-                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantUpdateMoreInfo"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
+                m_selectedResult.PushCopy();
+                EditPartViewModel dialogViewModel = new EditPartViewModel(m_selectedResult);
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok) m_selectedResult.PopCopy(WorkingCopyResult.Apply);
+                else if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Cancel) m_selectedResult.PopCopy(WorkingCopyResult.Restore);
+                return;
             }
 
             try

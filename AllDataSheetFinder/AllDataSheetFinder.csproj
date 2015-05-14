@@ -72,6 +72,7 @@
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanNegateConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInvertedConverter.cs" />
     <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
     <Compile Include="Converters\PartMoreInfoStateToVisibilityConverter.cs" />
@@ -87,11 +88,14 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StringExt.cs" />
+    <Compile Include="Validation\FileExistsValidator.cs" />
     <Compile Include="Validation\IntegerValidator.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\NoWhitespaceValidator.cs" />
+    <Compile Include="Validation\SeparatedValuesValidator.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validation\ValidatorCollection.cs" />
+    <Compile Include="Validation\ValidatorResultChangedEventArgs.cs" />
     <Compile Include="ValueViewModel.cs" />
     <Page Include="Controls\DataGridAppendResources.xaml">
       <SubType>Designer</SubType>
@@ -229,6 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\info_filled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

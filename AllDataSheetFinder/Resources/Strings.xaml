@@ -45,5 +45,8 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringManufacturerLogo">Manufacturer logo</s:String>
     <s:String x:Key="StringSizeKB">Size (KB)</s:String>
     <s:String x:Key="StringEditPartTitle">Edit part</s:String>
+    <s:String x:Key="StringCustomPath">Custom path</s:String>
+    <s:String x:Key="StringFileNotExists">File not exists</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Do you want to rebuild tags from description?</s:String>
     
 </ResourceDictionary>

@@ -24,14 +24,6 @@ namespace AllDataSheetFinder.Validation
             }
         }      
 
-        public void ForceValidateAll()
-        {
-            foreach (var item in this)
-            {
-                item.ForceValidate();
-            }
-        }
-
         protected override void ClearItems()
         {
             foreach (var item in this)

@@ -187,7 +187,9 @@ namespace AllDataSheetFinder
         {
             get
             {
+                if (ManufacturerImageLink == null) return string.Empty;
                 Uri imageUri = new Uri(ManufacturerImageLink);
+                if (imageUri.Segments.Length <= 0) return string.Empty;
                 return imageUri.Segments[imageUri.Segments.Length - 1];
             }
         }
@@ -221,6 +223,7 @@ namespace AllDataSheetFinder
         public async void LoadImage()
         {
             string file = ImageFileName;
+            if (string.IsNullOrWhiteSpace(file)) return;
             string imagePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory + Path.DirectorySeparatorChar + file;
 
             if (!Global.CachedImages.ContainsKey(file)) Global.CachedImages.Add(file, BitmapImageLoadingInfo.CreateDefault());

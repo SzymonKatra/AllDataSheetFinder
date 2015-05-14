@@ -11,7 +11,5 @@ namespace AllDataSheetFinder.Validation
         bool IsValid { get; }
         string Error { get; }
         event EventHandler IsValidChanged;
-
-        void ForceValidate();
     }
 }

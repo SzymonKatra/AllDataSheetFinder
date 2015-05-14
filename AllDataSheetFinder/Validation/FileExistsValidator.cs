@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AllDataSheetFinder.Validation
 {
-    public class NoWhitespaceValidator : Validator<string>
+    public class FileExistsValidator : Validator<string>
     {
         protected override ValidatorResult Validate()
         {
-            foreach (char c in Input)
-            {
-                if (char.IsWhiteSpace(c)) return ValidatorResult.CreateInvalid(Global.GetStringResource("StringIllegalCharacters"));
-            }
+            if (!File.Exists(Input)) return ValidatorResult.CreateInvalid(Global.GetStringResource("StringFileNotExists"));
 
             return ValidatorResult.CreateValid(Input);
         }

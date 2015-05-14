@@ -57,7 +57,7 @@ namespace AllDataSheetFinder
             m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
 
             m_maxCacheSize = new IntegerValidator(0, 100000);
-            m_maxCacheSize.Input = (Global.Configuration.MaxDatasheetsCacheSize / (1024 * 1024)).ToString();
+            m_maxCacheSize.ValidValue = (int)(Global.Configuration.MaxDatasheetsCacheSize / (1024 * 1024));
             m_validators.Add(m_maxCacheSize);
 
             LanguagePair pair = new LanguagePair(string.Empty);
@@ -174,7 +174,7 @@ namespace AllDataSheetFinder
 
         private void Ok(object param)
         {
-            Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.Result * 1024 * 1024;
+            Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.ValidValue * 1024 * 1024;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;

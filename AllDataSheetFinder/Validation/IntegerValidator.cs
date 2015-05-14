@@ -32,16 +32,16 @@ namespace AllDataSheetFinder.Validation
             set { m_max = value; }
         }
 
-        protected override ValidatorResult<int> ProcessValidation()
+        protected override ValidatorResult Validate()
         {
-            if (Input == null) return ValidatorResult<int>.CreateInvalid(Global.GetStringResource("StringInnerError"));
+            if (Input == null) return ValidatorResult.CreateInvalid(Global.GetStringResource("StringInnerError"));
 
             int result;
-            if (!int.TryParse(Input, out result)) return ValidatorResult<int>.CreateInvalid(Global.GetStringResource("StringIllegalCharacters"));
+            if (!int.TryParse(Input, out result)) return ValidatorResult.CreateInvalid(Global.GetStringResource("StringIllegalCharacters"));
 
-            if (result < m_min || result > m_max) return ValidatorResult<int>.CreateInvalid(string.Format(Global.GetStringResource("StringFormatMustBeInRange"), m_min, m_max));
+            if (result < m_min || result > m_max) return ValidatorResult.CreateInvalid(string.Format(Global.GetStringResource("StringFormatMustBeInRange"), m_min, m_max));
 
-            return ValidatorResult<int>.CreateValid(result);
+            return ValidatorResult.CreateValid(result);
         }
     }
 }
