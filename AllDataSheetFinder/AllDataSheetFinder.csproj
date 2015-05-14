@@ -89,6 +89,7 @@
     <Compile Include="StringExt.cs" />
     <Compile Include="Validation\IntegerValidator.cs" />
     <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Validation\NoWhitespaceValidator.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validation\ValidatorCollection.cs" />
     <Compile Include="ValueViewModel.cs" />

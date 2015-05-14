@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MVVMUtils;
 using System.Windows.Input;
+using AllDataSheetFinder.Validation;
 
 namespace AllDataSheetFinder
 {
@@ -22,6 +23,8 @@ namespace AllDataSheetFinder
             m_cancelCommand = new RelayCommand(Cancel);
 
             m_part = part;
+
+            m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
         }
 
         private PartViewModel m_part;
@@ -31,6 +34,8 @@ namespace AllDataSheetFinder
         {
             get { return m_result; }
         }
+
+        private ValidatorCollection m_validators;
 
         private string m_name;
         public string Name
@@ -67,7 +72,6 @@ namespace AllDataSheetFinder
             set { m_maufacturerSite = value; }
         }
 
-        private int m_sizeValue;
         private string m_size;
         public string Size
         {
