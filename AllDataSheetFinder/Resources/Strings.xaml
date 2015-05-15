@@ -48,5 +48,12 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringCustomPath">Custom path</s:String>
     <s:String x:Key="StringFileNotExists">File not exists</s:String>
     <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Do you want to rebuild tags from description?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Rebuild tags from description</s:String>
+    <s:String x:Key="StringYes">Yes</s:String>
+    <s:String x:Key="StringNo">No</s:String>
+    <s:String x:Key="StringSource">Source</s:String>
+    <s:String x:Key="StringOwn">Own</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">Pdf document (*.pdf)</s:String>
     
 </ResourceDictionary>

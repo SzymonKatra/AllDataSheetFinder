@@ -13,5 +13,6 @@
     <BitmapImage x:Key="ImageInfo" UriSource="Images\info.png"/>
     <BitmapImage x:Key="ImageInfoFilled" UriSource="Images\info_filled.png"/>
     <BitmapImage x:Key="ImageRefresh" UriSource="Images\refresh.png"/>
+    <BitmapImage x:Key="ImageAdd" UriSource="Images\add.png"/>
     
 </ResourceDictionary>

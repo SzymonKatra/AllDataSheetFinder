@@ -47,7 +47,7 @@ namespace AllDataSheetFinder
             result.CheckState();
             return result;
         }
-        public static PartViewModel MakeCustom(string originalPath, bool removeFromOriginalPath = false)
+        public static PartViewModel MakeCustom(string originalPath)
         {
             string savedDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory;
             string fileName = Path.GetFileNameWithoutExtension(originalPath);
@@ -59,19 +59,13 @@ namespace AllDataSheetFinder
                 count++;
             }
 
-            if (removeFromOriginalPath)
-            {
-                File.Move(originalPath, resultFilePath);
-            }
-            else
-            {
-                File.Copy(originalPath, resultFilePath);
-            }
-
             PartViewModel result = new PartViewModel();
             result.Description = fileName;
+            result.RebuildTags();
             result.Custom = true;
             result.CustomPath = resultFilePath;
+            result.DatasheetSize = (new FileInfo(originalPath)).Length;
+            result.CheckState();
 
             return result;
         }
@@ -180,6 +174,7 @@ namespace AllDataSheetFinder
         {
             get
             {
+                if (DatasheetSiteLink == null) return string.Empty;
                 return BuildCodeFromLink(DatasheetSiteLink, Name, Manufacturer, DatasheetSiteLink.GetHashCode().ToString());
             }
         }
@@ -322,6 +317,7 @@ namespace AllDataSheetFinder
         {
             if (Custom)
             {
+                LastUseDate = DateTime.Now;
                 Process.Start(CustomPath);
                 return;
             }
@@ -346,6 +342,7 @@ namespace AllDataSheetFinder
             else if (State == PartDatasheetState.Cached)
             {
                 string pdfPath = Global.BuildCachedDatasheetPath(code);
+                LastUseDate = DateTime.Now;
                 Process.Start(pdfPath);
             }
             else
@@ -396,7 +393,8 @@ namespace AllDataSheetFinder
         {
             if (State != PartDatasheetState.Saved) throw new InvalidOperationException("Pdf is not in saved state");
 
-            File.Delete(Global.BuildSavedDatasheetPath(Code));
+            string path = (Custom ? CustomPath : Global.BuildSavedDatasheetPath(Code));
+            File.Delete(path);
 
             CheckState();
         }
@@ -428,6 +426,12 @@ namespace AllDataSheetFinder
 
         private void CheckState()
         {
+            if (Custom)
+            {
+                State = PartDatasheetState.Saved;
+                return;
+            }
+
             string code = Code;
 
             bool isDownloading;

@@ -7,6 +7,7 @@ using MVVMUtils;
 using System.Windows.Input;
 using AllDataSheetFinder.Validation;
 using AllDataSheetFinder.Controls;
+using System.IO;
 
 namespace AllDataSheetFinder
 {
@@ -18,32 +19,41 @@ namespace AllDataSheetFinder
             Cancel
         }
 
+        public EditPartViewModel(string originalPath)
+            : this(PartViewModel.MakeCustom(originalPath))
+        {
+            m_addingOriginalPath = originalPath;
+        }
         public EditPartViewModel(PartViewModel part)
+            : this()
+        {
+            m_part = part;
+
+            m_isCustom = m_part.Custom;
+
+            ApplyData();
+        }
+        private EditPartViewModel()
         {
             m_okCommand = new RelayCommand(Ok);
             m_cancelCommand = new RelayCommand(Cancel);
             m_refreshCommand = new RelayCommand(Refresh, CanRefresh);
             m_rebuildTagsCommand = new RelayCommand(RebuildTags);
 
-            m_part = part;
-
             m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
 
-            m_name = new NoWhitespaceValidator();    
+            m_name = new NoWhitespaceValidator();
             m_validators.Add(m_name);
 
             m_tags = new SeparatedValuesValidator(',');
             m_validators.Add(m_tags);
-
-            m_customPath = new FileExistsValidator();
-            if (m_part.Custom) m_validators.Add(m_customPath);
-
-            m_isCustom = m_part.Custom;
-
-            ApplyData();
         }
 
         private PartViewModel m_part;
+        public PartViewModel Part
+        {
+            get { return m_part; }
+        }
 
         private EditPartResult m_result = EditPartResult.Cancel;
         public EditPartResult Result
@@ -93,17 +103,13 @@ namespace AllDataSheetFinder
             get { return m_tags; }
         }
 
-        private FileExistsValidator m_customPath;
-        public FileExistsValidator CustomPath
-        {
-            get { return m_customPath; }
-        }
-
         private bool m_isCustom;
         public bool IsCustom
         {
             get { return m_isCustom; }
         }
+
+        private string m_addingOriginalPath;
 
         private RelayCommand m_okCommand;
         public ICommand OkCommand
@@ -131,6 +137,11 @@ namespace AllDataSheetFinder
 
         private void Ok(object param)
         {
+            if (m_addingOriginalPath != null)
+            {
+                File.Copy(m_addingOriginalPath, m_part.CustomPath);
+            }
+
             m_part.Name = m_name.ValidValue;
             m_part.Description = m_description;
             m_part.Manufacturer = m_manufacturer;
@@ -168,7 +179,9 @@ namespace AllDataSheetFinder
         {
             if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRebuildTagsFromDescription"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
             m_part.RebuildTags();
-            ApplyData();
+            string[] tokens = new string[m_part.Tags.Count];
+            for (int i = 0; i < m_part.Tags.Count; i++) tokens[i] = m_part.Tags[i].Value;
+            m_tags.ValidValue = tokens;
         }
 
         private void ApplyData()

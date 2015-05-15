@@ -107,6 +107,7 @@ namespace AllDataSheetFinder.Validation
         protected abstract ValidatorResult Validate();
         protected virtual string ToValidForm()
         {
+            if (ValidValue == null) return string.Empty;
             return ValidValue.ToString();
         }
 

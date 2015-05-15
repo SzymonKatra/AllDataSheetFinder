@@ -26,8 +26,21 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="0" Grid.Column="0" Text="{DynamicResource StringCustomPath}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="0" Grid.Column="1" Text="{Binding CustomPath.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCustom}"/>
+            <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="0" Grid.Column="0" Text="{DynamicResource StringSource}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleTextBlockTitle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                                <Setter Property="Text" Value="{StaticResource StringOwn}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                                <Setter Property="Text" Value="{StaticResource StringAllDataSheet}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="1" Grid.Column="0" Text="{DynamicResource StringPartName}"/>
             <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="1" Grid.Column="1" Text="{Binding Name.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsCustom}"/>
@@ -51,10 +64,14 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="128"/>
                 <ColumnDefinition Width="64"/>
             </Grid.ColumnDefinitions>
             
-            <my:ImageButton Grid.Column="1" Height="48" Width="48" ImageSource="{StaticResource ImageRefresh}" Command="{Binding RefreshCommand}"/>
+            <Button Grid.Column="1" Style="{StaticResource StyleCommonMargin}" Command="{Binding RebuildTagsCommand}">
+                <TextBlock Text="{DynamicResource StringRebuildTagsFromDescription}" TextWrapping="WrapWithOverflow"/>
+            </Button>
+            <!--<my:ImageButton Grid.Column="2" Height="48" Width="48" ImageSource="{StaticResource ImageRefresh}" ImageMargin="3,3,3,3" Command="{Binding RefreshCommand}"/>-->
         </Grid>
         <my:OkCancelControl Grid.Row="2" CommandOk="{Binding OkCommand}" CommandCancel="{Binding CancelCommand}"/>
     </Grid>

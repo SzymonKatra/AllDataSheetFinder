@@ -12,6 +12,7 @@ using System.Windows.Data;
 using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
+using Microsoft.Win32;
 
 namespace AllDataSheetFinder
 {
@@ -27,6 +28,7 @@ namespace AllDataSheetFinder
             m_showFavouritesCommand = new RelayCommand(ShowFavourites, CanShowFavourites);
             m_settingsCommand = new RelayCommand(Settings);
             m_requestMoreInfoCommand = new RelayCommand(RequestMoreInfo);
+            m_addCustomCommand = new RelayCommand(AddCustom);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
             m_filteredResults.Filter = (x) =>
@@ -167,6 +169,12 @@ namespace AllDataSheetFinder
         public ICommand RequestMoreInfoCommand
         {
             get { return m_requestMoreInfoCommand; }
+        }
+
+        private RelayCommand m_addCustomCommand;
+        public ICommand AddCustomCommand
+        {
+            get { return m_addCustomCommand; }
         }
 
         public bool LoadMoreVisible
@@ -355,13 +363,30 @@ namespace AllDataSheetFinder
             }
         }
 
+        private void AddCustom(object param)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
+            if (!string.IsNullOrWhiteSpace(openFileDialog.FileName) && File.Exists(openFileDialog.FileName))
+            {
+                EditPartViewModel dialogViewModel = new EditPartViewModel(openFileDialog.FileName);
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok)
+                {
+                    m_searchResults.Add(dialogViewModel.Part);
+                    m_savedParts.Add(dialogViewModel.Part);
+                }
+            }
+        }
+
         private void RemoveUnavailableSavedParts()
         {
             foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory))
             {
                 if (Path.GetExtension(file) != ".pdf") continue;
                 string code = Path.GetFileNameWithoutExtension(file);
-                if (m_savedParts.FirstOrDefault(x => x.Code == code) == null) File.Delete(file);
+                if (m_savedParts.FirstOrDefault(x => x.Code == code || x.CustomPath == file) == null) File.Delete(file);
             }
         }
     }
