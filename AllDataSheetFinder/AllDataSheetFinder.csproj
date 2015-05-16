@@ -66,6 +66,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ActionDialogViewModel.cs" />
+    <Compile Include="ActionDialogWindow.xaml.cs">
+      <DependentUpon>ActionDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MessageBoxEx.xaml.cs">
       <DependentUpon>MessageBoxEx.xaml</DependentUpon>
     </Compile>
@@ -97,6 +101,10 @@
     <Compile Include="Validation\ValidatorCollection.cs" />
     <Compile Include="Validation\ValidatorResultChangedEventArgs.cs" />
     <Compile Include="ValueViewModel.cs" />
+    <Page Include="ActionDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DataGridAppendResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

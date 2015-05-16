@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Globalization;
 using System.Diagnostics;
 using MVVMUtils.Collections;
+using System.Text.RegularExpressions;
 
 namespace AllDataSheetFinder
 {
@@ -489,6 +490,16 @@ namespace AllDataSheetFinder
                 if (string.IsNullOrWhiteSpace(toAdd)) continue;
                 Tags.Add(new ValueViewModel<string>(toAdd));
             }
+        }
+        public Task ComputePagesCount()
+        {
+            if (!Custom) throw new InvalidOperationException("Part must be custom");
+            return Task.Run(() =>
+            {
+                string fileContent = File.ReadAllText(CustomPath);
+                Regex regex = new Regex(@"\s(R\/Type\/Page>)");
+                this.DatasheetPages = regex.Matches(fileContent).Count;
+            });
         }
 
         public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)

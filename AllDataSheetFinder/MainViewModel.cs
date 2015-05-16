@@ -37,7 +37,7 @@ namespace AllDataSheetFinder
 
                 PartViewModel part = (PartViewModel)x;
                 string[] tokens = m_searchField.ToUpper().Split(' ');
-                string upperName = part.Name.ToUpper();
+                string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
 
                 foreach (var item in tokens)
                 {
@@ -374,8 +374,12 @@ namespace AllDataSheetFinder
                 Global.Dialogs.ShowDialog(this, dialogViewModel);
                 if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok)
                 {
-                    m_searchResults.Add(dialogViewModel.Part);
-                    m_savedParts.Add(dialogViewModel.Part);
+                    PartViewModel part = dialogViewModel.Part;
+                    m_searchResults.Add(part);
+                    m_savedParts.Add(part);
+
+                    ActionDialogViewModel actionDialogViewModel = new ActionDialogViewModel(part.ComputePagesCount(), Global.GetStringResource("StringCountingPages"));
+                    Global.Dialogs.ShowDialog(this, actionDialogViewModel);
                 }
             }
         }

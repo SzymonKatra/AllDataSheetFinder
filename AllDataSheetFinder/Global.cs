@@ -20,6 +20,7 @@ namespace AllDataSheetFinder
             s_dialogs = new DialogService();
             s_dialogs.AddMapping(typeof(SettingsViewModel), typeof(SettingsWindow));
             s_dialogs.AddMapping(typeof(EditPartViewModel), typeof(EditPartWindow));
+            s_dialogs.AddMapping(typeof(ActionDialogViewModel), typeof(ActionDialogWindow));
         }
 
         public static readonly string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
