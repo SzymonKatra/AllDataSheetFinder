@@ -53,7 +53,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
-    
+
     <Style x:Key="StyleTextBoxInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTextBoxValidated}">
         <Setter Property="MaxHeight" Value="24"/>
     </Style>

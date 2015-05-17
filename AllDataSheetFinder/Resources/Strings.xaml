@@ -42,5 +42,20 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringMoreInfo">More information</s:String>
     <s:String x:Key="StringDoYouWantUpdateMoreInfo">Do you want to update more information?</s:String>
     <s:String x:Key="StringTags">Tags</s:String>
+    <s:String x:Key="StringManufacturerLogo">Manufacturer logo</s:String>
+    <s:String x:Key="StringSizeKB">Size (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Edit part</s:String>
+    <s:String x:Key="StringCustomPath">Custom path</s:String>
+    <s:String x:Key="StringFileNotExists">File not exists</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Do you want to rebuild tags from description?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Rebuild tags from description</s:String>
+    <s:String x:Key="StringYes">Yes</s:String>
+    <s:String x:Key="StringNo">No</s:String>
+    <s:String x:Key="StringSource">Source</s:String>
+    <s:String x:Key="StringOwn">Own</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">PDF document (*.pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Counting pages in PDF document. Please wait...</s:String>
+    <s:String x:Key="StringGraphicFiles">Graphic files (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
     
 </ResourceDictionary>

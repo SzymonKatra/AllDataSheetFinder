@@ -1,0 +1,16 @@
+﻿<Window x:Class="AllDataSheetFinder.ActionDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:c="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
+        Title="{DynamicResource StringAppName}" Height="150" Width="300" WindowStartupLocation="CenterOwner"
+        WindowStyle="None">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <c:EventToCommand Command="{Binding RunWorkCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <TextBlock Style="{StaticResource StyleTextBlockCommon}" Margin="10,10,10,10" Text="{Binding Message}" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Window>

@@ -12,6 +12,7 @@ using System.Windows.Data;
 using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
+using Microsoft.Win32;
 
 namespace AllDataSheetFinder
 {
@@ -27,6 +28,7 @@ namespace AllDataSheetFinder
             m_showFavouritesCommand = new RelayCommand(ShowFavourites, CanShowFavourites);
             m_settingsCommand = new RelayCommand(Settings);
             m_requestMoreInfoCommand = new RelayCommand(RequestMoreInfo);
+            m_addCustomCommand = new RelayCommand(AddCustom);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
             m_filteredResults.Filter = (x) =>
@@ -35,7 +37,7 @@ namespace AllDataSheetFinder
 
                 PartViewModel part = (PartViewModel)x;
                 string[] tokens = m_searchField.ToUpper().Split(' ');
-                string upperName = part.Name.ToUpper();
+                string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
 
                 foreach (var item in tokens)
                 {
@@ -48,7 +50,7 @@ namespace AllDataSheetFinder
 
                 return true;
             };
-            m_filteredResults.SortDescriptions.Add(new SortDescription("LastUseDate", ListSortDirection.Descending));
+            m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
             RemoveUnavailableSavedParts();
@@ -94,6 +96,7 @@ namespace AllDataSheetFinder
 
         private SynchronizedObservableCollection<PartViewModel, Part> m_savedParts;
 
+        private SortDescription m_sortDescription = new SortDescription("LastUseDate", ListSortDirection.Descending);
         private ICollectionView m_filteredResults;
         public ICollectionView FilteredResults
         {
@@ -111,7 +114,13 @@ namespace AllDataSheetFinder
         public bool IsFavouritesMode
         {
             get { return m_isFavouritesMode; }
-            set { m_isFavouritesMode = value; RaisePropertyChanged("IsFavouritesMode"); RaisePropertyChanged("LoadMoreVisible"); m_loadMoreResultCommand.RaiseCanExecuteChanged(); }
+            set
+            {
+                m_isFavouritesMode = value;
+                RaisePropertyChanged("IsFavouritesMode");
+                RaisePropertyChanged("LoadMoreVisible");
+                m_loadMoreResultCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private RelayCommand m_searchCommand;
@@ -162,6 +171,12 @@ namespace AllDataSheetFinder
             get { return m_requestMoreInfoCommand; }
         }
 
+        private RelayCommand m_addCustomCommand;
+        public ICommand AddCustomCommand
+        {
+            get { return m_addCustomCommand; }
+        }
+
         public bool LoadMoreVisible
         {
             get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
@@ -185,6 +200,7 @@ namespace AllDataSheetFinder
             m_searchContext = null;
             IsFavouritesMode = false;
             Searching = true;
+            m_filteredResults.SortDescriptions.Clear();
             m_filteredResults.Refresh();
             Mouse.OverrideCursor = Cursors.AppStarting;
 
@@ -295,6 +311,8 @@ namespace AllDataSheetFinder
         {
             SearchField = string.Empty;
             IsFavouritesMode = true;
+            m_filteredResults.SortDescriptions.Add(m_sortDescription);
+            m_filteredResults.Refresh();
             
             m_searchResults.Clear();
             foreach (var item in m_savedParts)
@@ -320,7 +338,12 @@ namespace AllDataSheetFinder
             if (m_selectedResult.MoreInfoState == PartMoreInfoState.Downloading) return;
             else if (m_selectedResult.MoreInfoState == PartMoreInfoState.Available)
             {
-                if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantUpdateMoreInfo"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
+                m_selectedResult.PushCopy();
+                EditPartViewModel dialogViewModel = new EditPartViewModel(m_selectedResult);
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok) m_selectedResult.PopCopy(WorkingCopyResult.Apply);
+                else if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Cancel) m_selectedResult.PopCopy(WorkingCopyResult.Restore);
+                return;
             }
 
             try
@@ -340,13 +363,37 @@ namespace AllDataSheetFinder
             }
         }
 
+        private void AddCustom(object param)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
+            if (!string.IsNullOrWhiteSpace(openFileDialog.FileName) && File.Exists(openFileDialog.FileName))
+            {
+                EditPartViewModel dialogViewModel = new EditPartViewModel(openFileDialog.FileName);
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok)
+                {
+                    PartViewModel part = dialogViewModel.Part;
+                    m_searchResults.Add(part);
+                    m_savedParts.Add(part);
+                    part.LastUseDate = DateTime.MinValue;
+
+                    ActionDialogViewModel actionDialogViewModel = new ActionDialogViewModel(part.ComputePagesCount(), Global.GetStringResource("StringCountingPages"));
+                    Global.Dialogs.ShowDialog(this, actionDialogViewModel);
+                }
+
+                m_filteredResults.Refresh();
+            }
+        }
+
         private void RemoveUnavailableSavedParts()
         {
             foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory))
             {
                 if (Path.GetExtension(file) != ".pdf") continue;
                 string code = Path.GetFileNameWithoutExtension(file);
-                if (m_savedParts.FirstOrDefault(x => x.Code == code) == null) File.Delete(file);
+                if (m_savedParts.FirstOrDefault(x => x.Code == code || x.CustomPath == file) == null) File.Delete(file);
             }
         }
     }
