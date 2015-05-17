@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.Net;
 using System.Xml.Linq;
 using System.Reflection;
+using System.Windows;
 
 namespace AllDataSheetFinder
 {
@@ -414,6 +415,8 @@ namespace AllDataSheetFinder
             m_checkingUpdates = true;
             bool newVersion = false;
             string link = string.Empty;
+            string execute = string.Empty;
+            string files = string.Empty;
             await Task.Run(() =>
             {
                 HttpWebRequest request = Requests.CreateDefaultRequest(Global.UpdateVersionLink);
@@ -422,21 +425,33 @@ namespace AllDataSheetFinder
                 XElement rootElement = XElement.Parse(result);
                 XElement versionElement = rootElement.Element("version");
                 if (versionElement == null) return;
+                XElement downloadElement = rootElement.Element("download");
+                if (downloadElement == null) return;
+                XElement executeElement = rootElement.Element("execute");
+                if (executeElement == null) return;
+                XElement filesElement = rootElement.Element("files");
+                if (filesElement == null) return;
+
                 Version version;
                 if (!Version.TryParse(versionElement.Value, out version)) return;
                 Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
 
-                XElement downloadElement = rootElement.Element("download");
-                if (downloadElement == null) return;
-
                 link = downloadElement.Value;
                 if (version > currentVersion) newVersion = true;
+
+                execute = executeElement.Value;
+                files = filesElement.Value;
             });
 
             if (newVersion && Global.MessageBox(this, Global.GetStringResource("StringUpdateAvailable"), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
             {
                 UpdateViewModel dialogViewModel = new UpdateViewModel(link);
                 Global.Dialogs.ShowDialog(this, dialogViewModel);
+                string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+                string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
+                Process.Start(basePath + Path.DirectorySeparatorChar + execute, "\"" + basePath + Path.DirectorySeparatorChar + files + "\" \"" + appDir + "\"");
+                NeedClose();
             }
 
             m_checkingUpdates = false;

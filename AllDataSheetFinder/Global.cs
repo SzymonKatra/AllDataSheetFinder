@@ -35,6 +35,8 @@ namespace AllDataSheetFinder
         public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
 
+        public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
+
         public static readonly string UpdateVersionLink = "https://www.dropbox.com/s/ypmujj9ikjl8nf1/update_info.xml?dl=1";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
