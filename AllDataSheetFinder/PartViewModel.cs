@@ -497,7 +497,7 @@ namespace AllDataSheetFinder
             return Task.Run(() =>
             {
                 string fileContent = File.ReadAllText(CustomPath);
-                Regex regex = new Regex(@"\s(R\/Type\/Page>)");
+                Regex regex = new Regex(@"Type\/Page[^s]");
                 this.DatasheetPages = regex.Matches(fileContent).Count;
             });
         }

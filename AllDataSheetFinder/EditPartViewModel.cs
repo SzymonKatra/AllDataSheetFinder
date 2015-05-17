@@ -151,7 +151,7 @@ namespace AllDataSheetFinder
             }
 
             string imagesPath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
-            if (!m_manufacturerLogo.StartsWith(imagesPath))
+            if (m_manufacturerLogo != null && !m_manufacturerLogo.StartsWith(imagesPath))
             {
                 string resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileName(m_manufacturerLogo);
                 int count = 1;
@@ -164,6 +164,8 @@ namespace AllDataSheetFinder
                 ManufacturerLogo = resultImagePath;
             }
 
+            string oldImage = m_part.ManufacturerImageLink;
+
             m_part.Name = m_name.ValidValue;
             m_part.Description = m_description;
             m_part.Manufacturer = m_manufacturer;
@@ -174,6 +176,8 @@ namespace AllDataSheetFinder
             {
                 m_part.Tags.Add(new ValueViewModel<string>(item.RemoveAll(x => char.IsWhiteSpace(x) || x == ',')));
             }
+
+            if (oldImage != m_part.ManufacturerImageLink) m_part.LoadImage();
 
             m_result = EditPartResult.Ok;
             Global.Dialogs.Close(this);

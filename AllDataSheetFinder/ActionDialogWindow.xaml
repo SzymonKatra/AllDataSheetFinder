@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:c="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
-        Title="{DynamicResource StringAppName}" Height="150" Width="300" WindowStartupLocation="CenterOwner">
+        Title="{DynamicResource StringAppName}" Height="150" Width="300" WindowStartupLocation="CenterOwner"
+        WindowStyle="None">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <c:EventToCommand Command="{Binding RunWorkCommand}"/>
