@@ -14,6 +14,7 @@ namespace AllDataSheetFinderUpdater
     {
         private static readonly string AppMutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
         private static readonly string UpdaterMutexName = "AllDataSheetFinderUpdater_0D8C8D15-EDE3-423C-81E9-871FEF848AE0";
+        private static readonly int AppClosedSteps = 2;
 
         private static Mutex m_oneInstanceMutex;
 
@@ -24,10 +25,13 @@ namespace AllDataSheetFinderUpdater
 
             m_oneInstanceMutex = new Mutex(true, UpdaterMutexName);
 
+            int step = 0;
             while (Mutex.TryOpenExisting(AppMutexName, out tmpMutex))
             {
                 tmpMutex.Close();
                 Thread.Sleep(1000); // checks if application is closed
+
+                if (++step >= AppClosedSteps) return;
             }
 
             if (args.Length < 2) return;
