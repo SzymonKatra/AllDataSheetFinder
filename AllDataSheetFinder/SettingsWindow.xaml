@@ -21,6 +21,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="35"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -64,6 +65,7 @@
             <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
             <ComboBox Grid.Column="1" Grid.Row="4" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
             
+            <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
         </Grid>
         
         <TextBlock Grid.Row="1" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Author, StringFormat={StaticResource StringFormatAuthor}}"/>

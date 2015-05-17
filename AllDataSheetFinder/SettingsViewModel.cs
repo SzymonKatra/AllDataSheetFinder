@@ -53,6 +53,7 @@ namespace AllDataSheetFinder
             m_clearDatasheetsCacheCommand = new RelayCommand(ClearDatasheetsCache);
             m_clearImagesCacheCommand = new RelayCommand(ClearImagesCache);
             m_clearSavedDatasheetsCommand = new RelayCommand(ClearSavedDatasheets);
+            m_checkUpdatesCommand = new RelayCommand(CheckUpdates);
 
             m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
 
@@ -159,6 +160,12 @@ namespace AllDataSheetFinder
             get { return m_clearSavedDatasheetsCommand; }
         }
 
+        private RelayCommand m_checkUpdatesCommand;
+        public ICommand CheckUpdatesCommand
+        {
+            get { return m_checkUpdatesCommand; }
+        }
+
         private ObservableCollection<LanguagePair> m_availableLanguages = new ObservableCollection<LanguagePair>();
         public ObservableCollection<LanguagePair> AvailableLanguages
         {
@@ -234,6 +241,11 @@ namespace AllDataSheetFinder
             RaisePropertyChanged("CurrentSavedDatasheetsSize");
         }
 
+        private void CheckUpdates(object param)
+        {
+            Global.Main.CheckForUpdates();
+        }
+
         private long ComputeFilesSize(string path)
         {
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -247,7 +259,5 @@ namespace AllDataSheetFinder
 
             return size;
         }
-
-        
     }
 }
