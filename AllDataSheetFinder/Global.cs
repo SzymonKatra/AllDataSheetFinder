@@ -21,16 +21,23 @@ namespace AllDataSheetFinder
             s_dialogs.AddMapping(typeof(SettingsViewModel), typeof(SettingsWindow));
             s_dialogs.AddMapping(typeof(EditPartViewModel), typeof(EditPartWindow));
             s_dialogs.AddMapping(typeof(ActionDialogViewModel), typeof(ActionDialogWindow));
+            s_dialogs.AddMapping(typeof(UpdateViewModel), typeof(UpdateWindow));
         }
 
         public static readonly string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
         public static readonly string ImagesCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Images";
         public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
         public static readonly string SavedDatasheetsDirectory = "SavedDatasheets";
+        public static readonly string UpdateFile = "update.zip";
+        public static readonly string UpdateExtractDirectory = "Update";
         public static readonly string ConfigFile = "config.xml";
         public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
         public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
+
+        public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
+
+        public static readonly string UpdateVersionLink = "https://www.dropbox.com/s/ypmujj9ikjl8nf1/update_info.xml?dl=1";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
         private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<Part>));

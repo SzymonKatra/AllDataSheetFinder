@@ -90,8 +90,8 @@ namespace AllDataSheetFinder
         public static AllDataSheetSearchResult Search(string value)
         {
             string url = SiteAddress + "?" + "Searchword=" + value + "&sPage=1&sField=4";
-            HttpWebRequest request = CreateDefaultRequest(url);
-            string result = ReadResponseString(request);
+            HttpWebRequest request = Requests.CreateDefaultRequest(url);
+            string result = Requests.ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
@@ -129,9 +129,9 @@ namespace AllDataSheetFinder
             while (true)
             {
                 string url = SiteAddress + "?" + "Searchword=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage + "&sField=" + (int)searchContext.Option;
-                HttpWebRequest request = CreateDefaultRequest(url);
+                HttpWebRequest request = Requests.CreateDefaultRequest(url);
                 request.Referer = searchContext.Referer;
-                string result = ReadResponseString(request);
+                string result = Requests.ReadResponseString(request);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(result);
@@ -268,8 +268,8 @@ namespace AllDataSheetFinder
 
         public MoreInfo RequestMoreInfo()
         {
-            HttpWebRequest request = CreateDefaultRequest(m_datasheetSiteLink);
-            string result = ReadResponseString(request);
+            HttpWebRequest request = Requests.CreateDefaultRequest(m_datasheetSiteLink);
+            string result = Requests.ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
@@ -320,10 +320,10 @@ namespace AllDataSheetFinder
 
             CookieContainer cookies = new CookieContainer();
 
-            HttpWebRequest request = CreateDefaultRequest(pdfSite);
+            HttpWebRequest request = Requests.CreateDefaultRequest(pdfSite);
             request.Referer = m_datasheetSiteLink;
             request.CookieContainer = cookies;
-            string result = ReadResponseString(request);
+            string result = Requests.ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
@@ -340,7 +340,7 @@ namespace AllDataSheetFinder
 
             cookies.Add(new Uri(pdfDirect), cookies.GetCookies(new Uri(pdfSite)));
 
-            request = CreateDefaultRequest(pdfDirect);
+            request = Requests.CreateDefaultRequest(pdfDirect);
             request.Referer = pdfSite;
             request.CookieContainer = cookies;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -357,7 +357,7 @@ namespace AllDataSheetFinder
 
         public Stream GetManufacturerImageStream()
         {
-            HttpWebRequest request = CreateDefaultRequest(m_manufacturerImageLink);
+            HttpWebRequest request = Requests.CreateDefaultRequest(m_manufacturerImageLink);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
         }
@@ -375,26 +375,6 @@ namespace AllDataSheetFinder
         {
             if (!node.Attributes.Contains(name)) return string.Empty;
             return node.Attributes[name].Value;
-        }
-
-        private static HttpWebRequest CreateDefaultRequest(string url)
-        {
-            HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.UserAgent = "AllDataSheetFinder";
-            request.Method = "GET";
-            return request;
-        }
-        private static string ReadResponseString(HttpWebRequest request)
-        {
-            string result;
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    result = WebUtility.HtmlDecode(reader.ReadToEnd());
-                }
-            }
-            return result;
         }
     }
 }

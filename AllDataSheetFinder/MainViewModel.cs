@@ -13,9 +13,15 @@ using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
 using Microsoft.Win32;
+using System.Net;
+using System.Xml.Linq;
+using System.Reflection;
+using System.Windows;
 
 namespace AllDataSheetFinder
 {
+    public delegate void NeedCloseDelegate();
+
     public sealed class MainViewModel : ObservableObject
     {
         public MainViewModel()
@@ -54,8 +60,13 @@ namespace AllDataSheetFinder
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
             RemoveUnavailableSavedParts();
+
+            CheckForUpdates();
         }
 
+        public NeedCloseDelegate NeedClose;
+
+        private bool m_checkingUpdates = false;
         private int m_openingCount = 0;
         private AllDataSheetSearchContext m_searchContext;
 
@@ -395,6 +406,55 @@ namespace AllDataSheetFinder
                 string code = Path.GetFileNameWithoutExtension(file);
                 if (m_savedParts.FirstOrDefault(x => x.Code == code || x.CustomPath == file) == null) File.Delete(file);
             }
+        }
+
+        public async void CheckForUpdates()
+        {
+            if (m_checkingUpdates) return;
+
+            m_checkingUpdates = true;
+            bool newVersion = false;
+            string link = string.Empty;
+            string execute = string.Empty;
+            string files = string.Empty;
+            await Task.Run(() =>
+            {
+                HttpWebRequest request = Requests.CreateDefaultRequest(Global.UpdateVersionLink);
+                string result = Requests.ReadResponseString(request);
+
+                XElement rootElement = XElement.Parse(result);
+                XElement versionElement = rootElement.Element("version");
+                if (versionElement == null) return;
+                XElement downloadElement = rootElement.Element("download");
+                if (downloadElement == null) return;
+                XElement executeElement = rootElement.Element("execute");
+                if (executeElement == null) return;
+                XElement filesElement = rootElement.Element("files");
+                if (filesElement == null) return;
+
+                Version version;
+                if (!Version.TryParse(versionElement.Value, out version)) return;
+                Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+
+                link = downloadElement.Value;
+                if (version > currentVersion) newVersion = true;
+
+                execute = executeElement.Value;
+                files = filesElement.Value;
+            });
+
+            if (newVersion && Global.MessageBox(this, Global.GetStringResource("StringUpdateAvailable"), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
+            {
+                UpdateViewModel dialogViewModel = new UpdateViewModel(link);
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+                string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
+                Process.Start(basePath + Path.DirectorySeparatorChar + execute, "\"" + basePath + Path.DirectorySeparatorChar + files + "\" \"" + appDir + "\"");
+                NeedClose();
+            }
+
+            m_checkingUpdates = false;
         }
     }
 }
