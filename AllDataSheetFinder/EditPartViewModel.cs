@@ -151,7 +151,7 @@ namespace AllDataSheetFinder
             }
 
             string imagesPath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
-            if (m_manufacturerLogo != null && !m_manufacturerLogo.StartsWith(imagesPath))
+            if (!string.IsNullOrWhiteSpace(m_manufacturerLogo) && File.Exists(m_manufacturerLogo) && !m_manufacturerLogo.StartsWith(imagesPath))
             {
                 string resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileName(m_manufacturerLogo);
                 int count = 1;
