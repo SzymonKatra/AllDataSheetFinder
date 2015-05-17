@@ -62,5 +62,6 @@ Do you want to download and install it?</s:String>
     <s:String x:Key="StringSearchingUpdate">Searching for update...</s:String>
     <s:String x:Key="StringDownloadingUpdate">Downloading update...</s:String>
     <s:String x:Key="StringExtractingUpdate">Extracting update...</s:String>
+    <s:String x:Key="StringCheckUpdates">Check updates</s:String>
     
 </ResourceDictionary>
