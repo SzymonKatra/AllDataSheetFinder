@@ -57,5 +57,10 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringPdfFiles">PDF document (*.pdf)</s:String>
     <s:String x:Key="StringCountingPages">Counting pages in PDF document. Please wait...</s:String>
     <s:String x:Key="StringGraphicFiles">Graphic files (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">An update is available.
+Do you want to download and install it?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Searching for update...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Downloading update...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Extracting update...</s:String>
     
 </ResourceDictionary>

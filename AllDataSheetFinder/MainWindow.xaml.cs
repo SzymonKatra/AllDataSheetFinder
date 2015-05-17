@@ -35,6 +35,7 @@ namespace AllDataSheetFinder
             Global.InitializeAll();
 
             MainViewModel main = new MainViewModel();
+            main.NeedClose = () => this.Close();
             Global.Main = main;
 
             this.DataContext = main;
