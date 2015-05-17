@@ -246,7 +246,7 @@ namespace AllDataSheetFinder
                 info.Image.StreamSource = stream;
                 info.Image.EndInit();
             }
-            else
+            else if (!Custom)
             {
                 MemoryStream memory = new MemoryStream();
                 await Task.Run(() =>

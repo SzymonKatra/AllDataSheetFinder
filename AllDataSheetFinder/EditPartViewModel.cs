@@ -8,6 +8,7 @@ using System.Windows.Input;
 using AllDataSheetFinder.Validation;
 using AllDataSheetFinder.Controls;
 using System.IO;
+using Microsoft.Win32;
 
 namespace AllDataSheetFinder
 {
@@ -39,6 +40,7 @@ namespace AllDataSheetFinder
             m_cancelCommand = new RelayCommand(Cancel);
             m_refreshCommand = new RelayCommand(Refresh, CanRefresh);
             m_rebuildTagsCommand = new RelayCommand(RebuildTags);
+            m_selectImageCommand = new RelayCommand(SelectImage);
 
             m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
 
@@ -135,11 +137,31 @@ namespace AllDataSheetFinder
             get { return m_rebuildTagsCommand; }
         }
 
+        private RelayCommand m_selectImageCommand;
+        public ICommand SelectImageCommand
+        {
+            get { return m_selectImageCommand; }
+        }
+
         private void Ok(object param)
         {
             if (m_addingOriginalPath != null)
             {
                 File.Copy(m_addingOriginalPath, m_part.CustomPath);
+            }
+
+            string imagesPath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
+            if (!m_manufacturerLogo.StartsWith(imagesPath))
+            {
+                string resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileName(m_manufacturerLogo);
+                int count = 1;
+                while(File.Exists(resultImagePath))
+                {
+                    resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(m_manufacturerLogo) + "(" + count.ToString() + ")" + Path.GetExtension(m_manufacturerLogo);
+                    count++;
+                }
+                File.Copy(m_manufacturerLogo, resultImagePath);
+                ManufacturerLogo = resultImagePath;
             }
 
             m_part.Name = m_name.ValidValue;
@@ -182,6 +204,15 @@ namespace AllDataSheetFinder
             string[] tokens = new string[m_part.Tags.Count];
             for (int i = 0; i < m_part.Tags.Count; i++) tokens[i] = m_part.Tags[i].Value;
             m_tags.ValidValue = tokens;
+        }
+
+        private void SelectImage(object param)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
+            openFileDialog.Filter = Global.GetStringResource("StringGraphicFiles") + "|" + "*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+            openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
+            ManufacturerLogo = openFileDialog.FileName;
         }
 
         private void ApplyData()

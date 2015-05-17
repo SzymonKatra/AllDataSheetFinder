@@ -47,12 +47,19 @@
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="2" Grid.Column="0" Text="{DynamicResource StringPartDescription}"/>
             <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="2" Grid.Column="1" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCustom}"/>
-
+  
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="3" Grid.Column="0" Text="{DynamicResource StringManufacturer}"/>
             <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="3" Grid.Column="1" Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCustom}"/>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="4" Grid.Column="0" Text="{DynamicResource StringManufacturerLogo}"/>
-            <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="4" Grid.Column="1" Text="{Binding ManufacturerLogo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCustom}"/>
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Column="0" Text="{Binding ManufacturerLogo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="..." Command="{Binding SelectImageCommand}"  IsEnabled="{Binding IsCustom}"/>
+            </Grid>
 
             <TextBlock Style="{StaticResource StyleTextBlockTitle}" Grid.Row="5" Grid.Column="0" Text="{DynamicResource StringManufacturerSite}"/>
             <TextBox Style="{StaticResource StyleTextBoxValidated}" Grid.Row="5" Grid.Column="1" Text="{Binding ManufacturerSite, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCustom}"/>
@@ -65,7 +72,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="128"/>
-                <ColumnDefinition Width="64"/>
             </Grid.ColumnDefinitions>
             
             <Button Grid.Column="1" Style="{StaticResource StyleCommonMargin}" Command="{Binding RebuildTagsCommand}">

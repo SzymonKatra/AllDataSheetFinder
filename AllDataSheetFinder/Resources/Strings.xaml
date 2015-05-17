@@ -56,5 +56,6 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
     <s:String x:Key="StringPdfFiles">Pdf document (*.pdf)</s:String>
     <s:String x:Key="StringCountingPages">Counting pages in PDF document. Please wait...</s:String>
+    <s:String x:Key="StringGraphicFiles">Graphic files (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
     
 </ResourceDictionary>

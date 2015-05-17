@@ -377,6 +377,7 @@ namespace AllDataSheetFinder
                     PartViewModel part = dialogViewModel.Part;
                     m_searchResults.Add(part);
                     m_savedParts.Add(part);
+                    part.LoadImage();
 
                     ActionDialogViewModel actionDialogViewModel = new ActionDialogViewModel(part.ComputePagesCount(), Global.GetStringResource("StringCountingPages"));
                     Global.Dialogs.ShowDialog(this, actionDialogViewModel);
