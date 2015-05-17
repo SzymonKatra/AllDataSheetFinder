@@ -42,5 +42,19 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringMoreInfo">Dodatkowe informacje</s:String>
     <s:String x:Key="StringDoYouWantUpdateMoreInfo">Czy chcesz zaktualizować dodatkowe informacje?</s:String>
     <s:String x:Key="StringTags">Tagi</s:String>
+    <s:String x:Key="StringManufacturerLogo">Logo producenta</s:String>
+    <s:String x:Key="StringSizeKB">Rozmiar (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Edytuj część</s:String>
+    <s:String x:Key="StringCustomPath">Własna ścieżka</s:String>
+    <s:String x:Key="StringFileNotExists">Plik nie istnieje</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Czy chcesz zbudować tagi z opisu?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Zbuduj tagi z opisu</s:String>
+    <s:String x:Key="StringYes">Tak</s:String>
+    <s:String x:Key="StringNo">Nie</s:String>
+    <s:String x:Key="StringSource">Żródło</s:String>
+    <s:String x:Key="StringOwn">Własne</s:String>
+    <s:String x:Key="StringPdfFiles">Dokument PDF (*.pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Liczenie stron w dokumencie PDF. Proszę czekać...</s:String>
+    <s:String x:Key="StringGraphicFiles">Pliki graficzne(*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
     
 </ResourceDictionary>
