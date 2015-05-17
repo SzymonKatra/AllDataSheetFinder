@@ -14,7 +14,11 @@ namespace AllDataSheetFinderUpdater
     {
         private static readonly string AppMutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
         private static readonly string UpdaterMutexName = "AllDataSheetFinderUpdater_0D8C8D15-EDE3-423C-81E9-871FEF848AE0";
+<<<<<<< HEAD
         private static readonly int AppClosedSteps = 5;
+=======
+        private static readonly int AppClosedSteps = 2;
+>>>>>>> e5c500c74847d7160104d6e24d75fc58ccd1034f
 
         private static Mutex m_oneInstanceMutex;
 
