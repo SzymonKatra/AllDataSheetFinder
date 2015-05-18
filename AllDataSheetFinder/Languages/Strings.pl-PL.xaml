@@ -56,5 +56,12 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringPdfFiles">Dokument PDF (*.pdf)</s:String>
     <s:String x:Key="StringCountingPages">Liczenie stron w dokumencie PDF. Proszę czekać...</s:String>
     <s:String x:Key="StringGraphicFiles">Pliki graficzne(*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">Aktualizacja jest dostępna.
+Czy chcesz ją pobrać i zainstalować?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Wyszukiwanie aktualizacji...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Pobieranie aktualizacji...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Wypakowywanie aktualizacji...</s:String>
+    <s:String x:Key="StringCheckUpdates">Sprawdź aktualizacje</s:String>
+    <s:String x:Key="StringUpdateTitle">Aktualizacja</s:String>
     
 </ResourceDictionary>

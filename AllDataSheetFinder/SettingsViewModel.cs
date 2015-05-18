@@ -211,6 +211,8 @@ namespace AllDataSheetFinder
                 File.Delete(file);
             }
 
+            foreach (var item in Global.Main.SearchResults) item.CheckState();
+
             RaisePropertyChanged("CurrentDatasheetsCacheSize");
         }
 
@@ -235,7 +237,17 @@ namespace AllDataSheetFinder
                 File.Delete(file);
             }
 
-            Global.SavedParts.Clear();
+            Global.Main.SavedParts.Clear();
+            if (Global.Main.IsFavouritesMode)
+            {
+                Global.Main.SearchResults.Clear();
+                Global.Main.FilteredResults.Refresh();
+            }
+            else
+            {
+                foreach (var item in Global.Main.SearchResults) item.CheckState();
+            }
+
             Global.SaveSavedParts();
 
             RaisePropertyChanged("CurrentSavedDatasheetsSize");

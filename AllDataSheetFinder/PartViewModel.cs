@@ -241,8 +241,10 @@ namespace AllDataSheetFinder
 
             if (File.Exists(imagePath))
             {
-                FileStream stream = new FileStream(imagePath, FileMode.Open);
+                byte[] imageData = File.ReadAllBytes(imagePath);
+                MemoryStream stream = new MemoryStream(imageData);
                 info.Image.BeginInit();
+                info.Image.CacheOption = BitmapCacheOption.OnLoad;
                 info.Image.StreamSource = stream;
                 info.Image.EndInit();
             }
@@ -273,6 +275,7 @@ namespace AllDataSheetFinder
 
                 memory.Seek(0, SeekOrigin.Begin);
                 info.Image.BeginInit();
+                info.Image.CacheOption = BitmapCacheOption.OnLoad;
                 info.Image.StreamSource = memory;
                 info.Image.EndInit();
             }
@@ -425,7 +428,7 @@ namespace AllDataSheetFinder
             }
         }
 
-        private void CheckState()
+        public void CheckState()
         {
             if (Custom)
             {
