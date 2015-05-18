@@ -5,6 +5,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:e="clr-namespace:MVVMUtils;assembly=MVVMUtilsExt"
         xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
+        xmlns:base="clr-namespace:AllDataSheetFinder"
         Title="{DynamicResource StringAppName}" Height="600" Width="800"
         Background="White"
         WindowStartupLocation="CenterScreen">
@@ -28,7 +29,7 @@
             </Grid.ColumnDefinitions>
 
             <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="0" ImageSource="{StaticResource ImageSettings}" ImageMargin="3,3,3,3" Text="{DynamicResource StringSettings}" Command="{Binding SettingsCommand}"/>
-            
+
             <my:ImageButton Grid.Column="1" Text="{DynamicResource StringFavourites}" Command="{Binding ShowFavouritesCommand}">
                 <my:ImageButton.Style>
                     <Style TargetType="{x:Type my:ImageButton}" BasedOn="{StaticResource StyleCommonMargin}">
@@ -39,15 +40,6 @@
                             <DataTrigger Binding="{Binding IsFavouritesMode}" Value="True">
                                 <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
                             </DataTrigger>
-                            <!--<MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True"/>
-                                    <Condition Binding="{Binding Searching}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <MultiDataTrigger.Setters>
-                                    <Setter Property="ImageSource" Value="{StaticResource ImageFavouriteFilled}"/>
-                                </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>-->
                         </Style.Triggers>
                     </Style>
                 </my:ImageButton.Style>
@@ -56,10 +48,13 @@
             <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Column="3" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageSearch}" Text="{DynamicResource StringSearch}" Command="{Binding SearchCommand}"/>
         </Grid>
 
-        <my:DataGridAppend Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
+        <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
                            CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" CanUserResizeColumns="False" VerticalScrollBarVisibility="Visible">
             <my:DataGridAppend.AppendControl>
-                <my:ImageButton Style="{StaticResource StyleCommonMargin}" Grid.Row="1" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                <StackPanel Orientation="Vertical">
+                    <my:ImageButton Style="{StaticResource StyleCommonMargin}" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                    <my:ImageButton Style="{StaticResource StyleCommonMargin}" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
+                </StackPanel>
             </my:DataGridAppend.AppendControl>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
@@ -69,7 +64,7 @@
                         </Setter.Value>
                     </Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterIsDownloading}}" Value="True">       
+                        <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterIsDownloading}}" Value="True">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="StoryboardBegin">
                                     <Storyboard>
@@ -96,7 +91,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Image Source="{Binding Image}" Width="150" Height="50"/>
-                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Part.Manufacturer}"/>
+                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Manufacturer}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -104,14 +99,43 @@
                 <DataGridTemplateColumn Header="{DynamicResource StringPartName}" Width="15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Name}"/>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="{DynamicResource StringPartDescription}" Width="85*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Part.Description}"/>
+                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" Text="{Binding Description}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="64">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <my:ImageButton Width="48" Height="48" x:Name="ButtonMoreInfo" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}">
+                                    <my:ImageButton.Style>
+                                        <Style TargetType="{x:Type my:ImageButton}">
+                                            <Setter Property="ImageSource" Value="{StaticResource ImageInfo}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding MoreInfoState}" Value="{x:Static base:PartMoreInfoState.Available}">
+                                                    <Setter Property="ImageSource" Value="{StaticResource ImageInfoFilled}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </my:ImageButton.Style>
+                                </my:ImageButton>
+                                <Popup PlacementTarget="{Binding ElementName=ButtonMoreInfo}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ButtonMoreInfo, Mode=OneWay}" PopupAnimation="Fade">
+                                    <Border Background="#FFBEE6FD">
+                                        <StackPanel Orientation="Vertical" Margin="10,10,10,10">
+                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{DynamicResource StringLoadMoreInfo}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.NotAvailable}}"/>
+                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{DynamicResource StringLoadingMoreInfo}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.Downloading}}"/>
+                                            <TextBlock Style="{StaticResource StyleTextBlockCommon}" Text="{Binding MoreInfoDisplay}" Visibility="{Binding MoreInfoState, Converter={StaticResource ConverterPartMoreInfoStateToVisibility}, ConverterParameter={x:Static base:PartMoreInfoState.Available}}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -122,7 +146,6 @@
                                 <my:ImageButton.Style>
                                     <Style TargetType="{x:Type my:ImageButton}">
                                         <Style.Triggers>
-
                                             <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToIsAvailable}}" Value="True">
                                                 <Setter Property="ImageSource" Value="{StaticResource ImagePdfFilled}"/>
                                             </DataTrigger>

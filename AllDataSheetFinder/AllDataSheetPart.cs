@@ -11,47 +11,78 @@ namespace AllDataSheetFinder
 {
     public class AllDataSheetPart
     {
+        public struct MoreInfo
+        {
+            public string PdfSite { get; set; }
+            public string Size { get; set; }
+            public string Pages { get; set; }
+            public string ManufacturerSite { get; set; }
+        }
+
+        protected AllDataSheetPart()
+        {
+        }
+        public AllDataSheetPart(string datasheetSiteLink)
+        {
+            m_datasheetSiteLink = datasheetSiteLink;
+            m_onlyContext = true;
+        }
+
         private string m_manufacturer;
         public string Manufacturer
         {
-            get { return m_manufacturer; }
-            set { m_manufacturer = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_manufacturer;
+            }
+            //set { m_manufacturer = value; }
         }
 
         private string m_manufacturerImageLink;
         public string ManufacturerImageLink
         {
-            get { return m_manufacturerImageLink; }
-            set { m_manufacturerImageLink = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_manufacturerImageLink;
+            }
+            //set { m_manufacturerImageLink = value; }
         }
 
         private string m_name;
         public string Name
         {
-            get { return m_name; }
-            set { m_name = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_name;
+            }
+            //set { m_name = value; }
         }
 
         private string m_description;
         public string Description
         {
-            get { return m_description; }
-            set { m_description = value; }
+            get
+            {
+                if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
+                return m_description;
+            }
+            //set { m_description = value; }
         }
 
         private string m_datasheetSiteLink;
         public string DatasheetSiteLink
         {
             get { return m_datasheetSiteLink; }
-            set { m_datasheetSiteLink = value; }
+            //set { m_datasheetSiteLink = value; }
         }
 
-        public string Code
+        private bool m_onlyContext = false;
+        public bool OnlyContext
         {
-            get
-            {
-                return BuildCodeFromLink(m_datasheetSiteLink, m_name, m_manufacturer, m_datasheetSiteLink.GetHashCode().ToString());
-            }
+            get { return m_onlyContext; }
         }
 
         private const string SiteAddress = "http://www.alldatasheet.com/view_datasheet.jsp";
@@ -59,8 +90,8 @@ namespace AllDataSheetFinder
         public static AllDataSheetSearchResult Search(string value)
         {
             string url = SiteAddress + "?" + "Searchword=" + value + "&sPage=1&sField=4";
-            HttpWebRequest request = CreateDefaultRequest(url);
-            string result = ReadResponseString(request);
+            HttpWebRequest request = Requests.CreateDefaultRequest(url);
+            string result = Requests.ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
@@ -98,9 +129,9 @@ namespace AllDataSheetFinder
             while (true)
             {
                 string url = SiteAddress + "?" + "Searchword=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage + "&sField=" + (int)searchContext.Option;
-                HttpWebRequest request = CreateDefaultRequest(url);
+                HttpWebRequest request = Requests.CreateDefaultRequest(url);
                 request.Referer = searchContext.Referer;
-                string result = ReadResponseString(request);
+                string result = Requests.ReadResponseString(request);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(result);
@@ -235,12 +266,10 @@ namespace AllDataSheetFinder
             else if (upperInnerText.Contains("INCLUDED")) option = AllDataSheetSearchContext.SearchOption.Included;
         }
 
-        public Stream GetDatasheetStream()
+        public MoreInfo RequestMoreInfo()
         {
-            List<string> responseHeaders = new List<string>();
-
-            HttpWebRequest request = CreateDefaultRequest(m_datasheetSiteLink);
-            string result = ReadResponseString(request);
+            HttpWebRequest request = Requests.CreateDefaultRequest(m_datasheetSiteLink);
+            string result = Requests.ReadResponseString(request);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
@@ -254,24 +283,54 @@ namespace AllDataSheetFinder
 
             HtmlNode aNode = matchingNodes.ElementAt(0).Element("a");
 
-            string pdfSite = GetAttributeValueOrEmpty(aNode, "href");
+            MoreInfo moreInfo = new MoreInfo();
 
+            moreInfo.PdfSite = GetAttributeValueOrEmpty(aNode, "href");
+
+            matchingNodes = from node in rootElement.Descendants("td")
+                            where IsAttributeValueLike(node, "height", "40") && IsAttributeValueLike(node, "class", "gray_title") &&
+                                  IsAttributeValueLike(node, "width", "100")
+                            select node;
+
+            HtmlNode sizeNode = matchingNodes.ElementAt(2).ParentNode;
+            moreInfo.Size = sizeNode.Elements("td").ElementAt(1).Element("font").InnerText;
+
+            HtmlNode pagesNode = matchingNodes.ElementAt(3).ParentNode;
+            moreInfo.Pages = pagesNode.Elements("td").ElementAt(1).Element("font").InnerText;
+
+            HtmlNode manufacturerSiteNode = matchingNodes.ElementAt(5).ParentNode;
+            moreInfo.ManufacturerSite = manufacturerSiteNode.Elements("td").ElementAt(1).InnerText;
+
+            return moreInfo;
+        }
+        public Task<MoreInfo> RequestMoreInfoAsync()
+        {
+            return Task.Run(() => RequestMoreInfo());
+        }
+
+        public Stream GetDatasheetStream()
+        {
+            MoreInfo moreInfo = RequestMoreInfo();
+            return GetDatasheetStream(moreInfo.PdfSite);
+        }
+        public Stream GetDatasheetStream(string pdfSite)
+        {
             Uri pdfUri = new Uri(pdfSite);
             string pdfHost = pdfUri.GetLeftPart(UriPartial.Scheme) + pdfUri.Host;
 
             CookieContainer cookies = new CookieContainer();
 
-            request = CreateDefaultRequest(pdfSite);
+            HttpWebRequest request = Requests.CreateDefaultRequest(pdfSite);
             request.Referer = m_datasheetSiteLink;
             request.CookieContainer = cookies;
-            result = ReadResponseString(request);
+            string result = Requests.ReadResponseString(request);
 
-            document = new HtmlDocument();
+            HtmlDocument document = new HtmlDocument();
             document.LoadHtml(result);
 
-            rootElement = document.DocumentNode;
+            HtmlNode rootElement = document.DocumentNode;
 
-            matchingNodes = from node in rootElement.Descendants("iframe")
+            IEnumerable<HtmlNode> matchingNodes = from node in rootElement.Descendants("iframe")
                             where IsAttributeValueLike(node, "height", "810") && IsAttributeValueLike(node, "name", "333") && IsAttributeValueLike(node, "width", "100%")
                             select node;
 
@@ -281,29 +340,24 @@ namespace AllDataSheetFinder
 
             cookies.Add(new Uri(pdfDirect), cookies.GetCookies(new Uri(pdfSite)));
 
-            request = CreateDefaultRequest(pdfDirect);
+            request = Requests.CreateDefaultRequest(pdfDirect);
             request.Referer = pdfSite;
             request.CookieContainer = cookies;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
-                //byte[] buffer = new byte[4096];
-                //using (BinaryReader reader = new BinaryReader(response.GetResponseStream()))
-                //{
-                //    int len;
-                //    while ((len = reader.Read(buffer, 0, buffer.Length)) > 0)
-                //    {
-                //        stream.Write(buffer, 0, len);
-                //    }
-                //}
         }
         public Task<Stream> GetDatasheetStreamAsync()
         {
             return Task.Run(() => GetDatasheetStream());
         }
+        public Task<Stream> GetDatasheetStreamAsync(string pdfSite)
+        {
+            return Task.Run(() => GetDatasheetStream(pdfSite));
+        }
 
         public Stream GetManufacturerImageStream()
         {
-            HttpWebRequest request = CreateDefaultRequest(m_manufacturerImageLink);
+            HttpWebRequest request = Requests.CreateDefaultRequest(m_manufacturerImageLink);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             return response.GetResponseStream();
         }
@@ -321,55 +375,6 @@ namespace AllDataSheetFinder
         {
             if (!node.Attributes.Contains(name)) return string.Empty;
             return node.Attributes[name].Value;
-        }
-
-        private static HttpWebRequest CreateDefaultRequest(string url)
-        {
-            HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.UserAgent = "AllDataSheetFinder";
-            request.Method = "GET";
-            return request;
-        }
-        private static string ReadResponseString(HttpWebRequest request)
-        {
-            string result;
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    result = WebUtility.HtmlDecode(reader.ReadToEnd());
-                }
-            }
-            return result;
-        }
-
-        public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)
-        {
-            Uri uri = new Uri(link);
-            string[] segments = uri.Segments;
-            if (segments.Length < 3) return BuildCode(name, manufacturer, link.GetHashCode().ToString());
-            string nameSegment = segments[segments.Length - 1];
-            string manufacturerSegment = segments[segments.Length - 2];
-            string numberSegment = segments[segments.Length - 3];
-
-            nameSegment = nameSegment.Remove(nameSegment.Length - 5); // remove ".html"
-            manufacturerSegment = manufacturerSegment.Remove(manufacturerSegment.Length - 1); // remove slash
-            numberSegment = numberSegment.Remove(numberSegment.Length - 1); // remove slash
-
-            return BuildCode(nameSegment, manufacturerSegment, numberSegment);
-        }
-        public static string BuildCode(string name, string manufacturer, string hash)
-        {
-            name = ToValidCodeForm(name);
-            manufacturer = ToValidCodeForm(manufacturer);
-            hash = ToValidCodeForm(hash);
-
-            return string.Format("{0}_{1}_{2}", name, manufacturer, hash);
-        }
-
-        private static string ToValidCodeForm(string value)
-        {
-            return value.Replace(' ', '-').RemoveAll(x => !char.IsLetterOrDigit(x));
         }
     }
 }

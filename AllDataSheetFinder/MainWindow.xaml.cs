@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,8 +22,19 @@ namespace AllDataSheetFinder
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Mutex m_oneInstanceMutex;
+
         public MainWindow()
         {
+            if (Mutex.TryOpenExisting(Global.MutexName, out m_oneInstanceMutex))
+            {
+                m_oneInstanceMutex.Close();
+                this.Close();
+                return;
+            }
+
+            m_oneInstanceMutex = new Mutex(true, Global.MutexName);
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             InitializeComponent();
@@ -35,6 +47,7 @@ namespace AllDataSheetFinder
             Global.InitializeAll();
 
             MainViewModel main = new MainViewModel();
+            main.NeedClose = () => this.Close();
             Global.Main = main;
 
             this.DataContext = main;

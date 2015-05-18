@@ -1,0 +1,16 @@
+﻿<Window x:Class="AllDataSheetFinder.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource StringUpdateTitle}" Height="200" Width="300"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Style="{StaticResource StyleTextBlockCommon}" Grid.Row="0" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Text}"/>
+        <ProgressBar Style="{StaticResource StyleCommonMargin}" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Progress}"/>
+    </Grid>
+</Window>

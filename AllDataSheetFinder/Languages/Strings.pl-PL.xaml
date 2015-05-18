@@ -8,10 +8,10 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringManufacturer">Producent</s:String>
     <s:String x:Key="StringPartName">Nazwa części</s:String>
     <s:String x:Key="StringPartDescription">Opis</s:String>
-    <s:String x:Key="StringDownloadError">Wystąpił błąd podczas pobierania dokumentacji</s:String>
+    <s:String x:Key="StringDownloadError">Wystąpił błąd podczas pobierania noty katalogowej</s:String>
     <s:String x:Key="StringLoadMoreResults">Załaduj więcej</s:String>
     <s:String x:Key="StringAddToFavourites">Ulubione</s:String>
-    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Czy na pewno chcesz usunąć tą dokumentację z ulubionych?</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Czy na pewno chcesz usunąć tą notę katalogową z ulubionych?</s:String>
     <s:String x:Key="StringOpen">Otwórz</s:String>
     <s:String x:Key="StringFavourites">Ulubione</s:String>
     <s:String x:Key="StringSettings">Ustawienia</s:String>
@@ -19,10 +19,10 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringIllegalCharacters">Niedozwolone znaki</s:String>
     <s:String x:Key="StringFormatMustBeInRange">Musi być w zakresie od {0} do {1}</s:String>
     <s:String x:Key="StringSettingsTitle">Ustawienia</s:String>
-    <s:String x:Key="StringMaxDatasheetsCacheSize">Maks. rozm. przechowywanych dokumentacji (MB)</s:String>
-    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Czy na pewno chcesz wyczyścić pamięć podręczną dokumentacji?</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maksymalny rozmiar pamięci podręcznej not (MB)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Czy na pewno chcesz wyczyścić pamięć podręczną not katalogowych?</s:String>
     <s:String x:Key="StringDoYouWantClearImagesCache">Czy na pewno chcesz wyczyścić pamięć podręczną obrazków?</s:String>
-    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Czy na pewno chcesz usunąć ulubione dokumentacje?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Czy na pewno chcesz usunąć ulubione noty katalogowe?</s:String>
     <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Aktualny rozmiar przechowywanych dokumentacji: {0} MB</s:String>
     <s:String x:Key="StringFormatCurrentImagesCacheSize">Aktualny rozmiar przechowywanych obrazków: {0} KB</s:String>
     <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Aktualny rozmiar ulubionych: {0} MB</s:String>
@@ -32,5 +32,36 @@ Sprawdź swoje połączenie internetowe.</s:String>
     <s:String x:Key="StringFormatLicense">Licencja: {0}</s:String>
     <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
     <s:String x:Key="StringFormatVersion">Wersja: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">Musisz zrestartować aplikację, aby zobaczyć pełną zmianę języka</s:String>
+    <s:String x:Key="StringMoreInfoError">Wystąpił błąd podczas pobierania dodatkowych informacji</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Kliknij, aby pobrać dodatkowe informacje</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Pobieranie dodatkowych informacji, proszę czekać...</s:String>
+    <s:String x:Key="StringSize">Rozmar</s:String>
+    <s:String x:Key="StringManufacturerSite">Strona producenta</s:String>
+    <s:String x:Key="StringPages">Stron</s:String>
+    <s:String x:Key="StringMoreInfo">Dodatkowe informacje</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Czy chcesz zaktualizować dodatkowe informacje?</s:String>
+    <s:String x:Key="StringTags">Tagi</s:String>
+    <s:String x:Key="StringManufacturerLogo">Logo producenta</s:String>
+    <s:String x:Key="StringSizeKB">Rozmiar (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Edytuj część</s:String>
+    <s:String x:Key="StringCustomPath">Własna ścieżka</s:String>
+    <s:String x:Key="StringFileNotExists">Plik nie istnieje</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Czy chcesz zbudować tagi z opisu?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Zbuduj tagi z opisu</s:String>
+    <s:String x:Key="StringYes">Tak</s:String>
+    <s:String x:Key="StringNo">Nie</s:String>
+    <s:String x:Key="StringSource">Żródło</s:String>
+    <s:String x:Key="StringOwn">Własne</s:String>
+    <s:String x:Key="StringPdfFiles">Dokument PDF (*.pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Liczenie stron w dokumencie PDF. Proszę czekać...</s:String>
+    <s:String x:Key="StringGraphicFiles">Pliki graficzne(*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">Aktualizacja jest dostępna.
+Czy chcesz ją pobrać i zainstalować?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Wyszukiwanie aktualizacji...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Pobieranie aktualizacji...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Wypakowywanie aktualizacji...</s:String>
+    <s:String x:Key="StringCheckUpdates">Sprawdź aktualizacje</s:String>
+    <s:String x:Key="StringUpdateTitle">Aktualizacja</s:String>
     
 </ResourceDictionary>

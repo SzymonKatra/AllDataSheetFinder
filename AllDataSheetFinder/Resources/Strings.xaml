@@ -32,5 +32,37 @@ Please check your internet connection.</s:String>
     <s:String x:Key="StringFormatLicense">License: {0}</s:String>
     <s:String x:Key="StringFormatAuthor">Author: {0}</s:String>
     <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">You must restart application to see language changes fully</s:String>
+    <s:String x:Key="StringMoreInfoError">An error occurred while requesting more information</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Click to load more information</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Requesting more information, please wait...</s:String>
+    <s:String x:Key="StringSize">Size</s:String>
+    <s:String x:Key="StringManufacturerSite">Manufacturer site</s:String>
+    <s:String x:Key="StringPages">Pages</s:String>
+    <s:String x:Key="StringMoreInfo">More information</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Do you want to update more information?</s:String>
+    <s:String x:Key="StringTags">Tags</s:String>
+    <s:String x:Key="StringManufacturerLogo">Manufacturer logo</s:String>
+    <s:String x:Key="StringSizeKB">Size (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Edit part</s:String>
+    <s:String x:Key="StringCustomPath">Custom path</s:String>
+    <s:String x:Key="StringFileNotExists">File not exists</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Do you want to rebuild tags from description?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Rebuild tags from description</s:String>
+    <s:String x:Key="StringYes">Yes</s:String>
+    <s:String x:Key="StringNo">No</s:String>
+    <s:String x:Key="StringSource">Source</s:String>
+    <s:String x:Key="StringOwn">Own</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">PDF document (*.pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Counting pages in PDF document. Please wait...</s:String>
+    <s:String x:Key="StringGraphicFiles">Graphic files (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">An update is available.
+Do you want to download and install it?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Searching for update...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Downloading update...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Extracting update...</s:String>
+    <s:String x:Key="StringCheckUpdates">Check updates</s:String>
+    <s:String x:Key="StringUpdateTitle">Update</s:String>
     
 </ResourceDictionary>
