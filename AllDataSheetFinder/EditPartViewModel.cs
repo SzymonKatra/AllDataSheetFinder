@@ -204,6 +204,7 @@ namespace AllDataSheetFinder
         private void RebuildTags(object param)
         {
             if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRebuildTagsFromDescription"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
+            m_part.Description = m_description;
             m_part.RebuildTags();
             string[] tokens = new string[m_part.Tags.Count];
             for (int i = 0; i < m_part.Tags.Count; i++) tokens[i] = m_part.Tags[i].Value;
