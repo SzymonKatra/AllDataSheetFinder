@@ -106,6 +106,10 @@ namespace AllDataSheetFinder
         }
 
         private SynchronizedObservableCollection<PartViewModel, Part> m_savedParts;
+        public SynchronizedObservableCollection<PartViewModel, Part> SavedParts
+        {
+            get { return m_savedParts; }
+        }
 
         private SortDescription m_sortDescription = new SortDescription("LastUseDate", ListSortDirection.Descending);
         private ICollectionView m_filteredResults;

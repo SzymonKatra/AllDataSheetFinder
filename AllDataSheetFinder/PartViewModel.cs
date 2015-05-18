@@ -428,7 +428,7 @@ namespace AllDataSheetFinder
             }
         }
 
-        private void CheckState()
+        public void CheckState()
         {
             if (Custom)
             {
