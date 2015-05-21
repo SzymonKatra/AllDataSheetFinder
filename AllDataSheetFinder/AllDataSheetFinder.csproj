@@ -81,6 +81,8 @@
     </Compile>
     <Compile Include="Converters\BooleanNegateConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInvertedConverter.cs" />
+    <Compile Include="Converters\DecimalAddConverter.cs" />
+    <Compile Include="Converters\DecimalIsLessThanConverter.cs" />
     <Compile Include="Converters\PartDatasheetStateToIsAvailableConverter.cs" />
     <Compile Include="Converters\PartMoreInfoStateToVisibilityConverter.cs" />
     <Compile Include="EditPartViewModel.cs" />

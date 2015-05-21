@@ -72,7 +72,8 @@ namespace AllDataSheetFinder
         }
 
         private static object s_downloadListLock = new object();
-        private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
+        //private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
+        private static Dictionary<string, PartViewModel> s_downloadList = new Dictionary<string, PartViewModel>();
 
         public string Name
         {
@@ -214,6 +215,13 @@ namespace AllDataSheetFinder
         public bool IsContextValid
         {
             get { return m_context != null; }
+        }
+
+        private decimal m_progress = 1M;
+        public decimal Progress
+        {
+            get { return m_progress; }
+            private set { m_progress = value; RaisePropertyChanged("Progress"); }
         }
 
         public async void LoadImage()
@@ -406,20 +414,25 @@ namespace AllDataSheetFinder
         private async Task DownloadPdf(string pdfPath)
         {
             Stream stream = null;
-            lock (s_downloadListLock) s_downloadList.Add(Code, State);
+            lock (s_downloadListLock) s_downloadList.Add(Code, this);
             try
             {
                 if (m_moreInfoState != PartMoreInfoState.Available) await RequestMoreInfo();
                 stream = await m_context.GetDatasheetStreamAsync(DatasheetPdfLink);
-                await Task.Run(() =>
+                using (FileStream file = new FileStream(pdfPath, FileMode.Create))
                 {
-                    using (FileStream file = new FileStream(pdfPath, FileMode.Create))
+                    byte[] buffer = new byte[4096];
+                    int len;
+                    long written = 0;
+                    Progress = 0M;
+                    while ((len = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                     {
-                        byte[] buffer = new byte[4096];
-                        int len;
-                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0) file.Write(buffer, 0, len);
+                        await file.WriteAsync(buffer, 0, len);
+                        written += len;
+                        Progress = (decimal)written / (decimal)DatasheetSize;
                     }
-                });
+                    Progress = 1M;
+                }
             }
             finally
             {
@@ -437,15 +450,6 @@ namespace AllDataSheetFinder
             }
 
             string code = Code;
-
-            bool isDownloading;
-            lock (s_downloadListLock) isDownloading = s_downloadList.ContainsKey(code);
-            if (isDownloading)
-            {
-                lock (s_downloadListLock) State = s_downloadList[code];
-                CheckGlobalState();
-                return;
-            }
 
             string pdfPath = Global.BuildSavedDatasheetPath(code);
             if (File.Exists(pdfPath))
@@ -503,6 +507,19 @@ namespace AllDataSheetFinder
                 Regex regex = new Regex(@"Type\/Page[^s]");
                 this.DatasheetPages = regex.Matches(fileContent).Count;
             });
+        }
+
+        public static bool GetDownloadingIfExists(string code, ref PartViewModel part)
+        {
+            lock (s_downloadListLock)
+            {
+                if (s_downloadList.ContainsKey(code))
+                {
+                    part = s_downloadList[code];
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static string BuildCodeFromLink(string link, string name, string manufacturer, string hash)
