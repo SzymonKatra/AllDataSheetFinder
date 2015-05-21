@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Controls="clr-namespace:AllDataSheetFinder.Controls">
 
     <Style x:Key="StyleCommonMargin" TargetType="{x:Type FrameworkElement}">
         <Setter Property="Margin" Value="10,5,10,5"/>
@@ -9,14 +9,14 @@
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
-    
+
     <Style x:Key="StyleTextBlockCommon" TargetType="{x:Type TextBlock}">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <Style x:Key="StyleTextDataGridResult" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleTextBlockCommon}">
-        <Setter Property="Margin" Value="10,5,10,5"/>      
+        <Setter Property="Margin" Value="10,5,10,5"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
@@ -43,11 +43,11 @@
     <Style x:Key="StyleTextBoxValidated" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleCommonMargin}">
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                <Setter Property="ToolTip" Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="StyleTextBlockTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleCommonMargin}">
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -57,7 +57,7 @@
     <Style x:Key="StyleTextBoxInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTextBoxValidated}">
         <Setter Property="MaxHeight" Value="24"/>
     </Style>
-    
+
     <Style x:Key="StyleTextBlockInformation" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleTextBlockTitle}">
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>

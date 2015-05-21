@@ -1,5 +1,6 @@
 ﻿<Window x:Class="AllDataSheetFinder.MainWindow"
         x:Name="root"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -9,6 +10,9 @@
         Title="{DynamicResource StringAppName}" Height="600" Width="800"
         Background="White"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <s:Decimal x:Key="DecimalOne">1</s:Decimal>
+    </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <e:EventToCommand Command="{Binding SaveFavouritesCommand}"/>
@@ -60,7 +64,12 @@
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
                     <Setter Property="Background">
                         <Setter.Value>
-                            <SolidColorBrush Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}"/>
+                            <!--<SolidColorBrush Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}"/>-->
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}" Offset="{Binding Progress}"/>
+                                <GradientStop Color="Transparent" Offset="{Binding Progress, Converter={StaticResource ConverterDecimalAdd}, ConverterParameter=0.025;1}"/>
+                                <GradientStop Color="Transparent" Offset="1.0" />
+                            </LinearGradientBrush>
                         </Setter.Value>
                     </Setter>
                     <Style.Triggers>
@@ -68,12 +77,17 @@
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="StoryboardBegin">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="Transparent" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.GradientStops[0].Color" To="Transparent" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding State, Converter={StaticResource ConverterIsDownloading}}" Value="False">
+                            <DataTrigger.EnterActions>
+                                <StopStoryboard BeginStoryboardName="StoryboardBegin"/>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Progress, Converter={StaticResource ConverterDecimalIsLessThan}, ConverterParameter={StaticResource DecimalOne}}" Value="True">
                             <DataTrigger.EnterActions>
                                 <StopStoryboard BeginStoryboardName="StoryboardBegin"/>
                             </DataTrigger.EnterActions>

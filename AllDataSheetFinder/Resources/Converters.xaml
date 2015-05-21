@@ -8,5 +8,7 @@
     <my:BooleanToVisibilityInvertedConverter x:Key="ConverterBooleanToVisibilityInverted"/>
     <my:PartMoreInfoStateToVisibilityConverter x:Key="ConverterPartMoreInfoStateToVisibility"/>
     <my:BooleanNegateConverter x:Key="ConverterBooleanNegate"/>
+    <my:DecimalIsLessThanConverter x:Key="ConverterDecimalIsLessThan"/>
+    <my:DecimalAddConverter x:Key="ConverterDecimalAdd"/>
     <BooleanToVisibilityConverter x:Key="ConverterBooleanToVisibility"/>
 </ResourceDictionary>
