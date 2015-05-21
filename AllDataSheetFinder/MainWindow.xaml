@@ -53,7 +53,7 @@
         </Grid>
 
         <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" CanUserResizeColumns="False" VerticalScrollBarVisibility="Visible">
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" VerticalScrollBarVisibility="Visible">
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
                     <my:ImageButton Style="{StaticResource StyleCommonMargin}" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
@@ -96,7 +96,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="200">
+                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="200" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -124,7 +124,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="64">
+                <DataGridTemplateColumn Width="64" MinWidth="48" MaxWidth="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -153,7 +153,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="64">
+                <DataGridTemplateColumn Width="64" MinWidth="48" MaxWidth="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
@@ -176,7 +176,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="64">
+                <DataGridTemplateColumn Width="64" MinWidth="48" MaxWidth="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}">
