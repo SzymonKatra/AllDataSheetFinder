@@ -295,6 +295,7 @@ namespace AllDataSheetFinder
                 if (IsFavouritesMode)
                 {
                     m_searchResults.Remove(m_selectedResult);
+                    Global.SaveSavedParts();
                 }
                 return;
             }
@@ -306,6 +307,7 @@ namespace AllDataSheetFinder
                 PartViewModel part = m_selectedResult;
                 await part.SavePdf();
                 m_savedParts.Add(part);
+                Global.SaveSavedParts();
             }
             catch
             {
