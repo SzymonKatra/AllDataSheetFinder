@@ -63,5 +63,6 @@ Czy chcesz ją pobrać i zainstalować?</s:String>
     <s:String x:Key="StringExtractingUpdate">Wypakowywanie aktualizacji...</s:String>
     <s:String x:Key="StringCheckUpdates">Sprawdź aktualizacje</s:String>
     <s:String x:Key="StringUpdateTitle">Aktualizacja</s:String>
-    
+    <s:String x:Key="StringAppDataPath">Ścieżka zapisu danych</s:String>
+
 </ResourceDictionary>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:AllDataSheetFinder.Controls"
         xmlns:v="clr-namespace:AllDataSheetFinder.Validation"
-        Title="{DynamicResource StringSettings}" Height="400" Width="450"
+        Title="{DynamicResource StringSettings}" Height="450" Width="450"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -17,6 +17,7 @@
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
@@ -28,11 +29,21 @@
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringAppDataPath}"/>
+            <Grid Grid.Column="1" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Style="{StaticResource StyleTextBoxInput}" Text="{Binding AppDataPath}" IsReadOnly="True"/>
+                <Button Grid.Column="1" Style="{StaticResource StyleCommonMargin}" Content="..." Command="{Binding SelectAppDataPathCommand}"/>
+            </Grid>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>           
+            <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             
-            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>           
-            <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-            
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -42,7 +53,7 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearDatasheetsCacheCommand}"/>
             </Grid>
             
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -52,7 +63,7 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearImagesCacheCommand}"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -62,10 +73,10 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearSavedDatasheetsCommand}"/>
             </Grid>
 
-            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
-            <ComboBox Grid.Column="1" Grid.Row="4" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
+            <ComboBox Grid.Column="1" Grid.Row="5" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
             
-            <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
+            <Button Grid.Column="1" Grid.Row="6" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
         </Grid>
         
         <TextBlock Grid.Row="1" Style="{StaticResource StyleTextBlockInformation}" Text="{Binding Author, StringFormat={StaticResource StringFormatAuthor}}"/>
