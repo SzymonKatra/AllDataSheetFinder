@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Diagnostics;
 using MVVMUtils.Collections;
 using System.Text.RegularExpressions;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace AllDataSheetFinder
 {
@@ -419,20 +421,25 @@ namespace AllDataSheetFinder
             {
                 if (m_moreInfoState != PartMoreInfoState.Available) await RequestMoreInfo();
                 stream = await m_context.GetDatasheetStreamAsync(DatasheetPdfLink);
+                Progress = 0M;
                 using (FileStream file = new FileStream(pdfPath, FileMode.Create))
                 {
                     byte[] buffer = new byte[4096];
                     int len;
                     long written = 0;
-                    Progress = 0M;
+                    
                     while ((len = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                     {
                         await file.WriteAsync(buffer, 0, len);
                         written += len;
                         Progress = (decimal)written / (decimal)DatasheetSize;
                     }
-                    Progress = 1M;
                 }
+                PdfDocument document = PdfReader.Open(pdfPath);
+                document.Close();
+                document.Info.Title = this.Name;
+                document.Save(pdfPath);
+                Progress = 1M;
             }
             finally
             {
@@ -503,9 +510,9 @@ namespace AllDataSheetFinder
             if (!Custom) throw new InvalidOperationException("Part must be custom");
             return Task.Run(() =>
             {
-                string fileContent = File.ReadAllText(CustomPath);
-                Regex regex = new Regex(@"Type\/Page[^s]");
-                this.DatasheetPages = regex.Matches(fileContent).Count;
+                PdfDocument document = PdfReader.Open(CustomPath);
+                document.Close();
+                this.DatasheetPages = document.PageCount;
             });
         }
 
