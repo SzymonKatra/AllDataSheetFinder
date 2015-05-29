@@ -25,6 +25,8 @@ namespace AllDataSheetFinder
             s_dialogs.AddMapping(typeof(UpdateViewModel), typeof(UpdateWindow));
         }
 
+        public static readonly string RegistryKeyName = @"Software\AllDataSheetFinder";
+
         public static string AppDataPath { get; private set; }
         public static readonly string ImagesCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Images";
         public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
@@ -142,7 +144,7 @@ namespace AllDataSheetFinder
         {
             AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
 
-            RegistryKey key = Registry.CurrentUser.CreateSubKey("AllDataSheetFinder");
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
             object dataPathObj = key.GetValue("DataPath", null);
             if (dataPathObj != null) AppDataPath = dataPathObj.ToString(); else key.SetValue("DataPath", AppDataPath);
             key.Close();
@@ -181,9 +183,10 @@ namespace AllDataSheetFinder
         }
         public static void ApplyAppDataPath(string newPath)
         {
+            if (Directory.Exists(newPath)) Directory.Delete(newPath);
             Directory.Move(AppDataPath, newPath);
 
-            RegistryKey key = Registry.CurrentUser.CreateSubKey("AllDataSheetFinder");
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
             key.SetValue("DataPath", newPath);
             key.Close();
 
@@ -254,6 +257,7 @@ namespace AllDataSheetFinder
         }
         public static void SaveSavedParts()
         {
+            CreateDirectoriesIfNeeded();
             string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
             using (FileStream file = new FileStream(path, FileMode.Create)) s_serialzierSavedParts.Serialize(file, s_savedParts);
         }
