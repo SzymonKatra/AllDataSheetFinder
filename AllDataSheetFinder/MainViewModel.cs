@@ -62,6 +62,7 @@ namespace AllDataSheetFinder
             RemoveUnavailableSavedParts();
 
             CheckForUpdates();
+            if (Global.Configuration.FavouritesOnStart) ShowFavourites(null);
         }
 
         public NeedCloseDelegate NeedClose;
@@ -204,6 +205,7 @@ namespace AllDataSheetFinder
                 PartViewModel viewModel = PartViewModel.FromAllDataSheetPart(item);
                 PartViewModel found = m_savedParts.FirstOrDefault(x => x.Code == viewModel.Code);
                 if (found != null) viewModel = found;
+                PartViewModel.GetDownloadingIfExists(viewModel.Code, ref viewModel);
                 viewModel.LoadImage();
                 m_searchResults.Add(viewModel);
             }
@@ -294,6 +296,7 @@ namespace AllDataSheetFinder
                 if (IsFavouritesMode)
                 {
                     m_searchResults.Remove(m_selectedResult);
+                    Global.SaveSavedParts();
                 }
                 return;
             }
@@ -305,6 +308,7 @@ namespace AllDataSheetFinder
                 PartViewModel part = m_selectedResult;
                 await part.SavePdf();
                 m_savedParts.Add(part);
+                Global.SaveSavedParts();
             }
             catch
             {

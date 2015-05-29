@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace AllDataSheetFinder
 {
@@ -54,6 +55,7 @@ namespace AllDataSheetFinder
             m_clearImagesCacheCommand = new RelayCommand(ClearImagesCache);
             m_clearSavedDatasheetsCommand = new RelayCommand(ClearSavedDatasheets);
             m_checkUpdatesCommand = new RelayCommand(CheckUpdates);
+            m_selectAppDataPathCommand = new RelayCommand(SelectAppDataPath);
 
             m_validators = new ValidatorCollection(() => m_okCommand.RaiseCanExecuteChanged());
 
@@ -75,6 +77,9 @@ namespace AllDataSheetFinder
                 m_availableLanguages.Add(pair);
                 if (pair.Name == Global.Configuration.Language) m_selectedLanguage = pair;
             }
+
+            m_initialPath = AppDataPath = Global.AppDataPath;
+            m_favouritesOnStart = Global.Configuration.FavouritesOnStart;
         }
 
         private FileVersionInfo m_fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
@@ -166,6 +171,12 @@ namespace AllDataSheetFinder
             get { return m_checkUpdatesCommand; }
         }
 
+        private RelayCommand m_selectAppDataPathCommand;
+        public ICommand SelectAppDataPathCommand
+        {
+            get { return m_selectAppDataPathCommand; }
+        }
+
         private ObservableCollection<LanguagePair> m_availableLanguages = new ObservableCollection<LanguagePair>();
         public ObservableCollection<LanguagePair> AvailableLanguages
         {
@@ -179,9 +190,25 @@ namespace AllDataSheetFinder
             set { m_selectedLanguage = value; RaisePropertyChanged("SelectedLanguage"); }
         }
 
+        private string m_initialPath;
+        private string m_appDataPath;
+        public string AppDataPath
+        {
+            get { return m_appDataPath; }
+            set { m_appDataPath = value; RaisePropertyChanged("AppDataPath"); }
+        }
+
+        private bool m_favouritesOnStart;
+        public bool FavouritesOnStart
+        {
+            get { return m_favouritesOnStart; }
+            set { m_favouritesOnStart = value; RaisePropertyChanged("FavouritesOnStart"); }
+        }
+
         private void Ok(object param)
         {
             Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.ValidValue * 1024 * 1024;
+            Global.Configuration.FavouritesOnStart = m_favouritesOnStart;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;
@@ -189,6 +216,8 @@ namespace AllDataSheetFinder
                 Global.MessageBox(this, Global.GetStringResource("StringLanguageChangeRestart"), MessageBoxExPredefinedButtons.Ok);
             }
             Global.SaveConfiguration();
+
+            if (m_initialPath != AppDataPath) Global.ApplyAppDataPath(AppDataPath);
 
             Global.Dialogs.Close(this);
         }
@@ -256,6 +285,13 @@ namespace AllDataSheetFinder
         private void CheckUpdates(object param)
         {
             Global.Main.CheckForUpdates();
+        }
+
+        private void SelectAppDataPath(object param)
+        {
+            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = AppDataPath;
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) AppDataPath = dialog.SelectedPath;
         }
 
         private long ComputeFilesSize(string path)
