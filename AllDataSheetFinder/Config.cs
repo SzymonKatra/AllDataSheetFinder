@@ -11,5 +11,6 @@ namespace AllDataSheetFinder
     {
         public long MaxDatasheetsCacheSize { get; set; }
         public string Language { get; set; }
+        public bool FavouritesOnStart { get; set; }
     }
 }

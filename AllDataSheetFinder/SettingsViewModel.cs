@@ -79,6 +79,7 @@ namespace AllDataSheetFinder
             }
 
             m_initialPath = AppDataPath = Global.AppDataPath;
+            m_favouritesOnStart = Global.Configuration.FavouritesOnStart;
         }
 
         private FileVersionInfo m_fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
@@ -197,9 +198,17 @@ namespace AllDataSheetFinder
             set { m_appDataPath = value; RaisePropertyChanged("AppDataPath"); }
         }
 
+        private bool m_favouritesOnStart;
+        public bool FavouritesOnStart
+        {
+            get { return m_favouritesOnStart; }
+            set { m_favouritesOnStart = value; RaisePropertyChanged("FavouritesOnStart"); }
+        }
+
         private void Ok(object param)
         {
             Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.ValidValue * 1024 * 1024;
+            Global.Configuration.FavouritesOnStart = m_favouritesOnStart;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;
