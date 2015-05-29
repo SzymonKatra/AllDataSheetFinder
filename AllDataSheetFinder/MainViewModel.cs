@@ -62,6 +62,7 @@ namespace AllDataSheetFinder
             RemoveUnavailableSavedParts();
 
             CheckForUpdates();
+            if (Global.Configuration.FavouritesOnStart) ShowFavourites(null);
         }
 
         public NeedCloseDelegate NeedClose;

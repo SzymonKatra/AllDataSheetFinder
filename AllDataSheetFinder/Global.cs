@@ -211,6 +211,7 @@ namespace AllDataSheetFinder
                 s_configuration = new Config();
                 s_configuration.MaxDatasheetsCacheSize = 100 * 1024 * 1024; // 100 MiB
                 s_configuration.Language = string.Empty;
+                s_configuration.FavouritesOnStart = false;
                 SaveConfiguration();
             }
             else
