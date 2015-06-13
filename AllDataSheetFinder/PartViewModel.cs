@@ -510,9 +510,23 @@ namespace AllDataSheetFinder
             if (!Custom) throw new InvalidOperationException("Part must be custom");
             return Task.Run(() =>
             {
-                PdfDocument document = PdfReader.Open(CustomPath);
-                document.Close();
-                this.DatasheetPages = document.PageCount;
+                PdfDocument document = null;
+                try
+                {
+                    document = PdfReader.Open(CustomPath);
+                    this.DatasheetPages = document.PageCount;
+                }
+                catch
+                {
+                    // if PdfReader can't open pdf file, try using regex method to count pages
+                    string fileContent = File.ReadAllText(CustomPath);
+                    Regex regex = new Regex(@"Type\/Page[^s]");
+                    this.DatasheetPages = regex.Matches(fileContent).Count;
+                }
+                finally
+                {
+                    if (document != null) document.Close();
+                }
             });
         }
 
