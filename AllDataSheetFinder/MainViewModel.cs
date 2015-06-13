@@ -59,7 +59,6 @@ namespace AllDataSheetFinder
             m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
-            RemoveUnavailableSavedParts();
 
             CheckForUpdates();
             if (Global.Configuration.FavouritesOnStart) ShowFavourites(null);
@@ -403,16 +402,6 @@ namespace AllDataSheetFinder
                 }
 
                 m_filteredResults.Refresh();
-            }
-        }
-
-        private void RemoveUnavailableSavedParts()
-        {
-            foreach (string file in Directory.EnumerateFiles(Global.AppDataPath + Path.DirectorySeparatorChar + Global.SavedDatasheetsDirectory))
-            {
-                if (Path.GetExtension(file) != ".pdf") continue;
-                string code = Path.GetFileNameWithoutExtension(file);
-                if (m_savedParts.FirstOrDefault(x => x.Code == code || x.CustomPath == file) == null) File.Delete(file);
             }
         }
 
