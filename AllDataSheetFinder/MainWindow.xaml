@@ -62,6 +62,10 @@
                     <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="White" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
                 </StackPanel>
             </my:DataGridAppend.AppendControl>
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenPdfCommand}"/>
+            </DataGrid.InputBindings>
+
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
                     <Setter Property="Background">
@@ -116,7 +120,7 @@
                                         </TextBlock.Background>
                                     </TextBlock>
                                     <Border Grid.Row="1" BorderThickness="0,0,0,1" BorderBrush="Black"/>
-                                </Grid>                           
+                                </Grid>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
