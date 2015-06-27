@@ -12,6 +12,7 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <s:Decimal x:Key="DecimalOne">1</s:Decimal>
+        <s:Int32 x:Key="IntegerZero">0</s:Int32>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -53,18 +54,22 @@
         </Grid>
 
         <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" VerticalScrollBarVisibility="Visible">
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
+                           BorderThickness="0" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
-                    <my:ImageButton Style="{StaticResource StyleCommonMargin}" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
-                    <my:ImageButton Style="{StaticResource StyleCommonMargin}" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="White" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="White" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
                 </StackPanel>
             </my:DataGridAppend.AppendControl>
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenPdfCommand}"/>
+            </DataGrid.InputBindings>
+
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
                     <Setter Property="Background">
                         <Setter.Value>
-                            <!--<SolidColorBrush Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}"/>-->
                             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                 <GradientStop Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}" Offset="{Binding Progress}"/>
                                 <GradientStop Color="Transparent" Offset="{Binding Progress, Converter={StaticResource ConverterDecimalAdd}, ConverterParameter=0.025;1}"/>
@@ -95,8 +100,34 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="1"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Style="{StaticResource StyleTextBlockHeader}" Text="{TemplateBinding Content}">
+                                        <TextBlock.Background>
+                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                <GradientStop Color="White" Offset="0"/>
+                                                <GradientStop Color="White" Offset="0.2"/>
+                                                <GradientStop Color="#EDEDED" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </TextBlock.Background>
+                                    </TextBlock>
+                                    <Border Grid.Row="1" BorderThickness="0,0,0,1" BorderBrush="Black"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" SortMemberPath="Part.Manufacturer" Width="200" MinWidth="150">
+                <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" Width="200" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
