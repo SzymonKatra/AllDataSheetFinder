@@ -67,7 +67,17 @@ namespace AllDataSheetFinder
         public NeedCloseDelegate NeedClose;
 
         private bool m_checkingUpdates = false;
-        private int m_openingCount = 0;
+        private int m_actionsCount;
+        public int ActionsCount
+        {
+            get { return m_actionsCount; }
+            set
+            {
+                m_actionsCount = value;
+                Mouse.OverrideCursor = (m_actionsCount <= 0 ? null : Cursors.AppStarting);
+                RaisePropertyChanged("ActionsCount");
+            }
+        }
         private AllDataSheetSearchContext m_searchContext;
 
         private bool m_searching = false;
@@ -218,10 +228,10 @@ namespace AllDataSheetFinder
             Searching = true;
             m_filteredResults.SortDescriptions.Clear();
             m_filteredResults.Refresh();
-            Mouse.OverrideCursor = Cursors.AppStarting;
 
             try
             {
+                ActionsCount++;
                 AllDataSheetSearchResult result = await AllDataSheetPart.SearchAsync(m_searchField);
                 m_searchContext = result.SearchContext;
                 AddResults(result.Parts);
@@ -230,8 +240,11 @@ namespace AllDataSheetFinder
             {
                 Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxExPredefinedButtons.Ok);
             }
+            finally
+            {
+                ActionsCount--;
+            }
 
-            if(m_openingCount <= 0) Mouse.OverrideCursor = null;
             Searching = false;
         }
         private bool CanSearch(object param)
@@ -244,7 +257,7 @@ namespace AllDataSheetFinder
             if (m_selectedResult == null) return;
             try
             {
-                m_openingCount++;
+                ActionsCount++;
                 Mouse.OverrideCursor = Cursors.AppStarting;
                 await m_selectedResult.OpenPdf();
             }
@@ -254,18 +267,17 @@ namespace AllDataSheetFinder
             }
             finally
             {
-                m_openingCount--;
-                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+                ActionsCount--;
             }
         }
 
         private async void LoadMoreResults(object param)
         {
             Searching = true;
-            Mouse.OverrideCursor = Cursors.AppStarting;
 
             try
             {
+                ActionsCount++;
                 AllDataSheetSearchResult result = await AllDataSheetPart.SearchAsync(m_searchContext);
                 m_searchContext = result.SearchContext;
                 AddResults(result.Parts);
@@ -274,8 +286,11 @@ namespace AllDataSheetFinder
             {
                 Global.MessageBox(this, Global.GetStringResource("StringSearchError"), MessageBoxExPredefinedButtons.Ok);
             }
+            finally
+            {
+                ActionsCount--;
+            }
 
-            Mouse.OverrideCursor = null;
             Searching = false;
         }
         private bool CanLoadMoreResults(object param)
@@ -302,7 +317,7 @@ namespace AllDataSheetFinder
 
             try
             {
-                m_openingCount++;
+                ActionsCount++;
                 Mouse.OverrideCursor = Cursors.AppStarting;
                 PartViewModel part = m_selectedResult;
                 await part.SavePdf();
@@ -315,8 +330,7 @@ namespace AllDataSheetFinder
             }
             finally
             {
-                m_openingCount--;
-                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+                ActionsCount--;
             }
         }
 
@@ -366,7 +380,7 @@ namespace AllDataSheetFinder
 
             try
             {
-                m_openingCount++;
+                ActionsCount++;
                 Mouse.OverrideCursor = Cursors.AppStarting;
                 await m_selectedResult.RequestMoreInfo();
             }
@@ -376,8 +390,7 @@ namespace AllDataSheetFinder
             }
             finally
             {
-                m_openingCount--;
-                if (m_openingCount <= 0) Mouse.OverrideCursor = null;
+                ActionsCount--;
             }
         }
 
