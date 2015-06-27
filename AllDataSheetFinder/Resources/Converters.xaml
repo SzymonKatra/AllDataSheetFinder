@@ -10,5 +10,6 @@
     <my:BooleanNegateConverter x:Key="ConverterBooleanNegate"/>
     <my:DecimalIsLessThanConverter x:Key="ConverterDecimalIsLessThan"/>
     <my:DecimalAddConverter x:Key="ConverterDecimalAdd"/>
+    <my:IntegerGreaterThanConverter x:Key="ConverterIntegerGreaterThan"/>
     <BooleanToVisibilityConverter x:Key="ConverterBooleanToVisibility"/>
 </ResourceDictionary>

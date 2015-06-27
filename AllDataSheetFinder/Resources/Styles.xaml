@@ -61,5 +61,13 @@
     <Style x:Key="StyleTextBlockInformation" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StyleTextBlockTitle}">
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
+    
+    <Style x:Key="StyleTextBlockHeader" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="5,10,5,10"/>
+        <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+    </Style>
 
 </ResourceDictionary>
