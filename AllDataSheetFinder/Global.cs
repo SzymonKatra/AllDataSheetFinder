@@ -180,6 +180,20 @@ namespace AllDataSheetFinder
             }
 
             LoadSavedParts();
+
+            string updatePath = Path.Combine(AppDataPath, UpdateFile);
+            if (File.Exists(updatePath))
+            {
+                try
+                {
+                    File.Delete(updatePath);
+                }
+                catch
+                {
+                    // nothing special should happen when we can't delete update pack
+                    // just leave it as is
+                }
+            } 
         }
         public static void ApplyAppDataPathAndCopy(string newPath)
         {
