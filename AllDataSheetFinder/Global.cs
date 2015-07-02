@@ -181,10 +181,10 @@ namespace AllDataSheetFinder
 
             LoadSavedParts();
         }
-        public static void ApplyAppDataPath(string newPath)
+        public static void ApplyAppDataPathAndCopy(string newPath)
         {
-            if (Directory.Exists(newPath)) Directory.Delete(newPath);
-            Directory.Move(AppDataPath, newPath);
+            if (Directory.Exists(newPath)) Directory.Delete(newPath, true);
+            DirectoryExt.Copy(AppDataPath, newPath);
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
             key.SetValue("DataPath", newPath);
