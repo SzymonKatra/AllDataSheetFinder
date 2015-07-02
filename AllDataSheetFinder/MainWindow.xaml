@@ -81,8 +81,8 @@
                         <Setter.Value>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                                 <GradientStop Color="Transparent" Offset="0"/>
-                                <GradientStop Color="Black" Offset="0.2"/>
-                                <GradientStop Color="Black" Offset="0.8"/>
+                                <GradientStop Color="Black" Offset="0.1"/>
+                                <GradientStop Color="Black" Offset="0.9"/>
                                 <GradientStop Color="Transparent" Offset="1"/>
                             </LinearGradientBrush>
                         </Setter.Value>
@@ -92,7 +92,7 @@
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="StoryboardBegin">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background.GradientStops[0].Color" To="Transparent" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.GradientStops[0].Color" To="White" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
@@ -107,6 +107,9 @@
                                 <StopStoryboard BeginStoryboardName="StoryboardBegin"/>
                             </DataTrigger.EnterActions>
                         </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.7"/>
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
