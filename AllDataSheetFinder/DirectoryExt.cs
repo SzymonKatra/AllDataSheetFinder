@@ -20,10 +20,6 @@ namespace AllDataSheetFinder
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 File.Copy(item, result);
             }
-            foreach (var item in Directory.EnumerateDirectories(sourceDirName))
-            {
-                DirectoryExt.Copy(item, Path.Combine(destinationDirName, Path.GetFileName(item)));
-            }
         }
     }
 }
