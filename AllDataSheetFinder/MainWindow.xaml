@@ -54,12 +54,12 @@
         </Grid>
 
         <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="White" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
-                           BorderThickness="0" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="{StaticResource BrushResultsBackground}" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
+                           BorderThickness="0" GridLinesVisibility="None" HeadersVisibility="Column">
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
-                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="White" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
-                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="White" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
                 </StackPanel>
             </my:DataGridAppend.AppendControl>
             <DataGrid.InputBindings>
@@ -67,13 +67,23 @@
             </DataGrid.InputBindings>
 
             <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}">
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource StyleDataGridRowNoSelection}" x:Name="row">
                     <Setter Property="Background">
                         <Setter.Value>
-                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,10">
                                 <GradientStop Color="{Binding State, Converter={StaticResource ConverterPartDatasheetStateToColor}}" Offset="{Binding Progress}"/>
-                                <GradientStop Color="Transparent" Offset="{Binding Progress, Converter={StaticResource ConverterDecimalAdd}, ConverterParameter=0.025;1}"/>
-                                <GradientStop Color="Transparent" Offset="1.0" />
+                                <GradientStop Color="White" Offset="{Binding Progress, Converter={StaticResource ConverterDecimalAdd}, ConverterParameter=0.025;1}"/>
+                                <GradientStop Color="White" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="OpacityMask">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color="#20000000" Offset="0"/>
+                                <GradientStop Color="Black" Offset="0.15"/>
+                                <GradientStop Color="Black" Offset="0.85"/>
+                                <GradientStop Color="#20000000" Offset="1"/>
                             </LinearGradientBrush>
                         </Setter.Value>
                     </Setter>
@@ -82,7 +92,7 @@
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="StoryboardBegin">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background.GradientStops[0].Color" To="Transparent" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.GradientStops[0].Color" To="White" Duration="0:0:1" AutoReverse="True" RepeatBehavior="Forever"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
@@ -97,6 +107,9 @@
                                 <StopStoryboard BeginStoryboardName="StoryboardBegin"/>
                             </DataTrigger.EnterActions>
                         </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.7"/>
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
@@ -115,11 +128,10 @@
                                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                                                 <GradientStop Color="White" Offset="0"/>
                                                 <GradientStop Color="White" Offset="0.2"/>
-                                                <GradientStop Color="#EDEDED" Offset="1"/>
+                                                <GradientStop Color="{StaticResource ColorResultsBackground}" Offset="1"/>
                                             </LinearGradientBrush>
                                         </TextBlock.Background>
                                     </TextBlock>
-                                    <Border Grid.Row="1" BorderThickness="0,0,0,1" BorderBrush="Black"/>
                                 </Grid>
                             </ControlTemplate>
                         </Setter.Value>
@@ -132,10 +144,10 @@
                         <DataTemplate>
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="33"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Source="{Binding Image}" Width="150" Height="50"/>
+                                <Image Source="{Binding Image}" Width="99" Height="33"/>
                                 <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Manufacturer}"/>
                             </Grid>
                         </DataTemplate>
