@@ -90,6 +90,10 @@ namespace AllDataSheetFinder
                 return m_fileVersionInfo.CompanyName;
             }
         }
+        public string Mail
+        {
+            get { return Global.GetStringResource("StringMail"); }
+        }
         public string Version
         {
             get
