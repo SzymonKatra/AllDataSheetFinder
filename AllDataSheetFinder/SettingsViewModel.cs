@@ -90,6 +90,10 @@ namespace AllDataSheetFinder
                 return m_fileVersionInfo.CompanyName;
             }
         }
+        public string Mail
+        {
+            get { return Global.GetStringResource("StringMail"); }
+        }
         public string Version
         {
             get
@@ -217,7 +221,46 @@ namespace AllDataSheetFinder
             }
             Global.SaveConfiguration();
 
-            if (m_initialPath != AppDataPath) Global.ApplyAppDataPath(AppDataPath);
+            if (m_initialPath != AppDataPath)
+            {
+                bool errorOccurred = false;
+                Task task = Task.Run(() =>
+                {
+                    try
+                    {
+                        Global.ApplyAppDataPathAndCopy(AppDataPath);
+                    }
+                    catch
+                    {
+                        errorOccurred = true;
+                    }
+                });
+                ActionDialogViewModel dialogViewModel = new ActionDialogViewModel(task, Global.GetStringResource("StringWaitForDataMove"));
+                Global.Dialogs.ShowDialog(this, dialogViewModel);
+                if (errorOccurred)
+                {
+                    Global.MessageBox(this, Global.GetStringResource("StringDataMoveError"), MessageBoxExPredefinedButtons.Ok);
+                    return;
+                }
+
+                bool tryAgain = false;
+                do
+                {
+                    try
+                    {
+                        tryAgain = false;
+                        Directory.Delete(m_initialPath, true);
+                    }
+                    catch
+                    {
+                        if (Global.MessageBox(this, string.Format(Global.GetStringResource("StringOldDataRemoveErrorTemplate"), m_initialPath), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
+                        {
+                            tryAgain = true;
+                        }
+                    }
+                }
+                while (tryAgain);
+            }
 
             Global.Dialogs.Close(this);
         }

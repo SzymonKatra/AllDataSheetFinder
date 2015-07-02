@@ -66,5 +66,14 @@ Do you want to download and install it?</s:String>
     <s:String x:Key="StringUpdateTitle">Update</s:String>
     <s:String x:Key="StringAppDataPath">Data save path</s:String>
     <s:String x:Key="StringFavouritesOnStart">Show favourites on startup</s:String>
+    <s:String x:Key="StringWaitForDataMove" xml:space="preserve">Moving application data
+Please wait...</s:String>
+    <s:String x:Key="StringDataMoveError" xml:space="preserve">An error occurred while moving application data
+Close all opened datasheets and try again</s:String>
+    <s:String x:Key="StringOldDataRemoveErrorTemplate" xml:space="preserve">An error occurred while deleting application data from old path
+Close all opened datasheets and click OK to try again or Cancel to ignore
+If you ignore this, you should manually delete remaining files from
+{0}</s:String>
+    <s:String x:Key="StringFormatContactMail">Contact: {0}</s:String>
     
 </ResourceDictionary>

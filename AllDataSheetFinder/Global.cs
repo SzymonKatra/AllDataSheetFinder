@@ -180,11 +180,25 @@ namespace AllDataSheetFinder
             }
 
             LoadSavedParts();
+
+            string updatePath = Path.Combine(AppDataPath, UpdateFile);
+            if (File.Exists(updatePath))
+            {
+                try
+                {
+                    File.Delete(updatePath);
+                }
+                catch
+                {
+                    // nothing special should happen when we can't delete update pack
+                    // just leave it as is
+                }
+            } 
         }
-        public static void ApplyAppDataPath(string newPath)
+        public static void ApplyAppDataPathAndCopy(string newPath)
         {
-            if (Directory.Exists(newPath)) Directory.Delete(newPath);
-            Directory.Move(AppDataPath, newPath);
+            if (Directory.Exists(newPath)) Directory.Delete(newPath, true);
+            DirectoryExt.Copy(AppDataPath, newPath);
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
             key.SetValue("DataPath", newPath);

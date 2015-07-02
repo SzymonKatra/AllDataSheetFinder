@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
-    <s:String x:Key="StringAppName">AllDataSheet Finder</s:String>
+    <s:String x:Key="StringAppName">AllDataSheetFinder</s:String>
     <s:String x:Key="StringLicense">GNU GPL v3</s:String>
     <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringMail">szymon.katra@gmail.com</s:String>
 </ResourceDictionary>

@@ -65,5 +65,14 @@ Czy chcesz ją pobrać i zainstalować?</s:String>
     <s:String x:Key="StringUpdateTitle">Aktualizacja</s:String>
     <s:String x:Key="StringAppDataPath">Ścieżka zapisu danych</s:String>
     <s:String x:Key="StringFavouritesOnStart">Pokaż ulubione przy włączeniu programu</s:String>
+    <s:String x:Key="StringWaitForDataMove" xml:space="preserve">Przenoszenie danych aplikacji
+Proszę czekać...</s:String>
+    <s:String x:Key="StringDataMoveError" xml:space="preserve">Wystąpił błąd podczas przenoszenia danych aplikacji
+Zamknij wszystkie otwarte noty i spróbuj ponownie</s:String>
+    <s:String x:Key="StringOldDataRemoveErrorTemplate" xml:space="preserve">Wystąpił błąd podczas usuwania danych aplikacji ze starej ścieżki
+Zamknij wszystkie otwarte noty i kliknij OK aby spróbować ponownie lub Anuluj aby zignorować
+Jeśli to zignorujesz, powinieneś ręczenie usunąć pozostałe pliki z
+{0}</s:String>
+    <s:String x:Key="StringFormatContactMail">Kontakt: {0}</s:String>
 
 </ResourceDictionary>
