@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Controls="clr-namespace:AllDataSheetFinder.Controls">
 
+    <Color x:Key="ColorResultsBackground">#F0F0F0</Color>
+    <SolidColorBrush x:Key="BrushResultsBackground" Color="{StaticResource ColorResultsBackground}"/>
+
     <Style x:Key="StyleCommonMargin" TargetType="{x:Type FrameworkElement}">
         <Setter Property="Margin" Value="10,5,10,5"/>
     </Style>

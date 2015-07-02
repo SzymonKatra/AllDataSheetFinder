@@ -54,12 +54,12 @@
         </Grid>
 
         <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
-                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="#F5F5F5" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
+                           CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="{StaticResource BrushResultsBackground}" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
                            BorderThickness="0" GridLinesVisibility="None" HeadersVisibility="Column">
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
-                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="#F5F5F5" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
-                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="#F5F5F5" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
                 </StackPanel>
             </my:DataGridAppend.AppendControl>
             <DataGrid.InputBindings>
@@ -128,7 +128,7 @@
                                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                                                 <GradientStop Color="White" Offset="0"/>
                                                 <GradientStop Color="White" Offset="0.2"/>
-                                                <GradientStop Color="#F5F5F5" Offset="1"/>
+                                                <GradientStop Color="{StaticResource ColorResultsBackground}" Offset="1"/>
                                             </LinearGradientBrush>
                                         </TextBlock.Background>
                                     </TextBlock>
