@@ -14,7 +14,6 @@ namespace AllDataSheetFinder.Controls
         public SmoothScrollViewer()
         {
             m_animation = new DoubleAnimation();
-            m_animation.AccelerationRatio = 0.4;
 
             m_endingAnimation = new DoubleAnimation();
             m_endingAnimation.DecelerationRatio = 0.8;
@@ -36,6 +35,7 @@ namespace AllDataSheetFinder.Controls
         private DoubleAnimation m_animation;
         private DoubleAnimation m_endingAnimation;
         private Storyboard m_storyboard;
+        private bool m_storyboardBegan = false;
 
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(SmoothScrollViewer), new PropertyMetadata(OnOffsetChanged));
         public double Offset
@@ -86,17 +86,35 @@ namespace AllDataSheetFinder.Controls
         {
             e.Handled = true;
 
-            double delta = e.Delta / MouseWheelDeltaDivider;
+            double delta = -e.Delta / MouseWheelDeltaDivider;
 
-            m_storyboard.Stop();
+            TimeSpan storyboardTime = (m_storyboardBegan ? m_storyboard.GetCurrentTime() : TimeSpan.Zero);
+            if (storyboardTime > TimeSpan.Zero && storyboardTime < Duration + SlowdownDuration)
+            {
+                m_storyboard.Stop();
 
-            m_animation.From = this.VerticalOffset;
-            m_animation.To = this.VerticalOffset - (double)delta * 0.8;
+                delta += (double)m_endingAnimation.To - this.VerticalOffset;
 
-            m_endingAnimation.From = m_animation.To;
-            m_endingAnimation.To = this.VerticalOffset - (double)delta;
+                m_animation.From = this.VerticalOffset;
+                m_animation.To = this.VerticalOffset + delta * 0.8;
+
+                m_endingAnimation.From = m_animation.To;
+                m_endingAnimation.To = this.VerticalOffset + delta;
+            }
+            else
+            {
+
+                m_storyboard.Stop();
+
+                m_animation.From = this.VerticalOffset;
+                m_animation.To = this.VerticalOffset + delta * 0.8;
+
+                m_endingAnimation.From = m_animation.To;
+                m_endingAnimation.To = this.VerticalOffset + delta;
+            }
 
             m_storyboard.Begin();
+            m_storyboardBegan = true;
         }
     }
 }
