@@ -214,7 +214,7 @@ namespace AllDataSheetFinder
         }
 
         private AllDataSheetPart m_context;
-        protected AllDataSheetPart Context
+        public AllDataSheetPart Context
         {
             get { return m_context; }
             set { m_context = value; }
@@ -263,8 +263,11 @@ namespace AllDataSheetFinder
                 info.Image.CacheOption = BitmapCacheOption.OnLoad;
                 info.Image.StreamSource = stream;
                 info.Image.EndInit();
+
+                this.Image = info.Image;
+                info.Loaded = true;
             }
-            else if (!Custom && !m_context.OnlyContext)
+            else if (IsContextValid && !m_context.OnlyContext)
             {
                 MemoryStream memory = new MemoryStream();
                 await Task.Run(() =>
@@ -294,11 +297,11 @@ namespace AllDataSheetFinder
                 info.Image.CacheOption = BitmapCacheOption.OnLoad;
                 info.Image.StreamSource = memory;
                 info.Image.EndInit();
+
+                this.Image = info.Image;
+                info.Loaded = true;
             }
 
-            this.Image = info.Image;
-
-            info.Loaded = true;
             info.Loading = false;
         }
         public async Task RequestMoreInfo()
