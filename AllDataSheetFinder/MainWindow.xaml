@@ -142,9 +142,9 @@
                 <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" Width="200" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Height="33">
-                                <Image x:Name="ImageManufacturer" Source="{Binding Image}" Width="99" Height="33"/>
-                                <Popup PlacementTarget="{Binding ElementName=ImageManufacturer}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ImageManufacturer, Mode=OneWay}" PopupAnimation="Slide">
+                            <Grid x:Name="ImageManufacturerGrid" Height="33" Width="99">
+                                <Image Source="{Binding Image}" Width="99" Height="33"/>
+                                <Popup PlacementTarget="{Binding ElementName=ImageManufacturerGrid}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=ImageManufacturerGrid, Mode=OneWay}" PopupAnimation="Slide">
                                     <Border Background="#FFBEE6FD">
                                         <StackPanel Orientation="Vertical" Height="33" Margin="10,0,10,0">
                                             <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Manufacturer}"/>

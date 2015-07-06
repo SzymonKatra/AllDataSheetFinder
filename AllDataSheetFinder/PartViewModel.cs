@@ -258,7 +258,7 @@ namespace AllDataSheetFinder
                 info.Image.StreamSource = stream;
                 info.Image.EndInit();
             }
-            else if (!Custom)
+            else if (!Custom && !m_context.OnlyContext)
             {
                 MemoryStream memory = new MemoryStream();
                 await Task.Run(() =>
