@@ -279,7 +279,11 @@ namespace AllDataSheetFinder
 
         public static string BuildSavedDatasheetPath(string code)
         {
-            return AppDataPath + Path.DirectorySeparatorChar + SavedDatasheetsDirectory + Path.DirectorySeparatorChar + code + ".pdf";
+            return AppDataPath + Path.DirectorySeparatorChar + BuildSavedDatasheetRelativePath(code);
+        }
+        public static string BuildSavedDatasheetRelativePath(string code)
+        {
+            return SavedDatasheetsDirectory + Path.DirectorySeparatorChar + code + ".pdf";
         }
         public static string BuildCachedDatasheetPath(string code)
         {

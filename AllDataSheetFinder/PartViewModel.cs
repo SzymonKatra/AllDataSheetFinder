@@ -62,11 +62,13 @@ namespace AllDataSheetFinder
                 count++;
             }
 
+            if (count > 0) fileName += '(' + (count - 1).ToString() + ')';
+
             PartViewModel result = new PartViewModel();
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
-            result.CustomPath = resultFilePath;
+            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName); //resultFilePath;
             result.DatasheetSize = (new FileInfo(originalPath)).Length;
             result.CheckState();
 
@@ -134,8 +136,12 @@ namespace AllDataSheetFinder
         }
         public string CustomPath
         {
+            get { return Global.AppDataPath + Path.DirectorySeparatorChar + Model.CustomPath; }
+        }
+        public string RelativeCustomPath
+        {
             get { return Model.CustomPath; }
-            set { Model.CustomPath = value; RaisePropertyChanged("CustomPath"); }
+            set { Model.CustomPath = value; RaisePropertyChanged("RelativeCustomPath"); RaisePropertyChanged("CustomPath"); }
         }
 
         private SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> m_tags;
@@ -588,7 +594,7 @@ namespace AllDataSheetFinder
                 this.ManufacturerSite = (string)pack.Read();
                 this.LastUseDate = (DateTime)pack.Read();
                 this.Custom = (bool)pack.Read();
-                this.CustomPath = (string)pack.Read();
+                this.RelativeCustomPath = (string)pack.Read();
             }
 
             Tags.PopCopy(result);
@@ -607,7 +613,7 @@ namespace AllDataSheetFinder
             pack.Write(this.ManufacturerSite);
             pack.Write(this.LastUseDate);
             pack.Write(this.Custom);
-            pack.Write(this.CustomPath);
+            pack.Write(this.RelativeCustomPath);
 
             CopyStack.Push(pack);
 
