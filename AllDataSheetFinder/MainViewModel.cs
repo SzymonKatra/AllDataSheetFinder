@@ -215,6 +215,7 @@ namespace AllDataSheetFinder
                 PartViewModel found = m_savedParts.FirstOrDefault(x => x.Code == viewModel.Code);
                 if (found != null) viewModel = found;
                 PartViewModel.GetDownloadingIfExists(viewModel.Code, ref viewModel);
+                if (viewModel.Context.OnlyContext) viewModel.Context = item;
                 viewModel.LoadImage();
                 m_searchResults.Add(viewModel);
             }
