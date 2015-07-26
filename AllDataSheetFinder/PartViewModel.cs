@@ -12,6 +12,7 @@ using MVVMUtils.Collections;
 using System.Text.RegularExpressions;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using System.Net;
 
 namespace AllDataSheetFinder
 {
@@ -267,39 +268,66 @@ namespace AllDataSheetFinder
                 this.Image = info.Image;
                 info.Loaded = true;
             }
-            else if (IsContextValid && !m_context.OnlyContext)
+            else
             {
                 MemoryStream memory = new MemoryStream();
-                await Task.Run(() =>
+                bool success = await Task.Run<bool>(() =>
                 {
-                    Stream stream = m_context.GetManufacturerImageStream();
-
-                    FileStream fileStream = new FileStream(imagePath, FileMode.Create);
-                    try
+                    Stream stream = null;
+                    if (IsContextValid && !m_context.OnlyContext)
                     {
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        stream = m_context.GetManufacturerImageStream();
+                    }
+                    else if (!Custom && !string.IsNullOrWhiteSpace(ManufacturerImageLink))
+                    {
+                        try
                         {
-                            memory.Write(buffer, 0, len);
-                            fileStream.Write(buffer, 0, len);
+                            HttpWebRequest request = Requests.CreateDefaultRequest(ManufacturerImageLink);
+                            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                            stream = response.GetResponseStream();
+                        }
+                        catch
+                        {
+                            stream = null;
                         }
                     }
-                    finally
+
+                    if (stream != null)
                     {
-                        stream.Close();
-                        fileStream.Close();
+                        FileStream fileStream = new FileStream(imagePath, FileMode.Create);
+                        try
+                        {
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                memory.Write(buffer, 0, len);
+                                fileStream.Write(buffer, 0, len);
+                            }
+                        }
+                        finally
+                        {
+                            stream.Close();
+                            fileStream.Close();
+                        }
+
+                        return true;
                     }
+
+                    return false;
                 });
 
-                memory.Seek(0, SeekOrigin.Begin);
-                info.Image.BeginInit();
-                info.Image.CacheOption = BitmapCacheOption.OnLoad;
-                info.Image.StreamSource = memory;
-                info.Image.EndInit();
+                if (success)
+                {
+                    memory.Seek(0, SeekOrigin.Begin);
+                    info.Image.BeginInit();
+                    info.Image.CacheOption = BitmapCacheOption.OnLoad;
+                    info.Image.StreamSource = memory;
+                    info.Image.EndInit();
 
-                this.Image = info.Image;
-                info.Loaded = true;
+                    this.Image = info.Image;
+                    info.Loaded = true;
+                }
             }
 
             info.Loading = false;
