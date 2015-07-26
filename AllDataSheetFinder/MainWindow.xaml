@@ -9,7 +9,7 @@
         xmlns:base="clr-namespace:AllDataSheetFinder"
         Title="{DynamicResource StringAppName}" Height="600" Width="800"
         Background="White"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <s:Decimal x:Key="DecimalOne">1</s:Decimal>
         <s:Int32 x:Key="IntegerZero">0</s:Int32>
@@ -59,7 +59,7 @@
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
                     <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>
-                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="48" Command="{Binding AddCustomCommand}"/>
+                    <my:ImageButton Padding="10,5,10,5" Visibility="{Binding IsFavouritesMode, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,3,0,3" ImageSource="{StaticResource ImageAdd}" Height="42" Command="{Binding AddCustomCommand}"/>
                 </StackPanel>
             </my:DataGridAppend.AppendControl>
             <DataGrid.InputBindings>
@@ -142,13 +142,17 @@
                 <DataGridTemplateColumn Header="{DynamicResource StringManufacturer}" Width="200" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="33"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <Grid>              
                                 <Image Source="{Binding Image}" Width="99" Height="33"/>
-                                <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Manufacturer}"/>
+                                <Rectangle x:Name="MaskImageManufacturer" Width="99" Height="33" Fill="Transparent"/>
+                                
+                                <Popup PlacementTarget="{Binding ElementName=MaskImageManufacturer}" Placement="Bottom" AllowsTransparency="True" IsOpen="{Binding IsMouseOver, ElementName=MaskImageManufacturer, Mode=OneWay}" PopupAnimation="Slide">
+                                    <Border Background="#FFBEE6FD">
+                                        <StackPanel Orientation="Vertical" Height="33" Margin="10,0,10,0">
+                                            <TextBlock Style="{StaticResource StyleTextDataGridResult}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Manufacturer}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -171,7 +175,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <my:ImageButton Width="48" Height="48" x:Name="ButtonMoreInfo" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}">
+                                <my:ImageButton Width="42" Height="42" x:Name="ButtonMoreInfo" ImageMargin="3,3,3,3" Text="{DynamicResource StringMoreInfo}" Command="{Binding DataContext.RequestMoreInfoCommand, ElementName=root}">
                                     <my:ImageButton.Style>
                                         <Style TargetType="{x:Type my:ImageButton}">
                                             <Setter Property="ImageSource" Value="{StaticResource ImageInfo}"/>
@@ -199,7 +203,7 @@
                 <DataGridTemplateColumn Width="64" MinWidth="48" MaxWidth="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
+                            <my:ImageButton Height="42" Width="42" Text="{DynamicResource StringOpen}" Command="{Binding DataContext.OpenPdfCommand, ElementName=root}">
                                 <my:ImageButton.Style>
                                     <Style TargetType="{x:Type my:ImageButton}">
                                         <Style.Triggers>
@@ -222,7 +226,7 @@
                 <DataGridTemplateColumn Width="64" MinWidth="48" MaxWidth="64">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <my:ImageButton Height="48" Width="48" Text="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}">
+                            <my:ImageButton Height="42" Width="42" Text="{DynamicResource StringAddToFavourites}" Command="{Binding DataContext.AddToFavouritesCommand, ElementName=root}">
                                 <my:ImageButton.Style>
                                     <Style TargetType="{x:Type my:ImageButton}">
                                         <Style.Triggers>

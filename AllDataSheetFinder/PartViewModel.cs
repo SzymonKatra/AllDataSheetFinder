@@ -12,6 +12,7 @@ using MVVMUtils.Collections;
 using System.Text.RegularExpressions;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using System.Net;
 
 namespace AllDataSheetFinder
 {
@@ -62,11 +63,13 @@ namespace AllDataSheetFinder
                 count++;
             }
 
+            if (count > 0) fileName += '(' + (count - 1).ToString() + ')';
+
             PartViewModel result = new PartViewModel();
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
-            result.CustomPath = resultFilePath;
+            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName); //resultFilePath;
             result.DatasheetSize = (new FileInfo(originalPath)).Length;
             result.CheckState();
 
@@ -134,8 +137,12 @@ namespace AllDataSheetFinder
         }
         public string CustomPath
         {
+            get { return Global.AppDataPath + Path.DirectorySeparatorChar + Model.CustomPath; }
+        }
+        public string RelativeCustomPath
+        {
             get { return Model.CustomPath; }
-            set { Model.CustomPath = value; RaisePropertyChanged("CustomPath"); }
+            set { Model.CustomPath = value; RaisePropertyChanged("RelativeCustomPath"); RaisePropertyChanged("CustomPath"); }
         }
 
         private SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> m_tags;
@@ -208,7 +215,7 @@ namespace AllDataSheetFinder
         }
 
         private AllDataSheetPart m_context;
-        protected AllDataSheetPart Context
+        public AllDataSheetPart Context
         {
             get { return m_context; }
             set { m_context = value; }
@@ -257,42 +264,72 @@ namespace AllDataSheetFinder
                 info.Image.CacheOption = BitmapCacheOption.OnLoad;
                 info.Image.StreamSource = stream;
                 info.Image.EndInit();
+
+                this.Image = info.Image;
+                info.Loaded = true;
             }
-            else if (!Custom)
+            else
             {
                 MemoryStream memory = new MemoryStream();
-                await Task.Run(() =>
+                bool success = await Task.Run<bool>(() =>
                 {
-                    Stream stream = m_context.GetManufacturerImageStream();
-
-                    FileStream fileStream = new FileStream(imagePath, FileMode.Create);
-                    try
+                    Stream stream = null;
+                    if (IsContextValid && !m_context.OnlyContext)
                     {
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        stream = m_context.GetManufacturerImageStream();
+                    }
+                    else if (!Custom && !string.IsNullOrWhiteSpace(ManufacturerImageLink))
+                    {
+                        try
                         {
-                            memory.Write(buffer, 0, len);
-                            fileStream.Write(buffer, 0, len);
+                            HttpWebRequest request = Requests.CreateDefaultRequest(ManufacturerImageLink);
+                            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                            stream = response.GetResponseStream();
+                        }
+                        catch
+                        {
+                            stream = null;
                         }
                     }
-                    finally
+
+                    if (stream != null)
                     {
-                        stream.Close();
-                        fileStream.Close();
+                        FileStream fileStream = new FileStream(imagePath, FileMode.Create);
+                        try
+                        {
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                memory.Write(buffer, 0, len);
+                                fileStream.Write(buffer, 0, len);
+                            }
+                        }
+                        finally
+                        {
+                            stream.Close();
+                            fileStream.Close();
+                        }
+
+                        return true;
                     }
+
+                    return false;
                 });
 
-                memory.Seek(0, SeekOrigin.Begin);
-                info.Image.BeginInit();
-                info.Image.CacheOption = BitmapCacheOption.OnLoad;
-                info.Image.StreamSource = memory;
-                info.Image.EndInit();
+                if (success)
+                {
+                    memory.Seek(0, SeekOrigin.Begin);
+                    info.Image.BeginInit();
+                    info.Image.CacheOption = BitmapCacheOption.OnLoad;
+                    info.Image.StreamSource = memory;
+                    info.Image.EndInit();
+
+                    this.Image = info.Image;
+                    info.Loaded = true;
+                }
             }
 
-            this.Image = info.Image;
-
-            info.Loaded = true;
             info.Loading = false;
         }
         public async Task RequestMoreInfo()
@@ -588,7 +625,7 @@ namespace AllDataSheetFinder
                 this.ManufacturerSite = (string)pack.Read();
                 this.LastUseDate = (DateTime)pack.Read();
                 this.Custom = (bool)pack.Read();
-                this.CustomPath = (string)pack.Read();
+                this.RelativeCustomPath = (string)pack.Read();
             }
 
             Tags.PopCopy(result);
@@ -607,7 +644,7 @@ namespace AllDataSheetFinder
             pack.Write(this.ManufacturerSite);
             pack.Write(this.LastUseDate);
             pack.Write(this.Custom);
-            pack.Write(this.CustomPath);
+            pack.Write(this.RelativeCustomPath);
 
             CopyStack.Push(pack);
 

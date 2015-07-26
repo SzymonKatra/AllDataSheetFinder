@@ -99,6 +99,7 @@
     <Compile Include="Controls\OkCancelControl.xaml.cs">
       <DependentUpon>OkCancelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SmoothScrollViewer.cs" />
     <Compile Include="Converters\BooleanNegateConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInvertedConverter.cs" />
     <Compile Include="Converters\DecimalAddConverter.cs" />
