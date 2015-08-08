@@ -1,12 +1,19 @@
-AllDataSheetFinder is an utility for finding, downloading and organizing datasheets from alldatasheet.com.
-Application have also ability of organizing own datasheets - not downloaded from alldatasheet.com.
+# AllDataSheetFinder
+-----
 
-Once you download datasheet, it is stored in cache and can be deleted when cache limit exceeds. You can add it to favourites to prevent from removing.
-Manufacturers logos are downloaded only when they are needed and stored locally.
+AllDataSheetFinder is an utility for finding, downloading and organizing datasheets from alldatasheet.com or own, which originate from other sources.
 
-Need .NET Framework 4.5 and any PDF browser to run properly.
+## Features:
 
-All data is stored in AppData\Local\AllDataSheetFinder.
+- quick finding and downloading datasheets from alldatasheet.com site
+- storing last downloads
+- adding to favourites (then it won't be removed)
+- tagging
+- storing manufacturer logos
+- automatic updates
+- neat and simple interface in English or Polish
+
+License: GNU GPL v3
 
 Screenshots:
 ![Screenshot 1](screenshots/screenshot_1.png)
