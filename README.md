@@ -1,5 +1,5 @@
 # AllDataSheetFinder
------
+---
 
 AllDataSheetFinder is an utility for finding, downloading and organizing datasheets from alldatasheet.com or own, which originate from other sources.
 
