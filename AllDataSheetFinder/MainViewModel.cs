@@ -17,6 +17,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Shell;
 
 namespace AllDataSheetFinder
 {
@@ -76,7 +77,12 @@ namespace AllDataSheetFinder
                 m_actionsCount = value;
                 Mouse.OverrideCursor = (m_actionsCount <= 0 ? null : Cursors.AppStarting);
                 RaisePropertyChanged("ActionsCount");
+                RaisePropertyChanged("TaskbarProgressState");
             }
+        }
+        public TaskbarItemProgressState TaskbarProgressState
+        {
+            get { return (m_actionsCount <= 0 ? TaskbarItemProgressState.None : TaskbarItemProgressState.Indeterminate); }
         }
         private AllDataSheetSearchContext m_searchContext;
 
@@ -259,7 +265,6 @@ namespace AllDataSheetFinder
             try
             {
                 ActionsCount++;
-                Mouse.OverrideCursor = Cursors.AppStarting;
                 await m_selectedResult.OpenPdf();
             }
             catch
@@ -319,7 +324,6 @@ namespace AllDataSheetFinder
             try
             {
                 ActionsCount++;
-                Mouse.OverrideCursor = Cursors.AppStarting;
                 PartViewModel part = m_selectedResult;
                 await part.SavePdf();
                 m_savedParts.Add(part);
@@ -382,7 +386,6 @@ namespace AllDataSheetFinder
             try
             {
                 ActionsCount++;
-                Mouse.OverrideCursor = Cursors.AppStarting;
                 await m_selectedResult.RequestMoreInfo();
             }
             catch

@@ -14,6 +14,9 @@
         <s:Decimal x:Key="DecimalOne">1</s:Decimal>
         <s:Int32 x:Key="IntegerZero">0</s:Int32>
     </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="{Binding TaskbarProgressState}"/>
+    </Window.TaskbarItemInfo>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <e:EventToCommand Command="{Binding SaveFavouritesCommand}"/>
