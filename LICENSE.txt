@@ -1,3 +1,5 @@
+               Copyright (C) 2015 Szymon Katra
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
