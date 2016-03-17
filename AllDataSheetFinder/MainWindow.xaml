@@ -9,7 +9,7 @@
         xmlns:base="clr-namespace:AllDataSheetFinder"
         Title="{DynamicResource StringAppName}" Height="600" Width="800"
         Background="White"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Resources>
         <s:Decimal x:Key="DecimalOne">1</s:Decimal>
         <s:Int32 x:Key="IntegerZero">0</s:Int32>
