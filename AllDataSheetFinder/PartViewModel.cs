@@ -69,7 +69,7 @@ namespace AllDataSheetFinder
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
-            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName); //resultFilePath;
+            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName);
             result.DatasheetSize = (new FileInfo(originalPath)).Length;
             result.CheckState();
 
@@ -77,7 +77,6 @@ namespace AllDataSheetFinder
         }
 
         private static object s_downloadListLock = new object();
-        //private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
         private static Dictionary<string, PartViewModel> s_downloadList = new Dictionary<string, PartViewModel>();
 
         public string Name

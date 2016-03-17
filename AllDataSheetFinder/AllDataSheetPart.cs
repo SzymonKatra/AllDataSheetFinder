@@ -36,7 +36,6 @@ namespace AllDataSheetFinder
                 if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
                 return m_manufacturer;
             }
-            //set { m_manufacturer = value; }
         }
 
         private string m_manufacturerImageLink;
@@ -47,7 +46,6 @@ namespace AllDataSheetFinder
                 if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
                 return m_manufacturerImageLink;
             }
-            //set { m_manufacturerImageLink = value; }
         }
 
         private string m_name;
@@ -58,7 +56,6 @@ namespace AllDataSheetFinder
                 if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
                 return m_name;
             }
-            //set { m_name = value; }
         }
 
         private string m_description;
@@ -69,14 +66,12 @@ namespace AllDataSheetFinder
                 if (m_onlyContext) throw new InvalidOperationException("AllDataSheetPart is in OnlyContext state");
                 return m_description;
             }
-            //set { m_description = value; }
         }
 
         private string m_datasheetSiteLink;
         public string DatasheetSiteLink
         {
             get { return m_datasheetSiteLink; }
-            //set { m_datasheetSiteLink = value; }
         }
 
         private bool m_onlyContext = false;
