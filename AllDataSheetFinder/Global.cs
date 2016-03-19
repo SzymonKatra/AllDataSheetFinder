@@ -90,7 +90,6 @@ namespace AllDataSheetFinder
         }
         public static MessageBoxExButton MessageBox(object viewModel, string text, MessageBoxExPredefinedButtons buttons)
         {
-            //return MessageBoxSuper.ShowBox(Dialogs.GetWindow(viewModel), text, GetStringResource("StringAppName"), buttons);
             MessageBoxEx mbox = new MessageBoxEx(text, GetStringResource("StringAppName"), buttons);
             mbox.Owner = Dialogs.GetWindow(viewModel);
             mbox.ShowDialog();

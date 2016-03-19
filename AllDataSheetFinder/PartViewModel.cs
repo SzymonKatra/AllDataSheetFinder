@@ -69,7 +69,7 @@ namespace AllDataSheetFinder
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
-            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName); //resultFilePath;
+            result.RelativeCustomPath = Global.BuildSavedDatasheetRelativePath(fileName);
             result.DatasheetSize = (new FileInfo(originalPath)).Length;
             result.CheckState();
 
@@ -77,7 +77,6 @@ namespace AllDataSheetFinder
         }
 
         private static object s_downloadListLock = new object();
-        //private static Dictionary<string, PartDatasheetState> s_downloadList = new Dictionary<string, PartDatasheetState>();
         private static Dictionary<string, PartViewModel> s_downloadList = new Dictionary<string, PartViewModel>();
 
         public string Name
@@ -245,11 +244,11 @@ namespace AllDataSheetFinder
             if (info.Loaded) this.Image = info.Image;
             if (info.Loading)
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     // ugly hack to test wheter image is loaded,
                     // assigment of Image.Source before BitmapImage has been loaded causes NullReferenceException in BitmapImage.EndInit()
-                    while (info.Loading) Task.Delay(100);
+                    while (info.Loading) await Task.Delay(100);
                 });
                 this.Image = info.Image;
             }
@@ -338,9 +337,9 @@ namespace AllDataSheetFinder
 
             if (MoreInfoState == PartMoreInfoState.Downloading)
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    while (MoreInfoState == PartMoreInfoState.Downloading) Task.Delay(100);
+                    while (MoreInfoState == PartMoreInfoState.Downloading) await Task.Delay(100);
                 });
                 return;
             }
@@ -377,9 +376,9 @@ namespace AllDataSheetFinder
             if (State == PartDatasheetState.Downloading)
             {
                 State = PartDatasheetState.DownloadingAndOpening;
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    while (State != PartDatasheetState.Saved) Task.Delay(100);
+                    while (State != PartDatasheetState.Saved) await Task.Delay(100);
                 });
             }
 
@@ -412,9 +411,9 @@ namespace AllDataSheetFinder
             if (State == PartDatasheetState.Downloading) return;
             if (State == PartDatasheetState.DownloadingAndOpening)
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    while (State != PartDatasheetState.Cached) Task.Delay(100);
+                    while (State != PartDatasheetState.Cached) await Task.Delay(100);
                 });
             }
 
@@ -514,13 +513,13 @@ namespace AllDataSheetFinder
         private async void CheckGlobalState()
         {
             string code = Code;
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 bool contains;
                 lock (s_downloadListLock) contains = s_downloadList.ContainsKey(code);
                 while (contains)
                 {
-                    Task.Delay(100);
+                    await Task.Delay(100);
                     lock (s_downloadListLock) contains = s_downloadList.ContainsKey(code);
                 }
             });
