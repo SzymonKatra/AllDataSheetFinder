@@ -402,14 +402,32 @@ namespace AllDataSheetFinder
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
-            if (!string.IsNullOrWhiteSpace(openFileDialog.FileName) && File.Exists(openFileDialog.FileName))
+            foreach (var fileName in openFileDialog.FileNames)
             {
-                EditPartViewModel dialogViewModel = new EditPartViewModel(openFileDialog.FileName);
-                Global.Dialogs.ShowDialog(this, dialogViewModel);
-                if (dialogViewModel.Result == EditPartViewModel.EditPartResult.Ok)
+                if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName)) continue;
+
+                bool add = true;
+                PartViewModel part = null;
+
+                if (openFileDialog.FileNames.Length == 1) // if there is only one pdf to add, open window to edit properties of it
                 {
-                    PartViewModel part = dialogViewModel.Part;
+                    EditPartViewModel dialogViewModel = new EditPartViewModel(openFileDialog.FileName);
+                    Global.Dialogs.ShowDialog(this, dialogViewModel);
+                    if (dialogViewModel.Result != EditPartViewModel.EditPartResult.Ok)
+                        add = false;
+                    else
+                        part = dialogViewModel.Part;
+                }
+                else // if more then just add it
+                {
+                    part = PartViewModel.MakeCustom(fileName);
+                    File.Copy(fileName, part.CustomPath);
+                }
+
+                if (add)
+                {
                     m_searchResults.Add(part);
                     m_savedParts.Add(part);
                     part.LastUseDate = DateTime.MinValue;
@@ -417,9 +435,9 @@ namespace AllDataSheetFinder
                     ActionDialogViewModel actionDialogViewModel = new ActionDialogViewModel(part.ComputePagesCount(), Global.GetStringResource("StringCountingPages"));
                     Global.Dialogs.ShowDialog(this, actionDialogViewModel);
                 }
-
-                m_filteredResults.Refresh();
             }
+
+            m_filteredResults.Refresh();
         }
 
         public async void CheckForUpdates()
