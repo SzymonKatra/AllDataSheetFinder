@@ -66,6 +66,9 @@ namespace AllDataSheetFinder
             if (count > 0) fileName += '(' + (count - 1).ToString() + ')';
 
             PartViewModel result = new PartViewModel();
+            PdfDocument document = PdfReader.Open(originalPath);
+            result.Name = document.Info.Title;
+            document.Close();
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
