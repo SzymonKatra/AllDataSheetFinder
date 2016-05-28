@@ -94,6 +94,10 @@ namespace AllDataSheetFinder
         {
             get { return Global.GetStringResource("StringMail"); }
         }
+        public string Website
+        {
+            get { return Global.GetStringResource("StringWebsite"); }
+        }
         public string Version
         {
             get
