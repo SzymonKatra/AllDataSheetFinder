@@ -80,6 +80,7 @@ namespace AllDataSheetFinder
             {
                 if (document != null) document.Close();
             }
+            if (string.IsNullOrWhiteSpace(result.Name)) result.Name = fileName;
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
