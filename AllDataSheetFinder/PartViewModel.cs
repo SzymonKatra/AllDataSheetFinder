@@ -63,7 +63,7 @@ namespace AllDataSheetFinder
                 count++;
             }
 
-            if (count > 0) fileName += '(' + (count - 1).ToString() + ')';
+            if (count > 1) fileName += '(' + (count - 1).ToString() + ')';
 
             PartViewModel result = new PartViewModel();
             PdfDocument document = PdfReader.Open(originalPath);
