@@ -63,12 +63,24 @@ namespace AllDataSheetFinder
                 count++;
             }
 
-            if (count > 0) fileName += '(' + (count - 1).ToString() + ')';
+            if (count > 1) fileName += '(' + (count - 1).ToString() + ')';
 
             PartViewModel result = new PartViewModel();
-            PdfDocument document = PdfReader.Open(originalPath);
-            result.Name = document.Info.Title;
-            document.Close();
+            PdfDocument document = null;
+            try
+            {
+                document = PdfReader.Open(originalPath, PdfDocumentOpenMode.InformationOnly);
+                result.Name = document.Info.Title;
+            }
+            catch
+            {
+                result.Name = fileName;
+            }
+            finally
+            {
+                if (document != null) document.Close();
+            }
+            if (string.IsNullOrWhiteSpace(result.Name)) result.Name = fileName;
             result.Description = fileName;
             result.RebuildTags();
             result.Custom = true;
@@ -552,7 +564,7 @@ namespace AllDataSheetFinder
                 PdfDocument document = null;
                 try
                 {
-                    document = PdfReader.Open(CustomPath);
+                    document = PdfReader.Open(CustomPath, PdfDocumentOpenMode.Import);
                     this.DatasheetPages = document.PageCount;
                 }
                 catch
