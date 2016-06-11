@@ -3,7 +3,7 @@
                     xmlns:my="clr-namespace:AllDataSheetFinder.Controls">
     <ControlTemplate x:Key="TemplateDataGridAppend" TargetType="{x:Type my:DataGridAppend}">
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-            <my:SmoothScrollViewer x:Name="DG_ScrollViewer" Focusable="false" MouseWheelDeltaDivider="1.5">
+            <my:SmoothScrollViewer x:Name="DG_ScrollViewer" Focusable="false" MouseWheelDeltaDivider="1.5" IsSmoothScrollingEnabled="{TemplateBinding EnableSmoothScrolling}">
                 <ScrollViewer.Template>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
                         <Grid>
