@@ -43,7 +43,7 @@ namespace AllDataSheetFinder.Validation
                 bool old = m_isValid;
                 m_isValid = value;
                 if (old != m_isValid) OnIsValidChanged();
-                RaisePropertyChanged("IsValid");
+                RaisePropertyChanged(nameof(IsValid));
             }
         }
 
@@ -54,7 +54,7 @@ namespace AllDataSheetFinder.Validation
             private set
             {
                 m_error = value;
-                RaisePropertyChanged("Error");
+                RaisePropertyChanged(nameof(Error));
             }
         }
 
@@ -65,9 +65,9 @@ namespace AllDataSheetFinder.Validation
             set
             {
                 m_validValue = value;
-                RaisePropertyChanged("ValidValue");
+                RaisePropertyChanged(nameof(ValidValue));
                 m_input = ToValidForm();
-                RaisePropertyChanged("Input");
+                RaisePropertyChanged(nameof(Input));
                 IsValid = true;
             }
         }
@@ -79,7 +79,7 @@ namespace AllDataSheetFinder.Validation
             set
             {
                 m_input = value;
-                RaisePropertyChanged("Input");
+                RaisePropertyChanged(nameof(Input));
 
                 ValidatorResult result = Validate();
 

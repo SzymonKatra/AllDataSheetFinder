@@ -19,7 +19,7 @@ namespace AllDataSheetFinder
         public bool EnableSmoothScrolling
         {
             get { return m_enableSmoothScrolling; }
-            set { m_enableSmoothScrolling = value; RaisePropertyChanged("EnableSmoothScrolling"); }
+            set { m_enableSmoothScrolling = value; RaisePropertyChanged(nameof(EnableSmoothScrolling)); }
         }
 
         public void ApplyFromOther(Config other)

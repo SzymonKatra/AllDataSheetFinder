@@ -196,14 +196,14 @@ namespace AllDataSheetFinder
         public LanguagePair SelectedLanguage
         {
             get { return m_selectedLanguage; }
-            set { m_selectedLanguage = value; RaisePropertyChanged("SelectedLanguage"); }
+            set { m_selectedLanguage = value; RaisePropertyChanged(nameof(SelectedLanguage)); }
         }
 
         private bool m_enableSmoothScrollingOption;
         public bool EnableSmoothScrollingOption
         {
             get { return m_enableSmoothScrollingOption; }
-            set { m_enableSmoothScrollingOption = value;  RaisePropertyChanged("EnableSmoothScrollingOption"); }
+            set { m_enableSmoothScrollingOption = value;  RaisePropertyChanged(nameof(EnableSmoothScrollingOption)); }
         }
 
         private string m_initialPath;
@@ -211,14 +211,14 @@ namespace AllDataSheetFinder
         public string AppDataPath
         {
             get { return m_appDataPath; }
-            set { m_appDataPath = value; RaisePropertyChanged("AppDataPath"); }
+            set { m_appDataPath = value; RaisePropertyChanged(nameof(AppDataPath)); }
         }
 
         private bool m_favouritesOnStart;
         public bool FavouritesOnStart
         {
             get { return m_favouritesOnStart; }
-            set { m_favouritesOnStart = value; RaisePropertyChanged("FavouritesOnStart"); }
+            set { m_favouritesOnStart = value; RaisePropertyChanged(nameof(FavouritesOnStart)); }
         }
 
         private void Ok(object param)
@@ -298,7 +298,7 @@ namespace AllDataSheetFinder
 
             foreach (var item in Global.Main.SearchResults) item.CheckState();
 
-            RaisePropertyChanged("CurrentDatasheetsCacheSize");
+            RaisePropertyChanged(nameof(CurrentDatasheetsCacheSize));
         }
 
         private void ClearImagesCache(object param)
@@ -310,7 +310,7 @@ namespace AllDataSheetFinder
                 File.Delete(file);
             }
 
-            RaisePropertyChanged("CurrentImagesCacheSize");
+            RaisePropertyChanged(nameof(CurrentImagesCacheSize));
         }
 
         private void ClearSavedDatasheets(object param)
@@ -335,7 +335,7 @@ namespace AllDataSheetFinder
 
             Global.SaveSavedParts();
 
-            RaisePropertyChanged("CurrentSavedDatasheetsSize");
+            RaisePropertyChanged(nameof(CurrentSavedDatasheetsSize));
         }
 
         private void CheckUpdates(object param)

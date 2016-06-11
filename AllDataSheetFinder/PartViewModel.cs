@@ -26,8 +26,8 @@ namespace AllDataSheetFinder
             : base(model)
         {
             m_tags = new SynchronizedPerItemObservableCollection<ValueViewModel<string>, string>(model.Tags, x => new ValueViewModel<string>(x));
-            m_tags.CollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
-            m_tags.ItemPropertyInCollectionChanged += (s, e) => RaisePropertyChanged("MoreInfoDisplay");
+            m_tags.CollectionChanged += (s, e) => RaisePropertyChanged(nameof(MoreInfoDisplay));
+            m_tags.ItemPropertyInCollectionChanged += (s, e) => RaisePropertyChanged(nameof(MoreInfoDisplay));
 
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
@@ -97,57 +97,57 @@ namespace AllDataSheetFinder
         public string Name
         {
             get { return Model.Name; }
-            set { Model.Name = value; RaisePropertyChanged("Name"); RaisePropertyChanged("Code"); }
+            set { Model.Name = value; RaisePropertyChanged(nameof(Name)); RaisePropertyChanged(nameof(Code)); }
         }
         public string Description
         {
             get { return Model.Description; }
-            set { Model.Description = value; RaisePropertyChanged("Description"); }
+            set { Model.Description = value; RaisePropertyChanged(nameof(Description)); }
         }
         public string Manufacturer
         {
             get { return Model.Manufacturer; }
-            set { Model.Manufacturer = value; RaisePropertyChanged("Manufacturer"); RaisePropertyChanged("Code"); }
+            set { Model.Manufacturer = value; RaisePropertyChanged(nameof(Manufacturer)); RaisePropertyChanged(nameof(Code)); }
         }
         public string ManufacturerImageLink
         {
             get { return Model.ManufacturerImageLink; }
-            set { Model.ManufacturerImageLink = value; RaisePropertyChanged("ManufacturerImageLink"); RaisePropertyChanged("ImageFileName"); }
+            set { Model.ManufacturerImageLink = value; RaisePropertyChanged(nameof(ManufacturerImageLink)); RaisePropertyChanged(nameof(ImageFileName)); }
         }
         public string DatasheetSiteLink
         {
             get { return Model.DatasheetSiteLink; }
-            set { Model.DatasheetSiteLink = value; RaisePropertyChanged("DatasheetSiteLink"); RaisePropertyChanged("Code"); }
+            set { Model.DatasheetSiteLink = value; RaisePropertyChanged(nameof(DatasheetSiteLink)); RaisePropertyChanged(nameof(Code)); }
         }
         public string DatasheetPdfLink
         {
             get { return Model.DatasheetPdfLink; }
-            set { Model.DatasheetPdfLink = value; RaisePropertyChanged("DatasheetPdfLink"); }
+            set { Model.DatasheetPdfLink = value; RaisePropertyChanged(nameof(DatasheetPdfLink)); }
         }
         public long DatasheetSize
         {
             get { return Model.DatasheetSize; }
-            set { Model.DatasheetSize = value; RaisePropertyChanged("DatasheetSize"); RaisePropertyChanged("MoreInfoDisplay"); }
+            set { Model.DatasheetSize = value; RaisePropertyChanged(nameof(DatasheetSize)); RaisePropertyChanged(nameof(MoreInfoDisplay)); }
         }
         public int DatasheetPages
         {
             get { return Model.DatasheetPages; }
-            set { Model.DatasheetPages = value; RaisePropertyChanged("DatasheetPages"); RaisePropertyChanged("MoreInfoDisplay"); }
+            set { Model.DatasheetPages = value; RaisePropertyChanged(nameof(DatasheetPages)); RaisePropertyChanged(nameof(MoreInfoDisplay)); }
         }
         public string ManufacturerSite
         {
             get { return Model.ManufacturerSite; }
-            set { Model.ManufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); RaisePropertyChanged("MoreInfoDisplay"); }
+            set { Model.ManufacturerSite = value; RaisePropertyChanged(nameof(ManufacturerSite)); RaisePropertyChanged(nameof(MoreInfoDisplay)); }
         }
         public DateTime LastUseDate
         {
             get { return Model.LastUseDate; }
-            set { Model.LastUseDate = value; RaisePropertyChanged("LastUseDate"); }
+            set { Model.LastUseDate = value; RaisePropertyChanged(nameof(LastUseDate)); }
         }
         public bool Custom
         {
             get { return Model.Custom; }
-            set { Model.Custom = value; RaisePropertyChanged("Custom"); }
+            set { Model.Custom = value; RaisePropertyChanged(nameof(Custom)); }
         }
         public string CustomPath
         {
@@ -156,7 +156,7 @@ namespace AllDataSheetFinder
         public string RelativeCustomPath
         {
             get { return Model.CustomPath; }
-            set { Model.CustomPath = value; RaisePropertyChanged("RelativeCustomPath"); RaisePropertyChanged("CustomPath"); }
+            set { Model.CustomPath = value; RaisePropertyChanged(nameof(RelativeCustomPath)); RaisePropertyChanged(nameof(CustomPath)); }
         }
 
         private SynchronizedPerItemObservableCollection<ValueViewModel<string>, string> m_tags;
@@ -171,7 +171,7 @@ namespace AllDataSheetFinder
         public PartMoreInfoState MoreInfoState
         {
             get { return m_moreInfoState; }
-            set { m_moreInfoState = value; RaisePropertyChanged("MoreInfoState"); }
+            set { m_moreInfoState = value; RaisePropertyChanged(nameof(MoreInfoState)); }
         }
         public string MoreInfoDisplay
         {
@@ -218,14 +218,14 @@ namespace AllDataSheetFinder
         public PartDatasheetState State
         {
             get { return m_state; }
-            set { m_state = value; RaisePropertyChanged("State"); }
+            set { m_state = value; RaisePropertyChanged(nameof(State)); }
         }
 
         private BitmapImage m_image;
         public BitmapImage Image
         {
             get { return m_image; }
-            set { m_image = value; RaisePropertyChanged("Image"); }
+            set { m_image = value; RaisePropertyChanged(nameof(Image)); }
         }
 
         private AllDataSheetPart m_context;
@@ -244,7 +244,7 @@ namespace AllDataSheetFinder
         public decimal Progress
         {
             get { return m_progress; }
-            private set { m_progress = value; RaisePropertyChanged("Progress"); }
+            private set { m_progress = value; RaisePropertyChanged(nameof(Progress)); }
         }
 
         public async void LoadImage()
@@ -543,7 +543,7 @@ namespace AllDataSheetFinder
         public void MakeContext()
         {
             m_context = new AllDataSheetPart(DatasheetSiteLink);
-            RaisePropertyChanged("IsContextValid");
+            RaisePropertyChanged(nameof(IsContextValid));
         }
         public void RebuildTags()
         {

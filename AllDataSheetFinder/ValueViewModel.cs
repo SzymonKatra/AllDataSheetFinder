@@ -21,7 +21,7 @@ namespace AllDataSheetFinder
         public T Value
         {
             get { return base.Model; }
-            set { base.Model = value; RaisePropertyChanged("Value"); }
+            set { base.Model = value; RaisePropertyChanged(nameof(Value)); }
         }
 
         protected override void OnPopCopy(WorkingCopyResult result)
