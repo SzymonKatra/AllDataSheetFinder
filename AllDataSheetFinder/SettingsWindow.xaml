@@ -22,6 +22,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -78,6 +79,8 @@
             <ComboBox Grid.Column="1" Grid.Row="6" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
             
             <Button Grid.Column="1" Grid.Row="7" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
+
+            <CheckBox Grid.Column="0" Grid.Row="8" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringEnableSmoothScrolling}" IsChecked="{Binding EnableSmoothScrollingOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
 
         <Grid Grid.Row="1">

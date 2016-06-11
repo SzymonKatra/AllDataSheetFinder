@@ -76,5 +76,6 @@ If you ignore this, you should manually delete remaining files from
 {0}</s:String>
     <s:String x:Key="StringFormatContactMail">Contact: {0}</s:String>
     <s:String x:Key="StringFormatWebsite">Website: {0}</s:String>
+    <s:String x:Key="StringEnableSmoothScrolling">Enable smooth scrolling</s:String>
     
 </ResourceDictionary>

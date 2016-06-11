@@ -80,6 +80,7 @@ namespace AllDataSheetFinder
 
             m_initialPath = AppDataPath = Global.AppDataPath;
             m_favouritesOnStart = Global.Configuration.FavouritesOnStart;
+            m_enableSmoothScrollingOption = Global.Configuration.EnableSmoothScrolling;
         }
 
         private FileVersionInfo m_fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
@@ -198,6 +199,13 @@ namespace AllDataSheetFinder
             set { m_selectedLanguage = value; RaisePropertyChanged("SelectedLanguage"); }
         }
 
+        private bool m_enableSmoothScrollingOption;
+        public bool EnableSmoothScrollingOption
+        {
+            get { return m_enableSmoothScrollingOption; }
+            set { m_enableSmoothScrollingOption = value;  RaisePropertyChanged("EnableSmoothScrollingOption"); }
+        }
+
         private string m_initialPath;
         private string m_appDataPath;
         public string AppDataPath
@@ -217,6 +225,7 @@ namespace AllDataSheetFinder
         {
             Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.ValidValue * 1024 * 1024;
             Global.Configuration.FavouritesOnStart = m_favouritesOnStart;
+            Global.Configuration.EnableSmoothScrolling = m_enableSmoothScrollingOption;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;

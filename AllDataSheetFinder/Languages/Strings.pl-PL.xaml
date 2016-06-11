@@ -75,5 +75,6 @@ Jeśli to zignorujesz, powinieneś ręczenie usunąć pozostałe pliki z
 {0}</s:String>
     <s:String x:Key="StringFormatContactMail">Kontakt: {0}</s:String>
     <s:String x:Key="StringFormatWebsite">Strona internetowa: {0}</s:String>
+    <s:String x:Key="StringEnableSmoothScrolling">Włącz płynne przewijanie</s:String>
 
 </ResourceDictionary>
