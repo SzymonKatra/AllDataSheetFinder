@@ -47,10 +47,15 @@ namespace AllDataSheetFinder
 
         private static ResourceDictionary s_stringsDictionary;
 
+        // this is singleton, do not set private property manually
         private static Config s_configuration;
         public static Config Configuration
         {
-            get { return s_configuration; }
+            get
+            {
+                if (s_configuration == null) s_configuration = new Config();
+                return s_configuration;
+            }
         }
 
         private static DialogService s_dialogs;
@@ -219,12 +224,13 @@ namespace AllDataSheetFinder
         public static void LoadConfiguration()
         {
             string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
+
             if (!File.Exists(path))
             {
-                s_configuration = new Config();
-                s_configuration.MaxDatasheetsCacheSize = 100 * 1024 * 1024; // 100 MiB
-                s_configuration.Language = string.Empty;
-                s_configuration.FavouritesOnStart = false;
+                Configuration.MaxDatasheetsCacheSize = 100 * 1024 * 1024; // 100 MiB
+                Configuration.Language = string.Empty;
+                Configuration.FavouritesOnStart = false;
+                Configuration.EnableSmoothScrolling = true;
                 SaveConfiguration();
             }
             else
@@ -233,7 +239,8 @@ namespace AllDataSheetFinder
                 {
                     try
                     {
-                        s_configuration = (Config)s_serializerConfig.Deserialize(file);
+                        Config cfg = (Config)s_serializerConfig.Deserialize(file);
+                        Configuration.ApplyFromOther(cfg);
                     }
                     catch
                     {
@@ -247,7 +254,7 @@ namespace AllDataSheetFinder
         public static void SaveConfiguration()
         {
             string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
-            using (FileStream file = new FileStream(path, FileMode.Create)) s_serializerConfig.Serialize(file, s_configuration);
+            using (FileStream file = new FileStream(path, FileMode.Create)) s_serializerConfig.Serialize(file, Configuration);
         }
 
         public static void LoadSavedParts()

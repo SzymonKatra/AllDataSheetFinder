@@ -28,5 +28,12 @@ namespace AllDataSheetFinder.Controls
             get { return GetValue(AppendControlProperty); }
             set { SetValue(AppendControlProperty, value); }
         }
+
+        public static readonly DependencyProperty EnableSmoothScrollingProperty = DependencyProperty.Register("EnableSmoothScrolling", typeof(bool), typeof(DataGridAppend), new PropertyMetadata(true));
+        public bool EnableSmoothScrolling
+        {
+            get { return (bool)GetValue(EnableSmoothScrollingProperty); }
+            set { SetValue(EnableSmoothScrollingProperty, value); }
+        }
     }
 }
