@@ -58,7 +58,7 @@
 
         <my:DataGridAppend x:Name="DataGridResults" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding FilteredResults}" SelectedItem="{Binding SelectedResult}"
                            CellStyle="{StaticResource StyleDataGridCellNoSelection}" CanUserReorderColumns="False" Background="{StaticResource BrushResultsBackground}" MinRowHeight="48" VerticalScrollBarVisibility="Visible"
-                           BorderThickness="0" GridLinesVisibility="None" HeadersVisibility="Column">
+                           BorderThickness="0" GridLinesVisibility="None" HeadersVisibility="Column" EnableSmoothScrolling="{Binding EnableSmoothScrolling, Source={x:Static base:Global.Configuration}}">
             <my:DataGridAppend.AppendControl>
                 <StackPanel Orientation="Vertical">
                     <my:ImageButton Padding="10,5,10,5" Visibility="{Binding LoadMoreVisible, Converter={StaticResource ConverterBooleanToVisibility}}" Background="{StaticResource BrushResultsBackground}" ImageMargin="0,10,0,10" ImageSource="{StaticResource ImageMore}" Text="{DynamicResource StringLoadMoreResults}" Command="{Binding LoadMoreResultsCommand}"/>

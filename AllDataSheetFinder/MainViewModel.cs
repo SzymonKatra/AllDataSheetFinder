@@ -213,6 +213,11 @@ namespace AllDataSheetFinder
             get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
         }
 
+        public bool EnableSmoothScrolling
+        {
+            get { return Global.Configuration.EnableSmoothScrolling; }
+        }
+
         private void AddResults(List<AllDataSheetPart> results)
         {
             foreach (var item in results)
