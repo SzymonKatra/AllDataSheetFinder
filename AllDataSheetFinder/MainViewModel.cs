@@ -445,7 +445,7 @@ namespace AllDataSheetFinder
             m_filteredResults.Refresh();
         }
 
-        public async void CheckForUpdates()
+        public async void CheckForUpdates(bool messageBoxOnError = false)
         {
             if (m_checkingUpdates) return;
 
@@ -454,41 +454,55 @@ namespace AllDataSheetFinder
             string link = string.Empty;
             string execute = string.Empty;
             string files = string.Empty;
-            await Task.Run(() =>
+
+            try
             {
-                HttpWebRequest request = Requests.CreateDefaultRequest(Global.UpdateVersionLink);
-                string result = Requests.ReadResponseString(request);
+                await Task.Run(() =>
+                {
+                    HttpWebRequest request = Requests.CreateDefaultRequest(Global.UpdateVersionLink);
+                    string result = Requests.ReadResponseString(request);
 
-                XElement rootElement = XElement.Parse(result);
-                XElement versionElement = rootElement.Element("version");
-                if (versionElement == null) return;
-                XElement downloadElement = rootElement.Element("download");
-                if (downloadElement == null) return;
-                XElement executeElement = rootElement.Element("execute");
-                if (executeElement == null) return;
-                XElement filesElement = rootElement.Element("files");
-                if (filesElement == null) return;
+                    XElement rootElement = XElement.Parse(result);
+                    XElement versionElement = rootElement.Element("version");
+                    if (versionElement == null) return;
+                    XElement downloadElement = rootElement.Element("download");
+                    if (downloadElement == null) return;
+                    XElement executeElement = rootElement.Element("execute");
+                    if (executeElement == null) return;
+                    XElement filesElement = rootElement.Element("files");
+                    if (filesElement == null) return;
 
-                Version version;
-                if (!Version.TryParse(versionElement.Value, out version)) return;
-                Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+                    Version version;
+                    if (!Version.TryParse(versionElement.Value, out version)) return;
+                    Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
 
-                link = downloadElement.Value;
-                if (version > currentVersion) newVersion = true;
+                    link = downloadElement.Value;
+                    if (version > currentVersion) newVersion = true;
 
-                execute = executeElement.Value;
-                files = filesElement.Value;
-            });
+                    execute = executeElement.Value;
+                    files = filesElement.Value;
+                });
+            }
+            catch
+            {
+                if (messageBoxOnError) Global.MessageBox(this, Global.GetStringResource("StringCheckUpdatesError"), MessageBoxExPredefinedButtons.Ok);
+            }
 
             if (newVersion && Global.MessageBox(this, Global.GetStringResource("StringUpdateAvailable"), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
             {
                 UpdateViewModel dialogViewModel = new UpdateViewModel(link);
                 Global.Dialogs.ShowDialog(this, dialogViewModel);
-                string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
-                string appDir = AppDomain.CurrentDomain.BaseDirectory;
-                while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
-                Process.Start(basePath + Path.DirectorySeparatorChar + execute, "\"" + basePath + Path.DirectorySeparatorChar + files + "\" \"" + appDir + "\"");
-                NeedClose();
+                if (!dialogViewModel.DownloadSuccessful) Global.MessageBox(this, Global.GetStringResource("StringUpdateDownloadError"), MessageBoxExPredefinedButtons.Ok);
+                else if (!dialogViewModel.ExtractSuccessful) Global.MessageBox(this, Global.GetStringResource("StringUpdateExtractError"), MessageBoxExPredefinedButtons.Ok);
+
+                if (dialogViewModel.DownloadSuccessful && dialogViewModel.ExtractSuccessful)
+                {
+                    string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+                    string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                    while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
+                    Process.Start(basePath + Path.DirectorySeparatorChar + execute, "\"" + basePath + Path.DirectorySeparatorChar + files + "\" \"" + appDir + "\"");
+                    NeedClose();
+                }
             }
 
             m_checkingUpdates = false;

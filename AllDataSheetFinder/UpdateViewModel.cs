@@ -36,66 +36,101 @@ namespace AllDataSheetFinder
             set { m_progress = value; RaisePropertyChanged("Progress"); }
         }
 
+        private bool m_downloadSuccessful = false;
+        public bool DownloadSuccessful
+        {
+            get { return m_downloadSuccessful; }
+            private set { m_downloadSuccessful = value; RaisePropertyChanged("DownloadSuccessful"); }
+        }
+
+        private bool m_extractSuccessful = false;
+        public bool ExtractSuccessful
+        {
+            get { return m_extractSuccessful; }
+            private set { m_extractSuccessful = value;  RaisePropertyChanged("ExtractSuccessful"); }
+        }
+
         private async void DoUpdate(string link)
         {
             string zipFilePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateFile;
-            string extractPath =Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+            string extractPath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
 
-            HttpWebRequest request = Requests.CreateDefaultRequest(link);
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            try
             {
-                using (Stream stream = response.GetResponseStream())
+                HttpWebRequest request = Requests.CreateDefaultRequest(link);
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
                 {
-                    Text = Global.GetStringResource("StringDownloadingUpdate");
-                    using (FileStream file = new FileStream(zipFilePath, FileMode.Create))
+                    using (Stream stream = response.GetResponseStream())
                     {
-                        int len;
-                        byte[] buffer = new byte[4096];
-                        while((len = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        Text = Global.GetStringResource("StringDownloadingUpdate");
+                        using (FileStream file = new FileStream(zipFilePath, FileMode.Create))
                         {
-                            await file.WriteAsync(buffer, 0, len);
-                            Progress = (int)((decimal)(file.Position - 1) / (decimal)response.ContentLength * 50M);
-                            Text = Global.GetStringResource("StringDownloadingUpdate") + Environment.NewLine + ((file.Position - 1) / 1024).ToString() + "/" + (response.ContentLength / 1024).ToString() + " KB";
+                            int len;
+                            byte[] buffer = new byte[4096];
+                            while ((len = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            {
+                                await file.WriteAsync(buffer, 0, len);
+                                Progress = (int)((decimal)(file.Position - 1) / (decimal)response.ContentLength * 50M);
+                                Text = Global.GetStringResource("StringDownloadingUpdate") + Environment.NewLine + ((file.Position - 1) / 1024).ToString() + "/" + (response.ContentLength / 1024).ToString() + " KB";
+                            }
                         }
                     }
                 }
             }
+            catch
+            {
+                Global.Dialogs.Close(this);
+                return;
+            }
+
+            m_downloadSuccessful = true;
 
             Text = Global.GetStringResource("StringExtractingUpdate");
-            if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
 
-            await Task.Run(() =>
+            try
             {
-                long totalSize = 0;
-                long transferred = 0;
-                long oldTransferred = 0;
-                ZipEntry oldEntry = null;
-                using (ZipFile zip = new ZipFile(zipFilePath))
+                if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
+
+                await Task.Run(() =>
                 {
-                    foreach (ZipEntry item in zip.Entries) totalSize += item.UncompressedSize;
-
-                    zip.ExtractProgress += (s, e) =>
+                    long totalSize = 0;
+                    long transferred = 0;
+                    long oldTransferred = 0;
+                    ZipEntry oldEntry = null;
+                    using (ZipFile zip = new ZipFile(zipFilePath))
                     {
-                        if(e.CurrentEntry != oldEntry)
-                        {
-                            oldEntry = e.CurrentEntry;
-                            oldTransferred = 0;
-                        }
-                        if (e.EventType == ZipProgressEventType.Extracting_EntryBytesWritten)
-                        {
-                            transferred += e.BytesTransferred - oldTransferred;
-                            oldTransferred = e.BytesTransferred;
-                        }
+                        foreach (ZipEntry item in zip.Entries) totalSize += item.UncompressedSize;
 
-                        InvokeWindow.Invoke(() =>
+                        zip.ExtractProgress += (s, e) =>
                         {
-                            Text = Global.GetStringResource("StringExtractingUpdate") + Environment.NewLine + (transferred / 1024).ToString() + "/" + (totalSize / 1024).ToString() + " KB";
-                            Progress = 50 + (int)((decimal)transferred / (decimal)totalSize * 50M);
-                        });
-                    };
-                    zip.ExtractAll(extractPath, ExtractExistingFileAction.OverwriteSilently);
-                }
-            });
+                            if (e.CurrentEntry != oldEntry)
+                            {
+                                oldEntry = e.CurrentEntry;
+                                oldTransferred = 0;
+                            }
+                            if (e.EventType == ZipProgressEventType.Extracting_EntryBytesWritten)
+                            {
+                                transferred += e.BytesTransferred - oldTransferred;
+                                oldTransferred = e.BytesTransferred;
+                            }
+
+                            InvokeWindow.Invoke(() =>
+                            {
+                                Text = Global.GetStringResource("StringExtractingUpdate") + Environment.NewLine + (transferred / 1024).ToString() + "/" + (totalSize / 1024).ToString() + " KB";
+                                Progress = 50 + (int)((decimal)transferred / (decimal)totalSize * 50M);
+                            });
+                        };
+                        zip.ExtractAll(extractPath, ExtractExistingFileAction.OverwriteSilently);
+                    }
+                });
+            }
+            catch
+            {
+                Global.Dialogs.Close(this);
+                return;
+            }
+
+            m_extractSuccessful = true;
 
             Global.Dialogs.Close(this);
         }

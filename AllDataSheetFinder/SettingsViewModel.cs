@@ -340,7 +340,7 @@ namespace AllDataSheetFinder
 
         private void CheckUpdates(object param)
         {
-            Global.Main.CheckForUpdates();
+            Global.Main.CheckForUpdates(true);
         }
 
         private void SelectAppDataPath(object param)
