@@ -76,8 +76,8 @@ namespace AllDataSheetFinder
             {
                 m_actionsCount = value;
                 Mouse.OverrideCursor = (m_actionsCount <= 0 ? null : Cursors.AppStarting);
-                RaisePropertyChanged("ActionsCount");
-                RaisePropertyChanged("TaskbarProgressState");
+                RaisePropertyChanged(nameof(ActionsCount));
+                RaisePropertyChanged(nameof(TaskbarProgressState));
             }
         }
         public TaskbarItemProgressState TaskbarProgressState
@@ -93,11 +93,11 @@ namespace AllDataSheetFinder
             set
             {
                 m_searching = value;
-                RaisePropertyChanged("Searching");
+                RaisePropertyChanged(nameof(Searching));
                 m_searchCommand.RaiseCanExecuteChanged();
                 m_loadMoreResultCommand.RaiseCanExecuteChanged();
                 m_showFavouritesCommand.RaiseCanExecuteChanged();
-                RaisePropertyChanged("LoadMoreVisible");
+                RaisePropertyChanged(nameof(LoadMoreVisible));
             }
         }
 
@@ -108,7 +108,7 @@ namespace AllDataSheetFinder
             set
             {
                 m_searchField = value;
-                RaisePropertyChanged("SearchField");
+                RaisePropertyChanged(nameof(SearchField));
                 m_searchCommand.RaiseCanExecuteChanged();
 
                 if (IsFavouritesMode) m_filteredResults.Refresh();
@@ -138,7 +138,7 @@ namespace AllDataSheetFinder
         public PartViewModel SelectedResult
         {
             get { return m_selectedResult; }
-            set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
+            set { m_selectedResult = value; RaisePropertyChanged(nameof(SelectedResult)); }
         }
 
         private bool m_isFavouritesMode = false;
@@ -148,8 +148,8 @@ namespace AllDataSheetFinder
             set
             {
                 m_isFavouritesMode = value;
-                RaisePropertyChanged("IsFavouritesMode");
-                RaisePropertyChanged("LoadMoreVisible");
+                RaisePropertyChanged(nameof(IsFavouritesMode));
+                RaisePropertyChanged(nameof(LoadMoreVisible));
                 m_loadMoreResultCommand.RaiseCanExecuteChanged();
             }
         }

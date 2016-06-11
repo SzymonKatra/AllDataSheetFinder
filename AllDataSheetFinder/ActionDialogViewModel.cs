@@ -28,7 +28,7 @@ namespace AllDataSheetFinder
         public string Message
         {
             get { return m_message; }
-            set { m_message = value; RaisePropertyChanged("Message"); }
+            set { m_message = value; RaisePropertyChanged(nameof(Message)); }
         }
 
         private RelayCommand m_runWorkCommand;

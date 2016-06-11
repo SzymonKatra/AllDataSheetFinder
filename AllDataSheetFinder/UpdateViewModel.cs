@@ -26,28 +26,28 @@ namespace AllDataSheetFinder
         public string Text
         {
             get { return m_text; }
-            set { m_text = value; RaisePropertyChanged("Text"); }
+            set { m_text = value; RaisePropertyChanged(nameof(Text)); }
         }
 
         private int m_progress;
         public int Progress
         {
             get { return m_progress; }
-            set { m_progress = value; RaisePropertyChanged("Progress"); }
+            set { m_progress = value; RaisePropertyChanged(nameof(Progress)); }
         }
 
         private bool m_downloadSuccessful = false;
         public bool DownloadSuccessful
         {
             get { return m_downloadSuccessful; }
-            private set { m_downloadSuccessful = value; RaisePropertyChanged("DownloadSuccessful"); }
+            private set { m_downloadSuccessful = value; RaisePropertyChanged(nameof(DownloadSuccessful)); }
         }
 
         private bool m_extractSuccessful = false;
         public bool ExtractSuccessful
         {
             get { return m_extractSuccessful; }
-            private set { m_extractSuccessful = value;  RaisePropertyChanged("ExtractSuccessful"); }
+            private set { m_extractSuccessful = value;  RaisePropertyChanged(nameof(ExtractSuccessful)); }
         }
 
         private async void DoUpdate(string link)

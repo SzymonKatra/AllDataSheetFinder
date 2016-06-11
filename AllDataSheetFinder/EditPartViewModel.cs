@@ -75,28 +75,28 @@ namespace AllDataSheetFinder
         public string Description
         {
             get { return m_description; }
-            set { m_description = value; RaisePropertyChanged("Description"); }
+            set { m_description = value; RaisePropertyChanged(nameof(Description)); }
         }
 
         private string m_manufacturer;
         public string Manufacturer
         {
             get { return m_manufacturer; }
-            set { m_manufacturer = value; RaisePropertyChanged("Manufacturer"); }
+            set { m_manufacturer = value; RaisePropertyChanged(nameof(Manufacturer)); }
         }
 
         private string m_manufacturerLogo;
         public string ManufacturerLogo
         {
             get { return m_manufacturerLogo; }
-            set { m_manufacturerLogo = value; RaisePropertyChanged("ManufacturerLogo"); }
+            set { m_manufacturerLogo = value; RaisePropertyChanged(nameof(ManufacturerLogo)); }
         }
 
         private string m_manufacturerSite;
         public string ManufacturerSite
         {
             get { return m_manufacturerSite; }
-            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); }
+            set { m_manufacturerSite = value; RaisePropertyChanged(nameof(ManufacturerSite)); }
         }
 
         private SeparatedValuesValidator m_tags;
