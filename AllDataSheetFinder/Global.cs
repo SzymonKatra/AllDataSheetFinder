@@ -227,10 +227,6 @@ namespace AllDataSheetFinder
 
             if (!File.Exists(path))
             {
-                Configuration.MaxDatasheetsCacheSize = 100 * 1024 * 1024; // 100 MiB
-                Configuration.Language = string.Empty;
-                Configuration.FavouritesOnStart = false;
-                Configuration.EnableSmoothScrolling = true;
                 SaveConfiguration();
             }
             else
