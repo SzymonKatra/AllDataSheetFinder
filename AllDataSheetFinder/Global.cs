@@ -28,15 +28,15 @@ namespace AllDataSheetFinder
         public static readonly string RegistryKeyName = @"Software\AllDataSheetFinder";
 
         public static string AppDataPath { get; private set; }
-        public static readonly string ImagesCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Images";
-        public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
+        public static readonly string ImagesCacheDirectory = $"Cache{Path.DirectorySeparatorChar}Images";
+        public static readonly string DatasheetsCacheDirectory = $"Cache{Path.DirectorySeparatorChar}Datasheets";
         public static readonly string SavedDatasheetsDirectory = "SavedDatasheets";
         public static readonly string UpdateFile = "update.zip";
         public static readonly string UpdateExtractDirectory = "Update";
         public static readonly string ConfigFile = "config.xml";
-        public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
-        public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
-        public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
+        public static readonly string SavedPartsFile = $"{SavedDatasheetsDirectory}{Path.DirectorySeparatorChar}parts.xml";
+        public static readonly string LanguagesDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}Languages";
+        public static readonly string ErrorLogFileName = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}{Path.DirectorySeparatorChar}AllDatasheetFinder.log";
 
         public static readonly string ImagesFilter = $"{GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
         public static readonly string PdfFilter = $"{GetStringResource("StringPdfFiles")}|*.pdf";
