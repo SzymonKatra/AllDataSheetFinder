@@ -235,6 +235,7 @@ namespace AllDataSheetFinder
             }
             else
             {
+                bool deserializeError = false;
                 using (FileStream file = new FileStream(path, FileMode.Open))
                 {
                     try
@@ -244,10 +245,14 @@ namespace AllDataSheetFinder
                     }
                     catch
                     {
-                        file.Close();
-                        File.Delete(path);
-                        LoadConfiguration();
+                        deserializeError = true;
                     }
+                }
+
+                if (deserializeError)
+                {
+                    File.Delete(path);
+                    LoadConfiguration();
                 }
             }
         }
