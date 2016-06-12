@@ -267,6 +267,7 @@ namespace AllDataSheetFinder
             string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{SavedPartsFile}";
             if (File.Exists(path))
             {
+                bool deserializeError = false;
                 using (FileStream file = new FileStream(path, FileMode.Open))
                 {
                     try
@@ -275,10 +276,11 @@ namespace AllDataSheetFinder
                     }
                     catch
                     {
-                        file.Close();
-                        File.Delete(path);
+                        deserializeError = true;
                     }
                 }
+
+                if (deserializeError) File.Delete(path);
             }
         }
         public static void SaveSavedParts()
