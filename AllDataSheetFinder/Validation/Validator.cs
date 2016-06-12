@@ -124,7 +124,7 @@ namespace AllDataSheetFinder.Validation
         {
             get
             {
-                if (columnName != "Input") return string.Empty;
+                if (columnName != nameof(Input)) return string.Empty;
                 return Error;
             }
         }
