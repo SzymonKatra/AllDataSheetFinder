@@ -445,7 +445,7 @@ namespace AllDataSheetFinder
             m_filteredResults.Refresh();
         }
 
-        public async void CheckForUpdates(bool messageBoxOnError = false)
+        public async void CheckForUpdates(bool raisedManually = false)
         {
             if (m_checkingUpdates) return;
 
@@ -465,13 +465,14 @@ namespace AllDataSheetFinder
                 }
                 catch
                 {
-                    if (messageBoxOnError) Global.MessageBox(this, Global.GetStringResource("StringCheckUpdatesError"), MessageBoxExPredefinedButtons.Ok);
+                    if (raisedManually) Global.MessageBox(this, Global.GetStringResource("StringCheckUpdatesError"), MessageBoxExPredefinedButtons.Ok);
                 }
             }
 
             Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
             if (info != null && info.Value.Version > currentVersion) newVersion = true;
 
+            if (raisedManually && !newVersion) Global.MessageBox(this, Global.GetStringResource("StringNoUpdatesFound"), MessageBoxExPredefinedButtons.Ok);
             if (newVersion && Global.MessageBox(this, Global.GetStringResource("StringUpdateAvailable"), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
             {
                 UpdateViewModel dialogViewModel = new UpdateViewModel(info.Value.Link);

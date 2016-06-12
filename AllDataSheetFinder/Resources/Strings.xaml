@@ -80,5 +80,6 @@ If you ignore this, you should manually delete remaining files from
     <s:String x:Key="StringCheckUpdatesError">An error occurred while checking for new updates</s:String>
     <s:String x:Key="StringUpdateDownloadError">An error occurred while downloading update</s:String>
     <s:String x:Key="StringUpdateExtractError">An error occurred while extracting update</s:String>
+    <s:String x:Key="StringNoUpdatesFound">You are using the latest version</s:String>
     
 </ResourceDictionary>
