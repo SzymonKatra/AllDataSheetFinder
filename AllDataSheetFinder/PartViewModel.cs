@@ -33,7 +33,29 @@ namespace AllDataSheetFinder
             if (modelValid)
             {
                 if (!model.Custom) m_context = new AllDataSheetPart(DatasheetSiteLink);
-                CheckState();
+
+                // can't call CheckState because it will result in a call to virtual method (RaisePropertyChanged) by setting State
+                // set m_state insead of State in constructor
+                if (model.Custom)
+                {
+                    m_state = PartDatasheetState.Saved;
+                }
+                else
+                {
+                    string code = Code;
+
+                    string pdfPath = Global.BuildSavedDatasheetPath(code);
+                    if (File.Exists(pdfPath))
+                    {
+                        m_state = PartDatasheetState.Saved;
+                    }
+                    else
+                    {
+                        pdfPath = Global.BuildCachedDatasheetPath(code);
+                        if (File.Exists(pdfPath)) m_state = PartDatasheetState.Cached;
+                        else m_state = PartDatasheetState.NotDownloaded;
+                    }
+                }
             }
         }
 
