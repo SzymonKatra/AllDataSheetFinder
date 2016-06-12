@@ -95,7 +95,7 @@ namespace AllDataSheetFinder
         public static string GetStringResource(object key)
         {
             object result = Application.Current.TryFindResource(key);
-            return (result == null ? key + " NOT FOUND - RESOURCE ERROR" : (string)result);
+            return (result == null ? key.ToString() : (string)result);
         }
         public static MessageBoxExButton MessageBox(object viewModel, string text, MessageBoxExPredefinedButtons buttons)
         {
