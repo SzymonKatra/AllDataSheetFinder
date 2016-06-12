@@ -20,7 +20,7 @@ namespace AllDataSheetFinder
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         private Mutex m_oneInstanceMutex;
 
@@ -95,5 +95,33 @@ namespace AllDataSheetFinder
                 if (vm.SearchCommand.CanExecute(null)) vm.SearchCommand.Execute(null);
             }
         }
+
+        #region IDisposable
+        private bool m_disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!m_disposed)
+            {
+                if (disposing)
+                {
+                    // managed
+                }
+
+                // unmanaged
+
+                m_disposed = true;
+            }
+        }
+        ~MainWindow()
+        {
+            Dispose(false);
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
