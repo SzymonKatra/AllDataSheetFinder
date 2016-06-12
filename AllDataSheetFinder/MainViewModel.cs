@@ -38,25 +38,7 @@ namespace AllDataSheetFinder
             m_addCustomCommand = new RelayCommand(AddCustom);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
-            m_filteredResults.Filter = (x) =>
-            {
-                if (!IsFavouritesMode) return true;
-
-                PartViewModel part = (PartViewModel)x;
-                string[] tokens = m_searchField.ToUpper().Split(' ');
-                string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
-
-                foreach (var item in tokens)
-                {
-                    var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
-                    if (result == null)
-                    {
-                        if (!upperName.Contains(item)) return false;
-                    }
-                }
-
-                return true;
-            };
+            m_filteredResults.Filter = TagsFilter;
             m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
@@ -491,6 +473,25 @@ namespace AllDataSheetFinder
             }
 
             m_checkingUpdates = false;
+        }
+        private bool TagsFilter(object x)
+        {
+            if (!IsFavouritesMode) return true;
+
+            PartViewModel part = (PartViewModel)x;
+            string[] tokens = m_searchField.ToUpper().Split(' ');
+            string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
+
+            foreach (var item in tokens)
+            {
+                var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
+                if (result == null)
+                {
+                    if (!upperName.Contains(item)) return false;
+                }
+            }
+
+            return true;
         }
     }
 }
