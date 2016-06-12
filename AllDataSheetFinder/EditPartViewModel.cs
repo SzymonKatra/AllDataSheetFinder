@@ -155,9 +155,9 @@ namespace AllDataSheetFinder
             {
                 string resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileName(m_manufacturerLogo);
                 int count = 1;
-                while(File.Exists(resultImagePath))
+                while (File.Exists(resultImagePath))
                 {
-                    resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(m_manufacturerLogo) + "(" + count.ToString() + ")" + Path.GetExtension(m_manufacturerLogo);
+                    resultImagePath = $"{imagesPath}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(m_manufacturerLogo)}({count.ToString()}){Path.GetExtension(m_manufacturerLogo)}";
                     count++;
                 }
                 File.Copy(m_manufacturerLogo, resultImagePath);
@@ -215,7 +215,7 @@ namespace AllDataSheetFinder
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
-            openFileDialog.Filter = Global.GetStringResource("StringGraphicFiles") + "|" + "*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+            openFileDialog.Filter = $"{Global.GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             ManufacturerLogo = openFileDialog.FileName;
         }
