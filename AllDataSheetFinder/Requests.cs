@@ -13,7 +13,7 @@ namespace AllDataSheetFinder
         public static HttpWebRequest CreateDefaultRequest(string url)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 0; AllDataSheetFinder)";
+            request.UserAgent = Global.RequestsUserAgent;
             request.Method = "GET";
             return request;
         }

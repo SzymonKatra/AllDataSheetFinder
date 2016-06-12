@@ -42,6 +42,8 @@ namespace AllDataSheetFinder
         public static readonly string ImagesFilter = $"{GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
         public static readonly string PdfFilter = $"{GetStringResource("StringPdfFiles")}|*.pdf";
 
+        public static readonly string RequestsUserAgent = "Mozilla/4.0 (compatible; MSIE 0; AllDataSheetFinder)";
+
         public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
 
         public static readonly string UpdateVersionLink = "https://goo.gl/G3dvUf"; // this link refers to link above. it is shortened by google url shortener. with this, i can see how much people is using AllDataSheetFinder
