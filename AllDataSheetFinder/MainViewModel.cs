@@ -383,7 +383,7 @@ namespace AllDataSheetFinder
         private void AddCustom(object param)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.Filter = Global.PdfFilter;
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             foreach (var fileName in openFileDialog.FileNames)
@@ -469,6 +469,7 @@ namespace AllDataSheetFinder
 
             m_checkingUpdates = false;
         }
+
         private bool TagsFilter(object x)
         {
             if (!IsFavouritesMode) return true;
