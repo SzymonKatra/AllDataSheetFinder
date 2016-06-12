@@ -59,11 +59,11 @@ namespace AllDataSheetFinder
             int count = 1;
             while (File.Exists(resultFilePath))
             {
-                resultFilePath = Global.BuildSavedDatasheetPath(fileName + '(' + count.ToString() + ')');
+                resultFilePath = Global.BuildSavedDatasheetPath($"{fileName}({count})");
                 count++;
             }
 
-            if (count > 1) fileName += '(' + (count - 1).ToString() + ')';
+            if (count > 1) fileName += $"({(count - 1)})";
 
             PartViewModel result = new PartViewModel();
             PdfDocument document = null;
@@ -251,7 +251,7 @@ namespace AllDataSheetFinder
         {
             string file = ImageFileName;
             if (string.IsNullOrWhiteSpace(file)) return;
-            string imagePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory + Path.DirectorySeparatorChar + file;
+            string imagePath = $"{Global.AppDataPath}{Path.DirectorySeparatorChar}{Global.ImagesCacheDirectory}{Path.DirectorySeparatorChar}{file}";
 
             if (!Global.CachedImages.ContainsKey(file)) Global.CachedImages.Add(file, BitmapImageLoadingInfo.CreateDefault());
             BitmapImageLoadingInfo info = Global.CachedImages[file];
@@ -615,7 +615,7 @@ namespace AllDataSheetFinder
             manufacturer = ToValidCodeForm(manufacturer);
             hash = ToValidCodeForm(hash);
 
-            return string.Format("{0}_{1}_{2}", name, manufacturer, hash);
+            return $"{name}_{manufacturer}_{hash}";
         }
 
         private static string ToValidCodeForm(string value)
