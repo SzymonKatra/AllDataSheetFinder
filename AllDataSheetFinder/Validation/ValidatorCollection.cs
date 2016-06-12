@@ -51,7 +51,7 @@ namespace AllDataSheetFinder.Validation
 
         private void item_IsValidChanged(object sender, EventArgs e)
         {
-            if (m_isValidChangedAction != null) m_isValidChangedAction();
+            m_isValidChangedAction?.Invoke();
         }
     }
 }
