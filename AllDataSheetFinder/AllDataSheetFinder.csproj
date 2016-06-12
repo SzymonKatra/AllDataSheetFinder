@@ -119,6 +119,7 @@
     <Compile Include="EditPartWindow.xaml.cs">
       <DependentUpon>EditPartWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewVersionInfo.cs" />
     <Compile Include="PartMoreInfoState.cs" />
     <Compile Include="Part.cs" />
     <Compile Include="PartViewModel.cs" />
