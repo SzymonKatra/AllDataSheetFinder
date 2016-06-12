@@ -79,6 +79,8 @@ namespace AllDataSheetFinderUpdater
             }
 
             Process.Start($"{destinationPath}{Path.DirectorySeparatorChar}AllDataSheetFinder.exe");
+
+            m_oneInstanceMutex.Close();
         }
     }
 }
