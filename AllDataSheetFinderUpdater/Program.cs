@@ -18,6 +18,7 @@ namespace AllDataSheetFinderUpdater
 
         private static Mutex m_oneInstanceMutex;
 
+        [STAThread]
         static void Main(string[] args)
         {
             Mutex tmpMutex;
