@@ -106,6 +106,7 @@ namespace AllDataSheetFinder
                 if (disposing)
                 {
                     // managed
+                    m_oneInstanceMutex.Dispose();
                 }
 
                 // unmanaged
