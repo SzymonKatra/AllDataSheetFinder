@@ -32,7 +32,7 @@ namespace AllDataSheetFinder
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
             {
-                if (!model.Custom) MakeContext();
+                if (!model.Custom) m_context = new AllDataSheetPart(DatasheetSiteLink);
                 CheckState();
             }
         }
