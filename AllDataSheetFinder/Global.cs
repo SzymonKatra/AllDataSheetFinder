@@ -40,7 +40,8 @@ namespace AllDataSheetFinder
 
         public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
 
-        public static readonly string UpdateVersionLink = "https://www.dropbox.com/s/ypmujj9ikjl8nf1/update_info.xml?dl=1";
+        public static readonly string UpdateVersionLink = "https://goo.gl/G3dvUf";
+        public static readonly string AdditionalUpdateVersionLink = "https://www.dropbox.com/s/ypmujj9ikjl8nf1/update_info.xml?dl=1";
 
         private static XmlSerializer s_serializerConfig = new XmlSerializer(typeof(Config));
         private static XmlSerializer s_serialzierSavedParts = new XmlSerializer(typeof(List<Part>));
