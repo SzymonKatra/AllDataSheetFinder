@@ -215,7 +215,7 @@ namespace AllDataSheetFinder
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
-            openFileDialog.Filter = $"{Global.GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+            openFileDialog.Filter = Global.ImagesFilter;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             ManufacturerLogo = openFileDialog.FileName;
         }

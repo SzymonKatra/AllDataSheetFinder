@@ -38,6 +38,8 @@ namespace AllDataSheetFinder
         public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
         public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
 
+        public static readonly string ImagesFilter = $"{GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+
         public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
 
         public static readonly string UpdateVersionLink = "https://goo.gl/G3dvUf"; // this link refers to link above. it is shortened by google url shortener. with this, i can see how much people is using AllDataSheetFinder
