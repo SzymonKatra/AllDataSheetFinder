@@ -32,7 +32,7 @@ namespace AllDataSheetFinder
                     try
                     {
                         CultureInfo culture = new CultureInfo(Name);
-                        return culture.NativeName;
+                        return culture.NativeName + " [" + Name + "]";
                     }
                     catch
                     {
