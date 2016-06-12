@@ -84,7 +84,7 @@ namespace AllDataSheetFinder
 
         public static AllDataSheetSearchResult Search(string value)
         {
-            string url = SiteAddress + "?" + "Searchword=" + value + "&sPage=1&sField=4";
+            string url = $"{SiteAddress}?Searchword={value}&sPage=1&sField=4";
             HttpWebRequest request = Requests.CreateDefaultRequest(url);
             string result = Requests.ReadResponseString(request);
 
@@ -123,7 +123,7 @@ namespace AllDataSheetFinder
 
             while (true)
             {
-                string url = SiteAddress + "?" + "Searchword=" + searchContext.SearchValue + "&sPage=" + searchContext.NextPage + "&sField=" + (int)searchContext.Option;
+                string url = $"{SiteAddress}?Searchword={searchContext.SearchValue}&sPage={searchContext.NextPage}&sField={(int)searchContext.Option}";
                 HttpWebRequest request = Requests.CreateDefaultRequest(url);
                 request.Referer = searchContext.Referer;
                 string result = Requests.ReadResponseString(request);
