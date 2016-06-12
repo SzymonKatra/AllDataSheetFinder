@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MVVMUtils;
+﻿using MVVMUtils;
 using System.Windows.Input;
 using AllDataSheetFinder.Validation;
 using AllDataSheetFinder.Controls;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
@@ -13,10 +11,7 @@ using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
 using Microsoft.Win32;
-using System.Net;
-using System.Xml.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Shell;
 
 namespace AllDataSheetFinder
