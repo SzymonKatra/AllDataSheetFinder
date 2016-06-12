@@ -462,7 +462,7 @@ namespace AllDataSheetFinder
                     string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
                     string appDir = AppDomain.CurrentDomain.BaseDirectory;
                     while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
-                    Process.Start(basePath + Path.DirectorySeparatorChar + info.Value.Execute, "\"" + basePath + Path.DirectorySeparatorChar + info.Value.Files + "\" \"" + appDir + "\"");
+                    Process.Start($"{basePath}{Path.DirectorySeparatorChar}{info.Value.Execute}", $"\"{basePath}{Path.DirectorySeparatorChar}{info.Value.Files}\" \"{appDir}\"");
                     NeedClose();
                 }
             }
