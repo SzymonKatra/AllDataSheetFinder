@@ -1,10 +1,6 @@
 ﻿using MVVMUtils;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllDataSheetFinder.Validation
 {
@@ -113,20 +109,18 @@ namespace AllDataSheetFinder.Validation
 
         protected virtual void OnIsValidChanged()
         {
-            EventHandler handler = IsValidChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            IsValidChanged?.Invoke(this, EventArgs.Empty);
         }
         protected virtual void OnResultChanged(ValidatorResultChangedEventArgs<T> e)
         {
-            EventHandler<ValidatorResultChangedEventArgs<T>> handler = ResultChanged;
-            if (handler != null) handler(this, e);
+            ResultChanged?.Invoke(this, e);
         }
 
         public string this[string columnName]
         {
             get
             {
-                if (columnName != "Input") return string.Empty;
+                if (columnName != nameof(Input)) return string.Empty;
                 return Error;
             }
         }

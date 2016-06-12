@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AllDataSheetFinder
@@ -13,8 +9,8 @@ namespace AllDataSheetFinder
         public static HttpWebRequest CreateDefaultRequest(string url)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 0; AllDataSheetFinder)";
-            request.Method = "GET";
+            request.UserAgent = Global.RequestsUserAgent;
+            request.Method = WebRequestMethods.Http.Get;
             return request;
         }
         public static string ReadResponseString(HttpWebRequest request)

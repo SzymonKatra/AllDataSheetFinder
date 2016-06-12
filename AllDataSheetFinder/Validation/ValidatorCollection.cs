@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllDataSheetFinder.Validation
 {
@@ -51,7 +48,7 @@ namespace AllDataSheetFinder.Validation
 
         private void item_IsValidChanged(object sender, EventArgs e)
         {
-            if (m_isValidChangedAction != null) m_isValidChangedAction();
+            m_isValidChangedAction?.Invoke();
         }
     }
 }

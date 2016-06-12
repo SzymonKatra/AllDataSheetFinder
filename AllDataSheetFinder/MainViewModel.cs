@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
@@ -13,10 +11,7 @@ using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
 using Microsoft.Win32;
-using System.Net;
-using System.Xml.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Shell;
 
 namespace AllDataSheetFinder
@@ -38,25 +33,7 @@ namespace AllDataSheetFinder
             m_addCustomCommand = new RelayCommand(AddCustom);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
-            m_filteredResults.Filter = (x) =>
-            {
-                if (!IsFavouritesMode) return true;
-
-                PartViewModel part = (PartViewModel)x;
-                string[] tokens = m_searchField.ToUpper().Split(' ');
-                string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
-
-                foreach (var item in tokens)
-                {
-                    var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
-                    if (result == null)
-                    {
-                        if (!upperName.Contains(item)) return false;
-                    }
-                }
-
-                return true;
-            };
+            m_filteredResults.Filter = TagsFilter;
             m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
@@ -211,11 +188,6 @@ namespace AllDataSheetFinder
         public bool LoadMoreVisible
         {
             get { return !IsFavouritesMode && m_searchContext != null && m_searchContext.CanLoadMore; }
-        }
-
-        public bool EnableSmoothScrolling
-        {
-            get { return Global.Configuration.EnableSmoothScrolling; }
         }
 
         private void AddResults(List<AllDataSheetPart> results)
@@ -406,7 +378,7 @@ namespace AllDataSheetFinder
         private void AddCustom(object param)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.Filter = Global.PdfFilter;
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             foreach (var fileName in openFileDialog.FileNames)
@@ -485,12 +457,32 @@ namespace AllDataSheetFinder
                     string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
                     string appDir = AppDomain.CurrentDomain.BaseDirectory;
                     while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
-                    Process.Start(basePath + Path.DirectorySeparatorChar + info.Value.Execute, "\"" + basePath + Path.DirectorySeparatorChar + info.Value.Files + "\" \"" + appDir + "\"");
+                    Process.Start($"{basePath}{Path.DirectorySeparatorChar}{info.Value.Execute}", $"\"{basePath}{Path.DirectorySeparatorChar}{info.Value.Files}\" \"{appDir}\"");
                     NeedClose();
                 }
             }
 
             m_checkingUpdates = false;
+        }
+
+        private bool TagsFilter(object x)
+        {
+            if (!IsFavouritesMode) return true;
+
+            PartViewModel part = (PartViewModel)x;
+            string[] tokens = m_searchField.ToUpper().Split(' ');
+            string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
+
+            foreach (var item in tokens)
+            {
+                var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
+                if (result == null)
+                {
+                    if (!upperName.Contains(item)) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

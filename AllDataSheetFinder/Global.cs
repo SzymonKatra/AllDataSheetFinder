@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.IO;
 using System.Xml.Serialization;
-using System.Windows.Media.Imaging;
 using MVVMUtils;
 using AllDataSheetFinder.Controls;
 using System.Globalization;
@@ -26,17 +23,23 @@ namespace AllDataSheetFinder
         }
 
         public static readonly string RegistryKeyName = @"Software\AllDataSheetFinder";
+        public static readonly string RegistryDataPathName = "DataPath";
 
         public static string AppDataPath { get; private set; }
-        public static readonly string ImagesCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Images";
-        public static readonly string DatasheetsCacheDirectory = "Cache" + Path.DirectorySeparatorChar + "Datasheets";
+        public static readonly string ImagesCacheDirectory = $"Cache{Path.DirectorySeparatorChar}Images";
+        public static readonly string DatasheetsCacheDirectory = $"Cache{Path.DirectorySeparatorChar}Datasheets";
         public static readonly string SavedDatasheetsDirectory = "SavedDatasheets";
         public static readonly string UpdateFile = "update.zip";
         public static readonly string UpdateExtractDirectory = "Update";
         public static readonly string ConfigFile = "config.xml";
-        public static readonly string SavedPartsFile = SavedDatasheetsDirectory + Path.DirectorySeparatorChar + "parts.xml";
-        public static readonly string LanguagesDirectory = AppDomain.CurrentDomain.BaseDirectory + "Languages";
-        public static readonly string ErrorLogFileName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + Path.DirectorySeparatorChar + "AllDatasheetFinder.log";
+        public static readonly string SavedPartsFile = $"{SavedDatasheetsDirectory}{Path.DirectorySeparatorChar}parts.xml";
+        public static readonly string LanguagesDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}Languages";
+        public static readonly string ErrorLogFileName = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}{Path.DirectorySeparatorChar}AllDatasheetFinder.log";
+
+        public static readonly string ImagesFilter = $"{GetStringResource("StringGraphicFiles")}|*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+        public static readonly string PdfFilter = $"{GetStringResource("StringPdfFiles")}|*.pdf";
+
+        public static readonly string RequestsUserAgent = "Mozilla/4.0 (compatible; MSIE 0; AllDataSheetFinder)";
 
         public static readonly string MutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
 
@@ -92,7 +95,7 @@ namespace AllDataSheetFinder
         public static string GetStringResource(object key)
         {
             object result = Application.Current.TryFindResource(key);
-            return (result == null ? key + " NOT FOUND - RESOURCE ERROR" : (string)result);
+            return (result == null ? key.ToString() : (string)result);
         }
         public static MessageBoxExButton MessageBox(object viewModel, string text, MessageBoxExPredefinedButtons buttons)
         {
@@ -116,7 +119,7 @@ namespace AllDataSheetFinder
 
             if (string.IsNullOrEmpty(language))
             {
-                string path = LanguagesDirectory + Path.DirectorySeparatorChar + "Strings." + CultureInfo.CurrentCulture.Name + ".xaml";
+                string path = $"{LanguagesDirectory}{Path.DirectorySeparatorChar}Strings.{CultureInfo.CurrentCulture.Name}.xaml";
                 if (File.Exists(path))
                 {
                     s_stringsDictionary.Source = new Uri(path, UriKind.Absolute);
@@ -147,11 +150,11 @@ namespace AllDataSheetFinder
 
         public static void InitializeAll()
         {
-            AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
+            AppDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}{Path.DirectorySeparatorChar}AllDataSheetFinder";
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
-            object dataPathObj = key.GetValue("DataPath", null);
-            if (dataPathObj != null) AppDataPath = dataPathObj.ToString(); else key.SetValue("DataPath", AppDataPath);
+            object dataPathObj = key.GetValue(RegistryDataPathName, null);
+            if (dataPathObj != null) AppDataPath = dataPathObj.ToString(); else key.SetValue(RegistryDataPathName, AppDataPath);
             key.Close();
 
             CreateDirectoriesIfNeeded();
@@ -206,7 +209,7 @@ namespace AllDataSheetFinder
             DirectoryExt.Copy(AppDataPath, newPath);
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
-            key.SetValue("DataPath", newPath);
+            key.SetValue(RegistryDataPathName, newPath);
             key.Close();
 
             AppDataPath = newPath;
@@ -232,6 +235,7 @@ namespace AllDataSheetFinder
             }
             else
             {
+                bool deserializeError = false;
                 using (FileStream file = new FileStream(path, FileMode.Open))
                 {
                     try
@@ -241,24 +245,29 @@ namespace AllDataSheetFinder
                     }
                     catch
                     {
-                        file.Close();
-                        File.Delete(path);
-                        LoadConfiguration();
+                        deserializeError = true;
                     }
+                }
+
+                if (deserializeError)
+                {
+                    File.Delete(path);
+                    LoadConfiguration();
                 }
             }
         }
         public static void SaveConfiguration()
         {
-            string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{ConfigFile}";
             using (FileStream file = new FileStream(path, FileMode.Create)) s_serializerConfig.Serialize(file, Configuration);
         }
 
         public static void LoadSavedParts()
         {
-            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{SavedPartsFile}";
             if (File.Exists(path))
             {
+                bool deserializeError = false;
                 using (FileStream file = new FileStream(path, FileMode.Open))
                 {
                     try
@@ -267,30 +276,31 @@ namespace AllDataSheetFinder
                     }
                     catch
                     {
-                        file.Close();
-                        File.Delete(path);
+                        deserializeError = true;
                     }
                 }
+
+                if (deserializeError) File.Delete(path);
             }
         }
         public static void SaveSavedParts()
         {
             CreateDirectoriesIfNeeded();
-            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{SavedPartsFile}";
             using (FileStream file = new FileStream(path, FileMode.Create)) s_serialzierSavedParts.Serialize(file, s_savedParts);
         }
 
         public static string BuildSavedDatasheetPath(string code)
         {
-            return AppDataPath + Path.DirectorySeparatorChar + BuildSavedDatasheetRelativePath(code);
+            return $"{AppDataPath}{Path.DirectorySeparatorChar}{BuildSavedDatasheetRelativePath(code)}";
         }
         public static string BuildSavedDatasheetRelativePath(string code)
         {
-            return SavedDatasheetsDirectory + Path.DirectorySeparatorChar + code + ".pdf";
+            return $"{SavedDatasheetsDirectory}{Path.DirectorySeparatorChar}{code}.pdf";
         }
         public static string BuildCachedDatasheetPath(string code)
         {
-            return AppDataPath + Path.DirectorySeparatorChar + DatasheetsCacheDirectory + Path.DirectorySeparatorChar + code + ".pdf";
+            return $"{AppDataPath}{Path.DirectorySeparatorChar}{DatasheetsCacheDirectory}{Path.DirectorySeparatorChar}{code}.pdf";
         }
     }
 }

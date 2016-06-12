@@ -32,8 +32,30 @@ namespace AllDataSheetFinder
             m_moreInfoState = PartMoreInfoState.Available;
             if (modelValid)
             {
-                if (!model.Custom) MakeContext();
-                CheckState();
+                if (!model.Custom) m_context = new AllDataSheetPart(DatasheetSiteLink);
+
+                // can't call CheckState because it will result in a call to virtual method (RaisePropertyChanged) by setting State
+                // set m_state insead of State in constructor
+                if (model.Custom)
+                {
+                    m_state = PartDatasheetState.Saved;
+                }
+                else
+                {
+                    string code = Code;
+
+                    string pdfPath = Global.BuildSavedDatasheetPath(code);
+                    if (File.Exists(pdfPath))
+                    {
+                        m_state = PartDatasheetState.Saved;
+                    }
+                    else
+                    {
+                        pdfPath = Global.BuildCachedDatasheetPath(code);
+                        if (File.Exists(pdfPath)) m_state = PartDatasheetState.Cached;
+                        else m_state = PartDatasheetState.NotDownloaded;
+                    }
+                }
             }
         }
 
@@ -59,11 +81,11 @@ namespace AllDataSheetFinder
             int count = 1;
             while (File.Exists(resultFilePath))
             {
-                resultFilePath = Global.BuildSavedDatasheetPath(fileName + '(' + count.ToString() + ')');
+                resultFilePath = Global.BuildSavedDatasheetPath($"{fileName}({count})");
                 count++;
             }
 
-            if (count > 1) fileName += '(' + (count - 1).ToString() + ')';
+            if (count > 1) fileName += $"({(count - 1)})";
 
             PartViewModel result = new PartViewModel();
             PdfDocument document = null;
@@ -251,7 +273,7 @@ namespace AllDataSheetFinder
         {
             string file = ImageFileName;
             if (string.IsNullOrWhiteSpace(file)) return;
-            string imagePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory + Path.DirectorySeparatorChar + file;
+            string imagePath = $"{Global.AppDataPath}{Path.DirectorySeparatorChar}{Global.ImagesCacheDirectory}{Path.DirectorySeparatorChar}{file}";
 
             if (!Global.CachedImages.ContainsKey(file)) Global.CachedImages.Add(file, BitmapImageLoadingInfo.CreateDefault());
             BitmapImageLoadingInfo info = Global.CachedImages[file];
@@ -540,11 +562,6 @@ namespace AllDataSheetFinder
             });
             CheckState();
         }
-        public void MakeContext()
-        {
-            m_context = new AllDataSheetPart(DatasheetSiteLink);
-            RaisePropertyChanged(nameof(IsContextValid));
-        }
         public void RebuildTags()
         {
             Tags.Clear();
@@ -615,7 +632,7 @@ namespace AllDataSheetFinder
             manufacturer = ToValidCodeForm(manufacturer);
             hash = ToValidCodeForm(hash);
 
-            return string.Format("{0}_{1}_{2}", name, manufacturer, hash);
+            return $"{name}_{manufacturer}_{hash}";
         }
 
         private static string ToValidCodeForm(string value)

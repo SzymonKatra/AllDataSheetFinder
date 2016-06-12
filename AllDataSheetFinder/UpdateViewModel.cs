@@ -1,8 +1,5 @@
 ﻿using MVVMUtils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zip;
 using System.Net;
@@ -52,8 +49,8 @@ namespace AllDataSheetFinder
 
         private async void DoUpdate(string link)
         {
-            string zipFilePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateFile;
-            string extractPath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+            string zipFilePath = $"{Global.AppDataPath}{Path.DirectorySeparatorChar}{Global.UpdateFile}";
+            string extractPath = $"{Global.AppDataPath}{Path.DirectorySeparatorChar}{Global.UpdateExtractDirectory}";
 
             try
             {
@@ -71,7 +68,7 @@ namespace AllDataSheetFinder
                             {
                                 await file.WriteAsync(buffer, 0, len);
                                 Progress = (int)((decimal)(file.Position - 1) / (decimal)response.ContentLength * 50M);
-                                Text = Global.GetStringResource("StringDownloadingUpdate") + Environment.NewLine + ((file.Position - 1) / 1024).ToString() + "/" + (response.ContentLength / 1024).ToString() + " KB";
+                                Text = $"{Global.GetStringResource("StringDownloadingUpdate")}{Environment.NewLine}{(file.Position - 1) / 1024}/{response.ContentLength / 1024} KB";
                             }
                         }
                     }
@@ -116,7 +113,7 @@ namespace AllDataSheetFinder
 
                             InvokeWindow.Invoke(() =>
                             {
-                                Text = Global.GetStringResource("StringExtractingUpdate") + Environment.NewLine + (transferred / 1024).ToString() + "/" + (totalSize / 1024).ToString() + " KB";
+                                Text = $"{Global.GetStringResource("StringExtractingUpdate")}{Environment.NewLine}{transferred / 1024}/{totalSize / 1024} KB";
                                 Progress = 50 + (int)((decimal)transferred / (decimal)totalSize * 50M);
                             });
                         };
