@@ -14,7 +14,7 @@ namespace AllDataSheetFinder
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
             request.UserAgent = Global.RequestsUserAgent;
-            request.Method = "GET";
+            request.Method = WebRequestMethods.Http.Get;
             return request;
         }
         public static string ReadResponseString(HttpWebRequest request)
