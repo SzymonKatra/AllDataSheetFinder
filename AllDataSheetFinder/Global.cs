@@ -119,7 +119,7 @@ namespace AllDataSheetFinder
 
             if (string.IsNullOrEmpty(language))
             {
-                string path = LanguagesDirectory + Path.DirectorySeparatorChar + "Strings." + CultureInfo.CurrentCulture.Name + ".xaml";
+                string path = $"{LanguagesDirectory}{Path.DirectorySeparatorChar}Strings.{CultureInfo.CurrentCulture.Name}.xaml";
                 if (File.Exists(path))
                 {
                     s_stringsDictionary.Source = new Uri(path, UriKind.Absolute);
@@ -150,7 +150,7 @@ namespace AllDataSheetFinder
 
         public static void InitializeAll()
         {
-            AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "AllDataSheetFinder";
+            AppDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}{Path.DirectorySeparatorChar}AllDataSheetFinder";
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
             object dataPathObj = key.GetValue("DataPath", null);
@@ -253,13 +253,13 @@ namespace AllDataSheetFinder
         }
         public static void SaveConfiguration()
         {
-            string path = AppDataPath + Path.DirectorySeparatorChar + ConfigFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{ConfigFile}";
             using (FileStream file = new FileStream(path, FileMode.Create)) s_serializerConfig.Serialize(file, Configuration);
         }
 
         public static void LoadSavedParts()
         {
-            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{SavedPartsFile}";
             if (File.Exists(path))
             {
                 using (FileStream file = new FileStream(path, FileMode.Open))
@@ -279,21 +279,21 @@ namespace AllDataSheetFinder
         public static void SaveSavedParts()
         {
             CreateDirectoriesIfNeeded();
-            string path = AppDataPath + Path.DirectorySeparatorChar + SavedPartsFile;
+            string path = $"{AppDataPath}{Path.DirectorySeparatorChar}{SavedPartsFile}";
             using (FileStream file = new FileStream(path, FileMode.Create)) s_serialzierSavedParts.Serialize(file, s_savedParts);
         }
 
         public static string BuildSavedDatasheetPath(string code)
         {
-            return AppDataPath + Path.DirectorySeparatorChar + BuildSavedDatasheetRelativePath(code);
+            return $"{AppDataPath}{Path.DirectorySeparatorChar}{BuildSavedDatasheetRelativePath(code)}";
         }
         public static string BuildSavedDatasheetRelativePath(string code)
         {
-            return SavedDatasheetsDirectory + Path.DirectorySeparatorChar + code + ".pdf";
+            return $"{SavedDatasheetsDirectory}{Path.DirectorySeparatorChar}{code}.pdf";
         }
         public static string BuildCachedDatasheetPath(string code)
         {
-            return AppDataPath + Path.DirectorySeparatorChar + DatasheetsCacheDirectory + Path.DirectorySeparatorChar + code + ".pdf";
+            return $"{AppDataPath}{Path.DirectorySeparatorChar}{DatasheetsCacheDirectory}{Path.DirectorySeparatorChar}{code}.pdf";
         }
     }
 }
