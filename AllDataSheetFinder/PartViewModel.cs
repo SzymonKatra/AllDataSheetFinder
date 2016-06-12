@@ -540,11 +540,6 @@ namespace AllDataSheetFinder
             });
             CheckState();
         }
-        //public void MakeContext()
-        //{
-        //    m_context = new AllDataSheetPart(DatasheetSiteLink);
-        //    RaisePropertyChanged(nameof(IsContextValid));
-        //}
         public void RebuildTags()
         {
             Tags.Clear();
