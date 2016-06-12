@@ -113,13 +113,11 @@ namespace AllDataSheetFinder.Validation
 
         protected virtual void OnIsValidChanged()
         {
-            EventHandler handler = IsValidChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            IsValidChanged?.Invoke(this, EventArgs.Empty);
         }
         protected virtual void OnResultChanged(ValidatorResultChangedEventArgs<T> e)
         {
-            EventHandler<ValidatorResultChangedEventArgs<T>> handler = ResultChanged;
-            if (handler != null) handler(this, e);
+            ResultChanged?.Invoke(this, e);
         }
 
         public string this[string columnName]
