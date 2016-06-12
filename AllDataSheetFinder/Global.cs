@@ -26,6 +26,7 @@ namespace AllDataSheetFinder
         }
 
         public static readonly string RegistryKeyName = @"Software\AllDataSheetFinder";
+        public static readonly string RegistryDataPathName = "DataPath";
 
         public static string AppDataPath { get; private set; }
         public static readonly string ImagesCacheDirectory = $"Cache{Path.DirectorySeparatorChar}Images";
@@ -153,8 +154,8 @@ namespace AllDataSheetFinder
             AppDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}{Path.DirectorySeparatorChar}AllDataSheetFinder";
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
-            object dataPathObj = key.GetValue("DataPath", null);
-            if (dataPathObj != null) AppDataPath = dataPathObj.ToString(); else key.SetValue("DataPath", AppDataPath);
+            object dataPathObj = key.GetValue(RegistryDataPathName, null);
+            if (dataPathObj != null) AppDataPath = dataPathObj.ToString(); else key.SetValue(RegistryDataPathName, AppDataPath);
             key.Close();
 
             CreateDirectoriesIfNeeded();
@@ -209,7 +210,7 @@ namespace AllDataSheetFinder
             DirectoryExt.Copy(AppDataPath, newPath);
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName);
-            key.SetValue("DataPath", newPath);
+            key.SetValue(RegistryDataPathName, newPath);
             key.Close();
 
             AppDataPath = newPath;
