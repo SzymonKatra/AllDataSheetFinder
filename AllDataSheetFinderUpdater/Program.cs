@@ -11,6 +11,9 @@ namespace AllDataSheetFinderUpdater
         private static readonly string AppMutexName = "AllDataSheetFinder_32366CEF-0521-4213-925D-1EB0299921E7";
         private static readonly string UpdaterMutexName = "AllDataSheetFinderUpdater_0D8C8D15-EDE3-423C-81E9-871FEF848AE0";
         private static readonly int AppClosedSteps = 5;
+        private static readonly int AppClosedWait = 1000;
+        private static readonly int OperationFailureSteps = 5;
+        private static readonly int OperationFailureWait = 500;
 
         private static Mutex m_oneInstanceMutex;
 
@@ -28,7 +31,11 @@ namespace AllDataSheetFinderUpdater
                 tmpMutex.Close();
                 Thread.Sleep(1000); // checks if application is closed
 
-                if (++step >= AppClosedSteps) return;
+                if (++step >= AppClosedSteps)
+                {
+                    MessageBox.Show("AllDataSheetFinder is still running and updater cant't install new version");
+                    return;
+                }
             }
 
             if (args.Length < 2) return;
@@ -41,24 +48,46 @@ namespace AllDataSheetFinderUpdater
             if (!Directory.Exists(destinationPath)) Directory.CreateDirectory(destinationPath);
             foreach (string file in Directory.EnumerateFiles(destinationPath, "*.*", SearchOption.AllDirectories))
             {
-                try
+                int fStep = 0;
+                while (true)
                 {
-                    File.Delete(file);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show($"Problem while deleting file:{Environment.NewLine}{file}{Environment.NewLine}{e.Message}");
+                    try
+                    {
+                        File.Delete(file);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        if (++fStep >= OperationFailureSteps)
+                        {
+                            MessageBox.Show($"Problem while deleting file:{Environment.NewLine}{file}{Environment.NewLine}{e.Message}");
+                            break;
+                        }
+                    }
+
+                    Thread.Sleep(OperationFailureWait);
                 }
             }
             foreach (string directory in Directory.EnumerateDirectories(destinationPath, "*", SearchOption.AllDirectories))
             {
-                try
+                int dStep = 0;
+                while (true)
                 {
-                    Directory.Delete(directory, true);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show($"Problem while deleting directory:{Environment.NewLine}{directory}{Environment.NewLine}{e.Message}");
+                    try
+                    {
+                        Directory.Delete(directory, true);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        if (++dStep >= OperationFailureSteps)
+                        {
+                            MessageBox.Show($"Problem while deleting directory:{Environment.NewLine}{directory}{Environment.NewLine}{e.Message}");
+                            break;
+                        }
+                    }
+
+                    Thread.Sleep(OperationFailureWait);
                 }
             }
 
@@ -67,14 +96,25 @@ namespace AllDataSheetFinderUpdater
                 string relativeFilePath = file.Substring(sourcePath.Length + 1);
                 string resultFilePath = $"{destinationPath}{Path.DirectorySeparatorChar}{relativeFilePath}";
 
-                try
+                int cStep = 0;
+                while (true)
                 {
-                    if (!Directory.Exists(Path.GetDirectoryName(resultFilePath))) Directory.CreateDirectory(Path.GetDirectoryName(resultFilePath));
-                    File.Copy(file, resultFilePath);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show($"Problem while copying file from:{Environment.NewLine}{file} to: {Environment.NewLine}{resultFilePath}{Environment.NewLine }{e.Message}");
+                    try
+                    {
+                        if (!Directory.Exists(Path.GetDirectoryName(resultFilePath))) Directory.CreateDirectory(Path.GetDirectoryName(resultFilePath));
+                        File.Copy(file, resultFilePath);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        if (++cStep >= OperationFailureSteps)
+                        {
+                            MessageBox.Show($"Problem while copying file from:{Environment.NewLine}{file} to: {Environment.NewLine}{resultFilePath}{Environment.NewLine }{e.Message}");
+                            break;
+                        }
+                    }
+
+                    Thread.Sleep(OperationFailureWait);
                 }
             }
 
