@@ -35,7 +35,7 @@
     <s:String x:Key="StringLanguageChangeRestart">необходимо перезапустить приложение, чтобы увидеть изменения языка полностью</s:String>
     <s:String x:Key="StringMoreInfoError">Произошла ошибка при запросе дополнительной информации</s:String>
     <s:String x:Key="StringLoadMoreInfo">Нажмите, чтобы загрузить больше информации</s:String>
-    <s:String x:Key="StringLoadingMoreInfo">Запрос больше информации, пожалуйста, подождите ...</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Запрос больше информации, пожалуйста, подождите...</s:String>
     <s:String x:Key="StringSize">Размер</s:String>
     <s:String x:Key="StringManufacturerSite">сайт производителя</s:String>
     <s:String x:Key="StringPages">Страницы</s:String>
@@ -55,13 +55,13 @@
     <s:String x:Key="StringOwn">Собственные</s:String>
     <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
     <s:String x:Key="StringPdfFiles">PDF документ (* .pdf)</s:String>
-    <s:String x:Key="StringCountingPages">Подсчет страниц в PDF документе. Пожалуйста, подождите ...</s:String>
-    <s:String x:Key="StringGraphicFiles">Графические файлы (* .bmp, * .gif, * .jpg, * .jpeg, * .png, * .tiff)</s:String>
+    <s:String x:Key="StringCountingPages">Подсчет страниц в PDF документе. Пожалуйста, подождите...</s:String>
+    <s:String x:Key="StringGraphicFiles">Графические файлы (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
     <s:String x:Key="StringUpdateAvailable" xml:space="preserve">Обновление доступно.
 Вы хотите, чтобы загрузить и установить его?</s:String>
-    <s:String x:Key="StringSearchingUpdate">При поиске обновлений ...</s:String>
-    <s:String x:Key="StringDownloadingUpdate">Загрузка обновлений ...</s:String>
-    <s:String x:Key="StringExtractingUpdate">Распаковка обновление ...</s:String>
+    <s:String x:Key="StringSearchingUpdate">При поиске обновлений...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Загрузка обновлений...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Распаковка обновление...</s:String>
     <s:String x:Key="StringCheckUpdates">Проверить обновления</s:String>
     <s:String x:Key="StringUpdateTitle">Обновление</s:String>
     <s:String x:Key="StringAppDataPath">Данные сохранить путь</s:String>

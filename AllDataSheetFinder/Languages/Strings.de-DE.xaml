@@ -35,7 +35,7 @@ Bitte überprüfen Sie Ihre Internetverbindung.</s:String>
     <s:String x:Key="StringLanguageChangeRestart">Sie müssen Anwendung neu starten Sprache Änderungen vollständig zu sehen</s:String>
     <s:String x:Key="StringMoreInfoError">Ist ein Fehler aufgetreten, während die Anforderung weiterer Informationen</s:String>
     <s:String x:Key="StringLoadMoreInfo">Klicken Sie weitere Informationen zu laden</s:String>
-    <s:String x:Key="StringLoadingMoreInfo">Weitere Informationen anfordern, bitte warten ...</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Weitere Informationen anfordern, bitte warten...</s:String>
     <s:String x:Key="StringSize">Größe</s:String>
     <s:String x:Key="StringManufacturerSite">Hersteller-Website</s:String>
     <s:String x:Key="StringPages">Seiten</s:String>
@@ -55,13 +55,13 @@ Bitte überprüfen Sie Ihre Internetverbindung.</s:String>
     <s:String x:Key="StringOwn">Eigene</s:String>
     <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
     <s:String x:Key="StringPdfFiles">PDF-Dokument (* .pdf)</s:String>
-    <s:String x:Key="StringCountingPages">Counting Seiten im PDF-Dokument. Bitte warten ...</s:String>
-    <s:String x:Key="StringGraphicFiles">Grafik-Dateien (* .bmp, * .gif, * .jpg, * .jpeg, * .png, * .tif)</s:String>
+    <s:String x:Key="StringCountingPages">Counting Seiten im PDF-Dokument. Bitte warten...</s:String>
+    <s:String x:Key="StringGraphicFiles">Grafik-Dateien (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
     <s:String x:Key="StringUpdateAvailable" xml:space = "preserve">Ein Update ist verfügbar.
 Wollen Sie es herunterladen und installieren?</s:String>
-    <s:String x:Key="StringSearchingUpdate">Für Update Suche ...</s:String>
-    <s:String x:Key="StringDownloadingUpdate">Download-Update ...</s:String>
-    <s:String x:Key="StringExtractingUpdate">Einrichtung Update ...</s:String>
+    <s:String x:Key="StringSearchingUpdate">Für Update Suche...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Download-Update...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Einrichtung Update...</s:String>
     <s:String x:Key="StringCheckUpdates">Überprüfen Updates</s:String>
     <s:String x:Key="StringUpdateTitle">Update</s:String>
     <s:String x:Key="StringAppDataPath">Daten speichern Pfad</s:String>
