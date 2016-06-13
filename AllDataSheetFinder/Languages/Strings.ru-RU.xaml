@@ -80,4 +80,5 @@
     <s:String x:Key="StringUpdateDownloadError">Произошла ошибка при загрузке обновления</s:String>
     <s:String x:Key="StringUpdateExtractError">Произошла ошибка при извлечении обновления</s:String>
     <s:String x:Key="StringNoUpdatesFound">​​Вы используете последнюю версию</s:String>
+    
 </ResourceDictionary>
