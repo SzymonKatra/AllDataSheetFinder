@@ -86,17 +86,17 @@ cp %cd%\LICENSE.txt %files%
 
 cp %cd%\AllDataSheetFinderUpdater\bin\Release\AllDataSheetFinderUpdater.exe %release%
 
-cd Zipping update
+echo Zipping update
 cd %release%
 zip -q -r %outputupdate% .
 cd %callingdir%
 
-cd Zipping release
+echo Zipping release
 cd %files%
 zip -q -r %output% .
 cd %callingdir%
 
-cd Removing temporary files
+echo Removing temporary files
 rm -r %release%
 
 :end
