@@ -1,0 +1,85 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="StringSearch">Suchen</s:String>
+    <s:String x:Key="StringSearchError" xml:space = "preserve">Ist ein Fehler aufgetreten während der Suche.
+Bitte überprüfen Sie Ihre Internetverbindung.</s:String>
+    <s:String x:Key="StringManufacturer">Hersteller</s:String>
+    <s:String x:Key="StringPartName">Teilname</s:String>
+    <s:String x:Key="StringPartDescription">Beschreibung</s:String>
+    <s:String x:Key="StringDownloadError">Fehler beim Datenblatt Download</s:String>
+    <s:String x:Key="StringLoadMoreResults">Laden mehr</s:String>
+    <s:String x:Key="StringAddToFavourites">Lieblings</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Wollen Sie wirklich dieses Datenblatt aus Favoriten löschen?</s:String>
+    <s:String x:Key="StringOpen">Öffnen</s:String>
+    <s:String x:Key="StringFavourites">Favoriten</s:String>
+    <s:String x:Key="StringSettings">Einstellungen</s:String>
+    <s:String x:Key="StringInnerError">Inner Fehler</s:String>
+    <s:String x:Key="StringIllegalCharacters">Illegale Zeichen</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Muss im Bereich von {0} {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Einstellungen</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maximale Datenblätter Cache-Größe (MB)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Do rellay Sie Datenblätter Cache zu löschen?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Haben wirklich Cache Sie Bilder löschen möchten?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Wollen Sie wirklich Datenblätter Favoriten löschen möchten?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Aktuelle Datenblätter Cache-Größe: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Aktuelle Bilder Cache-Größe: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Aktuelle Favoriten Größe: {0} MB</s:String>
+    <s:String x:Key="StringClear">Löschen</s:String>
+    <s:String x:Key="StringDefault">Standard</s:String>
+    <s:String x:Key="StringLanguage">Sprache</s:String>
+    <s:String x:Key="StringFormatLicense">Lizenz: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Autor: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">Sie müssen Anwendung neu starten Sprache Änderungen vollständig zu sehen</s:String>
+    <s:String x:Key="StringMoreInfoError">Ist ein Fehler aufgetreten, während die Anforderung weiterer Informationen</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Klicken Sie weitere Informationen zu laden</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Weitere Informationen anfordern, bitte warten ...</s:String>
+    <s:String x:Key="StringSize">Größe</s:String>
+    <s:String x:Key="StringManufacturerSite">Hersteller-Website</s:String>
+    <s:String x:Key="StringPages">Seiten</s:String>
+    <s:String x:Key="StringMoreInfo">Weitere Informationen</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Wollen Sie mehr Informationen zu aktualisieren?</s:String>
+    <s:String x:Key="StringTags">Tags</s:String>
+    <s:String x:Key="StringManufacturerLogo">Herstellerlogo</s:String>
+    <s:String x:Key="StringSizeKB">Größe (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Bearbeiten Teil</s:String>
+    <s:String x:Key="StringCustomPath">Benutzerdefinierte Pfad</s:String>
+    <s:String x:Key="StringFileNotExists">Datei nicht existiert</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Möchten Sie die Tags aus Beschreibung neu erstellen möchten?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Rebuild-Tags aus Beschreibung</s:String>
+    <s:String x:Key="StringYes">Ja</s:String>
+    <s:String x:Key="StringNo">Nein</s:String>
+    <s:String x:Key="StringSource">Quelle</s:String>
+    <s:String x:Key="StringOwn">Eigene</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">PDF-Dokument (* .pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Counting Seiten im PDF-Dokument. Bitte warten ...</s:String>
+    <s:String x:Key="StringGraphicFiles">Grafik-Dateien (* .bmp, * .gif, * .jpg, * .jpeg, * .png, * .tif)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space = "preserve">Ein Update ist verfügbar.
+Wollen Sie es herunterladen und installieren?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Für Update Suche ...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Download-Update ...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Einrichtung Update ...</s:String>
+    <s:String x:Key="StringCheckUpdates">Überprüfen Updates</s:String>
+    <s:String x:Key="StringUpdateTitle">Update</s:String>
+    <s:String x:Key="StringAppDataPath">Daten speichern Pfad</s:String>
+    <s:String x:Key="StringFavouritesOnStart">Favoriten anzeigen beim Start</s:String>
+    <s:String x:Key="StringWaitForDataMove" xml:space = "preserve">Anwendungsdaten verschieben
+Bitte warten ...</s:String>
+    <s:String x:Key="StringDataMoveError" xml:space = "preserve">Fehler beim Anwendungsdaten bewegen
+Schließen Sie alle geöffneten Datenblätter und versuchen Sie es erneut</s:String>
+    <s:String x:Key="StringOldDataRemoveErrorTemplate" xml:space = "preserve">Fehler beim Anwendungsdaten aus dem alten Pfad zu löschen
+Schließen Sie alle geöffneten Datenblätter und klicken Sie auf OK erneut zu versuchen oder Abbrechen zu ignorieren
+Wenn Sie dies ignorieren, sollten Sie löschen Sie Dateien manuell restlichen aus
+{0}</s:String>
+    <s:String x:Key="StringFormatContactMail">Kontakt: {0}</s:String>
+    <s:String x:Key="StringFormatWebsite">Webseite: {0}</s:String>
+    <s:String x:Key="StringEnableSmoothScrolling">Aktivieren smooth scrolling</s:String>
+    <s:String x:Key="StringCheckUpdatesError">Ist ein Fehler aufgetreten, während für neue Updates überprüfen</s:String>
+    <s:String x:Key="StringUpdateDownloadError">Fehler beim Update das Herunterladen</s:String>
+    <s:String x:Key="StringUpdateExtractError">Fehler beim Update Extrahieren</s:String>
+    <s:String x:Key="StringNoUpdatesFound">​​Sie die neueste Version mit</s:String>
+    
+</ResourceDictionary>
