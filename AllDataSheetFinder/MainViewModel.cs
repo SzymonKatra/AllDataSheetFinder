@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
@@ -13,10 +11,7 @@ using MVVMUtils;
 using MVVMUtils.Collections;
 using AllDataSheetFinder.Controls;
 using Microsoft.Win32;
-using System.Net;
-using System.Xml.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Shell;
 
 namespace AllDataSheetFinder
@@ -38,25 +33,7 @@ namespace AllDataSheetFinder
             m_addCustomCommand = new RelayCommand(AddCustom);
 
             m_filteredResults = CollectionViewSource.GetDefaultView(m_searchResults);
-            m_filteredResults.Filter = (x) =>
-            {
-                if (!IsFavouritesMode) return true;
-
-                PartViewModel part = (PartViewModel)x;
-                string[] tokens = m_searchField.ToUpper().Split(' ');
-                string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
-
-                foreach (var item in tokens)
-                {
-                    var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
-                    if (result == null)
-                    {
-                        if (!upperName.Contains(item)) return false;
-                    }
-                }
-
-                return true;
-            };
+            m_filteredResults.Filter = TagsFilter;
             m_filteredResults.Refresh();
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
@@ -76,8 +53,8 @@ namespace AllDataSheetFinder
             {
                 m_actionsCount = value;
                 Mouse.OverrideCursor = (m_actionsCount <= 0 ? null : Cursors.AppStarting);
-                RaisePropertyChanged("ActionsCount");
-                RaisePropertyChanged("TaskbarProgressState");
+                RaisePropertyChanged(nameof(ActionsCount));
+                RaisePropertyChanged(nameof(TaskbarProgressState));
             }
         }
         public TaskbarItemProgressState TaskbarProgressState
@@ -93,11 +70,11 @@ namespace AllDataSheetFinder
             set
             {
                 m_searching = value;
-                RaisePropertyChanged("Searching");
+                RaisePropertyChanged(nameof(Searching));
                 m_searchCommand.RaiseCanExecuteChanged();
                 m_loadMoreResultCommand.RaiseCanExecuteChanged();
                 m_showFavouritesCommand.RaiseCanExecuteChanged();
-                RaisePropertyChanged("LoadMoreVisible");
+                RaisePropertyChanged(nameof(LoadMoreVisible));
             }
         }
 
@@ -108,7 +85,7 @@ namespace AllDataSheetFinder
             set
             {
                 m_searchField = value;
-                RaisePropertyChanged("SearchField");
+                RaisePropertyChanged(nameof(SearchField));
                 m_searchCommand.RaiseCanExecuteChanged();
 
                 if (IsFavouritesMode) m_filteredResults.Refresh();
@@ -138,7 +115,7 @@ namespace AllDataSheetFinder
         public PartViewModel SelectedResult
         {
             get { return m_selectedResult; }
-            set { m_selectedResult = value; RaisePropertyChanged("SelectedResult"); }
+            set { m_selectedResult = value; RaisePropertyChanged(nameof(SelectedResult)); }
         }
 
         private bool m_isFavouritesMode = false;
@@ -148,8 +125,8 @@ namespace AllDataSheetFinder
             set
             {
                 m_isFavouritesMode = value;
-                RaisePropertyChanged("IsFavouritesMode");
-                RaisePropertyChanged("LoadMoreVisible");
+                RaisePropertyChanged(nameof(IsFavouritesMode));
+                RaisePropertyChanged(nameof(LoadMoreVisible));
                 m_loadMoreResultCommand.RaiseCanExecuteChanged();
             }
         }
@@ -401,7 +378,7 @@ namespace AllDataSheetFinder
         private void AddCustom(object param)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = Global.GetStringResource("StringPdfFiles") + "|*.pdf";
+            openFileDialog.Filter = Global.PdfFilter;
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             foreach (var fileName in openFileDialog.FileNames)
@@ -440,53 +417,72 @@ namespace AllDataSheetFinder
             m_filteredResults.Refresh();
         }
 
-        public async void CheckForUpdates()
+        public async void CheckForUpdates(bool raisedManually = false)
         {
             if (m_checkingUpdates) return;
 
             m_checkingUpdates = true;
             bool newVersion = false;
-            string link = string.Empty;
-            string execute = string.Empty;
-            string files = string.Empty;
-            await Task.Run(() =>
+
+            NewVersionInfo? info = null;
+            try
             {
-                HttpWebRequest request = Requests.CreateDefaultRequest(Global.UpdateVersionLink);
-                string result = Requests.ReadResponseString(request);
+                info = await NewVersionInfo.RequestInfoAsync(Global.UpdateVersionLink);
+            }
+            catch
+            {
+                try
+                {
+                    info = await NewVersionInfo.RequestInfoAsync(Global.AdditionalUpdateVersionLink);
+                }
+                catch
+                {
+                    if (raisedManually) Global.MessageBox(this, Global.GetStringResource("StringCheckUpdatesError"), MessageBoxExPredefinedButtons.Ok);
+                }
+            }
 
-                XElement rootElement = XElement.Parse(result);
-                XElement versionElement = rootElement.Element("version");
-                if (versionElement == null) return;
-                XElement downloadElement = rootElement.Element("download");
-                if (downloadElement == null) return;
-                XElement executeElement = rootElement.Element("execute");
-                if (executeElement == null) return;
-                XElement filesElement = rootElement.Element("files");
-                if (filesElement == null) return;
+            Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+            if (info != null && info.Value.Version > currentVersion) newVersion = true;
 
-                Version version;
-                if (!Version.TryParse(versionElement.Value, out version)) return;
-                Version currentVersion = Version.Parse(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
-
-                link = downloadElement.Value;
-                if (version > currentVersion) newVersion = true;
-
-                execute = executeElement.Value;
-                files = filesElement.Value;
-            });
-
+            if (raisedManually && !newVersion) Global.MessageBox(this, Global.GetStringResource("StringNoUpdatesFound"), MessageBoxExPredefinedButtons.Ok);
             if (newVersion && Global.MessageBox(this, Global.GetStringResource("StringUpdateAvailable"), MessageBoxExPredefinedButtons.YesNo) == MessageBoxExButton.Yes)
             {
-                UpdateViewModel dialogViewModel = new UpdateViewModel(link);
+                UpdateViewModel dialogViewModel = new UpdateViewModel(info.Value.Link);
                 Global.Dialogs.ShowDialog(this, dialogViewModel);
-                string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
-                string appDir = AppDomain.CurrentDomain.BaseDirectory;
-                while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
-                Process.Start(basePath + Path.DirectorySeparatorChar + execute, "\"" + basePath + Path.DirectorySeparatorChar + files + "\" \"" + appDir + "\"");
-                NeedClose();
+                if (!dialogViewModel.DownloadSuccessful) Global.MessageBox(this, Global.GetStringResource("StringUpdateDownloadError"), MessageBoxExPredefinedButtons.Ok);
+                else if (!dialogViewModel.ExtractSuccessful) Global.MessageBox(this, Global.GetStringResource("StringUpdateExtractError"), MessageBoxExPredefinedButtons.Ok);
+
+                if (dialogViewModel.DownloadSuccessful && dialogViewModel.ExtractSuccessful)
+                {
+                    string basePath = Global.AppDataPath + Path.DirectorySeparatorChar + Global.UpdateExtractDirectory;
+                    string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                    while (appDir.EndsWith("\\")) appDir = appDir.Remove(appDir.Length - 1);
+                    Process.Start($"{basePath}{Path.DirectorySeparatorChar}{info.Value.Execute}", $"\"{basePath}{Path.DirectorySeparatorChar}{info.Value.Files}\" \"{appDir}\"");
+                    NeedClose();
+                }
             }
 
             m_checkingUpdates = false;
+        }
+
+        private bool TagsFilter(object x)
+        {
+            if (!IsFavouritesMode) return true;
+
+            PartViewModel part = (PartViewModel)x;
+            string[] tokens = m_searchField.ToUpper().Split(' ');
+            string upperName = (part.Name == null ? string.Empty : part.Name.ToUpper());
+
+            foreach (var item in tokens)
+            {
+                var result = part.Tags.FirstOrDefault(tag => tag.Value.ToUpper().StartsWith(item));
+                if (result == null)
+                {
+                    if (!upperName.Contains(item)) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using MVVMUtils;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllDataSheetFinder.Validation
 {
@@ -43,7 +39,7 @@ namespace AllDataSheetFinder.Validation
                 bool old = m_isValid;
                 m_isValid = value;
                 if (old != m_isValid) OnIsValidChanged();
-                RaisePropertyChanged("IsValid");
+                RaisePropertyChanged(nameof(IsValid));
             }
         }
 
@@ -54,7 +50,7 @@ namespace AllDataSheetFinder.Validation
             private set
             {
                 m_error = value;
-                RaisePropertyChanged("Error");
+                RaisePropertyChanged(nameof(Error));
             }
         }
 
@@ -65,9 +61,9 @@ namespace AllDataSheetFinder.Validation
             set
             {
                 m_validValue = value;
-                RaisePropertyChanged("ValidValue");
+                RaisePropertyChanged(nameof(ValidValue));
                 m_input = ToValidForm();
-                RaisePropertyChanged("Input");
+                RaisePropertyChanged(nameof(Input));
                 IsValid = true;
             }
         }
@@ -79,7 +75,7 @@ namespace AllDataSheetFinder.Validation
             set
             {
                 m_input = value;
-                RaisePropertyChanged("Input");
+                RaisePropertyChanged(nameof(Input));
 
                 ValidatorResult result = Validate();
 
@@ -113,20 +109,18 @@ namespace AllDataSheetFinder.Validation
 
         protected virtual void OnIsValidChanged()
         {
-            EventHandler handler = IsValidChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            IsValidChanged?.Invoke(this, EventArgs.Empty);
         }
         protected virtual void OnResultChanged(ValidatorResultChangedEventArgs<T> e)
         {
-            EventHandler<ValidatorResultChangedEventArgs<T>> handler = ResultChanged;
-            if (handler != null) handler(this, e);
+            ResultChanged?.Invoke(this, e);
         }
 
         public string this[string columnName]
         {
             get
             {
-                if (columnName != "Input") return string.Empty;
+                if (columnName != nameof(Input)) return string.Empty;
                 return Error;
             }
         }

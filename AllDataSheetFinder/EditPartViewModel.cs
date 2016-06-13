@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MVVMUtils;
+﻿using MVVMUtils;
 using System.Windows.Input;
 using AllDataSheetFinder.Validation;
 using AllDataSheetFinder.Controls;
@@ -75,28 +70,28 @@ namespace AllDataSheetFinder
         public string Description
         {
             get { return m_description; }
-            set { m_description = value; RaisePropertyChanged("Description"); }
+            set { m_description = value; RaisePropertyChanged(nameof(Description)); }
         }
 
         private string m_manufacturer;
         public string Manufacturer
         {
             get { return m_manufacturer; }
-            set { m_manufacturer = value; RaisePropertyChanged("Manufacturer"); }
+            set { m_manufacturer = value; RaisePropertyChanged(nameof(Manufacturer)); }
         }
 
         private string m_manufacturerLogo;
         public string ManufacturerLogo
         {
             get { return m_manufacturerLogo; }
-            set { m_manufacturerLogo = value; RaisePropertyChanged("ManufacturerLogo"); }
+            set { m_manufacturerLogo = value; RaisePropertyChanged(nameof(ManufacturerLogo)); }
         }
 
         private string m_manufacturerSite;
         public string ManufacturerSite
         {
             get { return m_manufacturerSite; }
-            set { m_manufacturerSite = value; RaisePropertyChanged("ManufacturerSite"); }
+            set { m_manufacturerSite = value; RaisePropertyChanged(nameof(ManufacturerSite)); }
         }
 
         private SeparatedValuesValidator m_tags;
@@ -155,9 +150,9 @@ namespace AllDataSheetFinder
             {
                 string resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileName(m_manufacturerLogo);
                 int count = 1;
-                while(File.Exists(resultImagePath))
+                while (File.Exists(resultImagePath))
                 {
-                    resultImagePath = imagesPath + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(m_manufacturerLogo) + "(" + count.ToString() + ")" + Path.GetExtension(m_manufacturerLogo);
+                    resultImagePath = $"{imagesPath}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(m_manufacturerLogo)}({count.ToString()}){Path.GetExtension(m_manufacturerLogo)}";
                     count++;
                 }
                 File.Copy(m_manufacturerLogo, resultImagePath);
@@ -215,7 +210,7 @@ namespace AllDataSheetFinder
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Global.AppDataPath + Path.DirectorySeparatorChar + Global.ImagesCacheDirectory;
-            openFileDialog.Filter = Global.GetStringResource("StringGraphicFiles") + "|" + "*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.tiff";
+            openFileDialog.Filter = Global.ImagesFilter;
             openFileDialog.ShowDialog(Global.Dialogs.GetWindow(this));
             ManufacturerLogo = openFileDialog.FileName;
         }

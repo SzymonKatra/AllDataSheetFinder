@@ -20,6 +20,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
@@ -42,9 +43,11 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringMaxDatasheetsCacheSize}"/>           
             <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource StyleTextBoxInput}" Text="{Binding MaxCacheSize.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             
-            <CheckBox Grid.Column="0" Grid.Row="2" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringFavouritesOnStart}" IsChecked="{Binding FavouritesOnStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+            <CheckBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringFavouritesOnStart}" IsChecked="{Binding FavouritesOnStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <CheckBox Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringEnableSmoothScrolling}" IsChecked="{Binding EnableSmoothScrollingOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -54,7 +57,7 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearDatasheetsCacheCommand}"/>
             </Grid>
             
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -64,7 +67,7 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearImagesCacheCommand}"/>
             </Grid>
 
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -74,10 +77,10 @@
                 <Button Style="{StaticResource StyleCommonMargin}" Grid.Column="1" Content="{DynamicResource StringClear}" Command="{Binding ClearSavedDatasheetsCommand}"/>
             </Grid>
 
-            <TextBlock Grid.Column="0" Grid.Row="6" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
-            <ComboBox Grid.Column="1" Grid.Row="6" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
-            
-            <Button Grid.Column="1" Grid.Row="7" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" Style="{StaticResource StyleTextBlockTitle}" Text="{DynamicResource StringLanguage}"/>
+            <ComboBox Grid.Column="1" Grid.Row="7" Style="{StaticResource StyleCommonMargin}" ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" DisplayMemberPath="DisplayName"/>
+
+            <Button Grid.Column="1" Grid.Row="8" Style="{StaticResource StyleCommonMargin}" Content="{DynamicResource StringCheckUpdates}" Command="{Binding CheckUpdatesCommand}"/>
         </Grid>
 
         <Grid Grid.Row="1">

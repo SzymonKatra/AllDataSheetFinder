@@ -1,8 +1,4 @@
 ﻿using MVVMUtils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -28,7 +24,7 @@ namespace AllDataSheetFinder
         public string Message
         {
             get { return m_message; }
-            set { m_message = value; RaisePropertyChanged("Message"); }
+            set { m_message = value; RaisePropertyChanged(nameof(Message)); }
         }
 
         private RelayCommand m_runWorkCommand;

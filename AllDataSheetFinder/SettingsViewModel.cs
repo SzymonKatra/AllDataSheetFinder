@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows.Controls;
 using MVVMUtils;
 using AllDataSheetFinder.Validation;
 using System.IO;
@@ -14,7 +9,6 @@ using System.Globalization;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Diagnostics;
-using Microsoft.Win32;
 
 namespace AllDataSheetFinder
 {
@@ -32,7 +26,7 @@ namespace AllDataSheetFinder
                     try
                     {
                         CultureInfo culture = new CultureInfo(Name);
-                        return culture.NativeName;
+                        return $"{culture.NativeName} [{Name}]";
                     }
                     catch
                     {
@@ -80,6 +74,7 @@ namespace AllDataSheetFinder
 
             m_initialPath = AppDataPath = Global.AppDataPath;
             m_favouritesOnStart = Global.Configuration.FavouritesOnStart;
+            m_enableSmoothScrollingOption = Global.Configuration.EnableSmoothScrolling;
         }
 
         private FileVersionInfo m_fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
@@ -195,7 +190,14 @@ namespace AllDataSheetFinder
         public LanguagePair SelectedLanguage
         {
             get { return m_selectedLanguage; }
-            set { m_selectedLanguage = value; RaisePropertyChanged("SelectedLanguage"); }
+            set { m_selectedLanguage = value; RaisePropertyChanged(nameof(SelectedLanguage)); }
+        }
+
+        private bool m_enableSmoothScrollingOption;
+        public bool EnableSmoothScrollingOption
+        {
+            get { return m_enableSmoothScrollingOption; }
+            set { m_enableSmoothScrollingOption = value;  RaisePropertyChanged(nameof(EnableSmoothScrollingOption)); }
         }
 
         private string m_initialPath;
@@ -203,20 +205,21 @@ namespace AllDataSheetFinder
         public string AppDataPath
         {
             get { return m_appDataPath; }
-            set { m_appDataPath = value; RaisePropertyChanged("AppDataPath"); }
+            set { m_appDataPath = value; RaisePropertyChanged(nameof(AppDataPath)); }
         }
 
         private bool m_favouritesOnStart;
         public bool FavouritesOnStart
         {
             get { return m_favouritesOnStart; }
-            set { m_favouritesOnStart = value; RaisePropertyChanged("FavouritesOnStart"); }
+            set { m_favouritesOnStart = value; RaisePropertyChanged(nameof(FavouritesOnStart)); }
         }
 
         private void Ok(object param)
         {
             Global.Configuration.MaxDatasheetsCacheSize = m_maxCacheSize.ValidValue * 1024 * 1024;
             Global.Configuration.FavouritesOnStart = m_favouritesOnStart;
+            Global.Configuration.EnableSmoothScrolling = m_enableSmoothScrollingOption;
             if (Global.Configuration.Language != m_selectedLanguage.Name)
             {
                 Global.Configuration.Language = m_selectedLanguage.Name;
@@ -289,7 +292,7 @@ namespace AllDataSheetFinder
 
             foreach (var item in Global.Main.SearchResults) item.CheckState();
 
-            RaisePropertyChanged("CurrentDatasheetsCacheSize");
+            RaisePropertyChanged(nameof(CurrentDatasheetsCacheSize));
         }
 
         private void ClearImagesCache(object param)
@@ -301,7 +304,7 @@ namespace AllDataSheetFinder
                 File.Delete(file);
             }
 
-            RaisePropertyChanged("CurrentImagesCacheSize");
+            RaisePropertyChanged(nameof(CurrentImagesCacheSize));
         }
 
         private void ClearSavedDatasheets(object param)
@@ -326,12 +329,12 @@ namespace AllDataSheetFinder
 
             Global.SaveSavedParts();
 
-            RaisePropertyChanged("CurrentSavedDatasheetsSize");
+            RaisePropertyChanged(nameof(CurrentSavedDatasheetsSize));
         }
 
         private void CheckUpdates(object param)
         {
-            Global.Main.CheckForUpdates();
+            Global.Main.CheckForUpdates(true);
         }
 
         private void SelectAppDataPath(object param)

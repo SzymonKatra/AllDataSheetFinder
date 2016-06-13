@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <s:String x:Key="StringSearch">Поиск</s:String>
+    <s:String x:Key="StringSearchError" xml:space="preserve">Произошла ошибка при поиске.
+Пожалуйста, проверьте подключение к Интернету.</s:String>
+    <s:String x:Key="StringManufacturer">Производитель</s:String>
+    <s:String x:Key="StringPartName">наименование</s:String>
+    <s:String x:Key="StringPartDescription">Описание</s:String>
+    <s:String x:Key="StringDownloadError">Произошла ошибка при загрузке таблицы данных</s:String>
+    <s:String x:Key="StringLoadMoreResults">Загрузить больше</s:String>
+    <s:String x:Key="StringAddToFavourites">Любимый</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Вы действительно хотите удалить эту таблицу из списка избранных?</s:String>
+    <s:String x:Key="StringOpen">Открыть</s:String>
+    <s:String x:Key="StringFavourites">Избранное</s:String>
+    <s:String x:Key="StringSettings">Настройки</s:String>
+    <s:String x:Key="StringInnerError">Внутренняя ошибка</s:String>
+    <s:String x:Key="StringIllegalCharacters">Запрещенные символы</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Должны быть в диапазоне от {0} до {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Настройки</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Максимальные радиокомпоненты размер кэша (МБ)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Есть ли rellay хотите очистить кэш справочных данных?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Вы действительно хотите, чтобы очистить кэш изображений?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Вы действительно хотите удалить избранные таблицы данных?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Текущий размер кэша в технических описаниях: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Текущий размер кэша изображений: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Текущие избранные размер: {0} MB</s:String>
+    <s:String x:Key="StringClear">Очистить</s:String>
+    <s:String x:Key="StringDefault">По умолчанию</s:String>
+    <s:String x:Key="StringLanguage">Язык</s:String>
+    <s:String x:Key="StringFormatLicense">Лицензия: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Автор: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Версия: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">необходимо перезапустить приложение, чтобы увидеть изменения языка полностью</s:String>
+    <s:String x:Key="StringMoreInfoError">Произошла ошибка при запросе дополнительной информации</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Нажмите, чтобы загрузить больше информации</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Запрос больше информации, пожалуйста, подождите...</s:String>
+    <s:String x:Key="StringSize">Размер</s:String>
+    <s:String x:Key="StringManufacturerSite">сайт производителя</s:String>
+    <s:String x:Key="StringPages">Страницы</s:String>
+    <s:String x:Key="StringMoreInfo">Больше информации</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Хотите обновить больше информации?</s:String>
+    <s:String x:Key="StringTags">Метки</s:String>
+    <s:String x:Key="StringManufacturerLogo">Логотип производителя</s:String>
+    <s:String x:Key="StringSizeKB">Размер (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Изменить часть</s:String>
+    <s:String x:Key="StringCustomPath">Пользовательский путь</s:String>
+    <s:String x:Key="StringFileNotExists">Файл не существует</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Хотите восстановить теги из описания?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">перестраивать теги из описания</s:String>
+    <s:String x:Key="StringYes">Да</s:String>
+    <s:String x:Key="StringNo">Нет</s:String>
+    <s:String x:Key="StringSource">Источник</s:String>
+    <s:String x:Key="StringOwn">Собственные</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">PDF документ (* .pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Подсчет страниц в PDF документе. Пожалуйста, подождите...</s:String>
+    <s:String x:Key="StringGraphicFiles">Графические файлы (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">Обновление доступно.
+Вы хотите, чтобы загрузить и установить его?</s:String>
+    <s:String x:Key="StringSearchingUpdate">При поиске обновлений...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Загрузка обновлений...</s:String>
+    <s:String x:Key="StringExtractingUpdate">Распаковка обновление...</s:String>
+    <s:String x:Key="StringCheckUpdates">Проверить обновления</s:String>
+    <s:String x:Key="StringUpdateTitle">Обновление</s:String>
+    <s:String x:Key="StringAppDataPath">Данные сохранить путь</s:String>
+    <s:String x:Key="StringFavouritesOnStart">Показать избранные при запуске</s:String>
+    <s:String x:Key="StringWaitForDataMove" xml:space="preserve">Перемещение данных приложения
+Пожалуйста, подождите ...
+Закройте все открытые таблицы данных и повторите попытку</s:String>
+    <s:String x:Key="StringOldDataRemoveErrorTemplate" xml:space="preserve">Произошла ошибка при удалении данных приложения от старого пути
+Закройте все открытые таблицы данных и нажмите кнопку OK, чтобы повторить попытку или Отмена, чтобы игнорировать
+Если игнорировать это, вы должны вручную удалить оставшиеся файлы из
+{0}</s:String>
+    <s:String x:Key="StringFormatContactMail">Контакт: {0}</s:String>
+    <s:String x:Key="StringFormatWebsite">Веб-сайт: {0}</s:String>
+    <s:String x:Key="StringEnableSmoothScrolling">Включить плавный скроллинг</s:String>
+    <s:String x:Key="StringCheckUpdatesError">Произошла ошибка при проверке новых обновлений</s:String>
+    <s:String x:Key="StringUpdateDownloadError">Произошла ошибка при загрузке обновления</s:String>
+    <s:String x:Key="StringUpdateExtractError">Произошла ошибка при извлечении обновления</s:String>
+    <s:String x:Key="StringNoUpdatesFound">​​Вы используете последнюю версию</s:String>
+    
+</ResourceDictionary>

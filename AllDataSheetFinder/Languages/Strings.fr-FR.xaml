@@ -1,0 +1,85 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <s:String x:Key="StringSearch">Rechercher</s:String>
+    <s:String x:Key="StringSearchError" xml:space = "preserve">Une erreur est survenue lors de la recherche.
+S'il vous plaît vérifier votre connexion Internet.</s:String>
+    <s:String x:Key="StringManufacturer">Fabricant</s:String>
+    <s:String x:Key="StringPartName">Nom de la pièce</s:String>
+    <s:String x:Key="StringPartDescription">Description</s:String>
+    <s:String x:Key="StringDownloadError">Une erreur est survenue lors du téléchargement Fiche</s:String>
+    <s:String x:Key="StringLoadMoreResults">Charger plus</s:String>
+    <s:String x:Key="StringAddToFavourites">Favourite</s:String>
+    <s:String x:Key="StringDoYouWantToRemoveFromFavourites">Voulez-vous vraiment supprimer cette fiche de favoris?</s:String>
+    <s:String x:Key="StringOpen">Ouvrir</s:String>
+    <s:String x:Key="StringFavourites">Favoris</s:String>
+    <s:String x:Key="StringSettings">Paramètres</s:String>
+    <s:String x:Key="StringInnerError">Erreur interne</s:String>
+    <s:String x:Key="StringIllegalCharacters">Caractères illégaux</s:String>
+    <s:String x:Key="StringFormatMustBeInRange">Doit être à portée de {0} {1}</s:String>
+    <s:String x:Key="StringSettingsTitle">Paramètres</s:String>
+    <s:String x:Key="StringMaxDatasheetsCacheSize">Maximum fiches taille du cache (MB)</s:String>
+    <s:String x:Key="StringDoYouWantClearDatasheetsCache">Avez-vous rellay souhaitez effacer les fiches cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearImagesCache">Voulez-vous vraiment effacer les images cache?</s:String>
+    <s:String x:Key="StringDoYouWantClearSavedDatasheets">Voulez-vous vraiment effacer favoris fiches?</s:String>
+    <s:String x:Key="StringFormatCurrentDatasheetsCacheSize">Taille actuelle les fiches techniques de cache: {0} MB</s:String>
+    <s:String x:Key="StringFormatCurrentImagesCacheSize">Taille actuelle images du cache: {0} KB</s:String>
+    <s:String x:Key="StringFormatCurrentSavedDatasheetsSize">Favoris Taille actuelle: {0} MB</s:String>
+    <s:String x:Key="StringClear">Effacer</s:String>
+    <s:String x:Key="StringDefault">Par défaut</s:String>
+    <s:String x:Key="StringLanguage">Langue</s:String>
+    <s:String x:Key="StringFormatLicense">Licence: {0}</s:String>
+    <s:String x:Key="StringFormatAuthor">Auteur: {0}</s:String>
+    <s:String x:Key="StringFormatVersion">Version: {0}</s:String>
+    <s:String x:Key="StringLanguageChangeRestart">Vous devez redémarrer l'application pour voir les changements de langue entièrement</s:String>
+    <s:String x:Key="StringMoreInfoError">Une erreur est survenue lors de la demande plus d'informations</s:String>
+    <s:String x:Key="StringLoadMoreInfo">Cliquez pour charger plus d'informations</s:String>
+    <s:String x:Key="StringLoadingMoreInfo">Demander plus d'informations, s'il vous plaît patienter...</s:String>
+    <s:String x:Key="stringsize">Taille</s:String>
+    <s:String x:Key="StringManufacturerSite">Site Fabricant</s:String>
+    <s:String x:Key="StringPages">Pages</s:String>
+    <s:String x:Key="StringMoreInfo">Plus d'informations</s:String>
+    <s:String x:Key="StringDoYouWantUpdateMoreInfo">Voulez-vous mettre à jour plus d'informations?</s:String>
+    <s:String x:Key="StringTags">Tags</s:String>
+    <s:String x:Key="StringManufacturerLogo">Logo du fabricant</s:String>
+    <s:String x:Key="StringSizeKB">Taille (KB)</s:String>
+    <s:String x:Key="StringEditPartTitle">Modifier part</s:String>
+    <s:String x:Key="StringCustomPath">Chemin personnalisé</s:String>
+    <s:String x:Key="StringFileNotExists">Le fichier n'existe</s:String>
+    <s:String x:Key="StringDoYouWantToRebuildTagsFromDescription">Est-ce que vous voulez reconstruire les balises de la description?</s:String>
+    <s:String x:Key="StringRebuildTagsFromDescription">Reconstruire les balises de la description</s:String>
+    <s:String x:Key="StringYes">Oui</s:String>
+    <s:String x:Key="StringNo">Non</s:String>
+    <s:String x:Key="StringSource">Source</s:String>
+    <s:String x:Key="StringOwn">propre</s:String>
+    <s:String x:Key="StringAllDataSheet">AllDataSheet</s:String>
+    <s:String x:Key="StringPdfFiles">Document PDF (* .pdf)</s:String>
+    <s:String x:Key="StringCountingPages">Comptage pages dans le document PDF. S'il vous plaît patienter ...</s:String>
+    <s:String x:Key="StringGraphicFiles">Les fichiers graphiques (*.bmp, *.gif, *.jpg, *.jpeg, *.png, *.tiff)</s:String>
+    <s:String x:Key="StringUpdateAvailable" xml:space="preserve">Une mise à jour est disponible.
+Voulez-vous télécharger et installer?</s:String>
+    <s:String x:Key="StringSearchingUpdate">Recherche de mise à jour...</s:String>
+    <s:String x:Key="StringDownloadingUpdate">Mise à jour Téléchargement...</s:String>
+    <s:String x:Key="StringExtractingUpdate">mise à jour... Extraction</s:String>
+    <s:String x:Key="StringCheckUpdates">Vérifier les mises à jour</s:String>
+    <s:String x:Key="StringUpdateTitle">Mise à jour</s:String>
+    <s:String x:Key="StringAppDataPath">Données chemin de sauvegarde</s:String>
+    <s:String x:Key="StringFavouritesOnStart">Afficher les favoris au démarrage</s:String>
+    <s:String x:Key="StringWaitForDataMove" xml:space = "preserve">Déplacement de données d'application
+S'il vous plaît patienter ...</s:String>
+    <s:String x:Key="StringDataMoveError" xml:space = "preserve">Une erreur est survenue lors du déplacement des données d'application
+Fermez toutes les fiches techniques ouvertes et essayez à nouveau</s:String>
+    <s:String x:Key="StringOldDataRemoveErrorTemplate" xml:space = "preserve">Une erreur est survenue lors de la suppression des données d'application à partir de vieux chemin
+Fermez toutes les fiches techniques ouvertes et cliquez sur OK pour réessayer ou Annuler pour ignorer
+Si vous ignorez ceci, vous devez supprimer manuellement les fichiers restants à partir
+{0}</s:String>
+    <s:String x:Key="StringFormatContactMail">Contact: {0}</s:String>
+    <s:String x:Key="StringFormatWebsite">Site Web: {0}</s:String>
+    <s:String x:Key="StringEnableSmoothScrolling">Activer le défilement régulier</s:String>
+    <s:String x:Key="StringCheckUpdatesError">Une erreur est survenue lors de la vérification des nouvelles mises à jour</s:String>
+    <s:String x:Key="StringUpdateDownloadError">Une erreur est survenue lors du téléchargement de la mise à jour</s:String>
+    <s:String x:Key="StringUpdateExtractError">Une erreur est survenue lors de l'extraction à jour</s:String>
+    <s:String x:Key="StringNoUpdatesFound">​​Vous utilisez la dernière version</s:String>
+
+</ResourceDictionary>

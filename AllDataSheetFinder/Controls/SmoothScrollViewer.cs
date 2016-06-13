@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -65,6 +61,13 @@ namespace AllDataSheetFinder.Controls
             set { SetValue(MouseWheelDeltaDividerProperty, value); }
         }
 
+        public static readonly DependencyProperty IsSmoothScrollingEnabledProperty = DependencyProperty.Register("IsSmoothScrollingEnabled", typeof(bool), typeof(SmoothScrollViewer), new PropertyMetadata(true));
+        public bool IsSmoothScrollingEnabled
+        {
+            get { return (bool)GetValue(IsSmoothScrollingEnabledProperty); }
+            set { SetValue(IsSmoothScrollingEnabledProperty, value); }
+        }
+
         private static void OnOffsetChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             SmoothScrollViewer viewer = sender as SmoothScrollViewer;
@@ -84,6 +87,12 @@ namespace AllDataSheetFinder.Controls
 
         protected override void OnMouseWheel(System.Windows.Input.MouseWheelEventArgs e)
         {
+            if (!IsSmoothScrollingEnabled)
+            {
+                base.OnMouseWheel(e);
+                return;
+            }
+
             e.Handled = true;
 
             double delta = -e.Delta / MouseWheelDeltaDivider;

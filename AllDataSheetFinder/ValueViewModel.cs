@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MVVMUtils;
+﻿using MVVMUtils;
 
 namespace AllDataSheetFinder
 {
@@ -21,7 +16,7 @@ namespace AllDataSheetFinder
         public T Value
         {
             get { return base.Model; }
-            set { base.Model = value; RaisePropertyChanged("Value"); }
+            set { base.Model = value; RaisePropertyChanged(nameof(Value)); }
         }
 
         protected override void OnPopCopy(WorkingCopyResult result)
