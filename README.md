@@ -11,7 +11,7 @@ AllDataSheetFinder is an utility for finding, downloading and organizing datashe
 - tagging
 - storing manufacturer logos
 - automatic updates
-- neat and simple interface in English or Polish
+- neat and simple interface in several languages (English, Polish, German, Russian and French)
 
 License: GNU GPL v3
 
