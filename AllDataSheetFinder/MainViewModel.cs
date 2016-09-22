@@ -38,7 +38,10 @@ namespace AllDataSheetFinder
 
             m_savedParts = new SynchronizedObservableCollection<PartViewModel, Part>(Global.SavedParts, (m) => new PartViewModel(m));
 
+#if DEBUG==false
             CheckForUpdates();
+#endif
+
             if (Global.Configuration.FavouritesOnStart) ShowFavourites(null);
         }
 
