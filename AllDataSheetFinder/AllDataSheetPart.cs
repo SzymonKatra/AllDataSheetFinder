@@ -283,7 +283,7 @@ namespace AllDataSheetFinder
 
             matchingNodes = from node in rootElement.Descendants("td")
                             where IsAttributeValueLike(node, "height", "40") && IsAttributeValueLike(node, "class", "gray_title") &&
-                                  IsAttributeValueLike(node, "width", "100")
+                                  IsAttributeValueLike(node, "width", "88")
                             select node;
 
             HtmlNode sizeNode = matchingNodes.ElementAt(2).ParentNode;
