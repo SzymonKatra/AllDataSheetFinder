@@ -291,7 +291,15 @@ namespace AllDataSheetFinder
             if (m_selectedResult.State == PartDatasheetState.Saved)
             {
                 if (Global.MessageBox(this, Global.GetStringResource("StringDoYouWantToRemoveFromFavourites"), MessageBoxExPredefinedButtons.YesNo) != MessageBoxExButton.Yes) return;
-                m_selectedResult.RemovePdf();
+                try
+                {
+                    m_selectedResult.RemovePdf();
+                }
+                catch (IOException)
+                {
+                    Global.MessageBox(this, Global.GetStringResource("StringRemoveError"), MessageBoxExPredefinedButtons.Ok);
+                    return;
+                }
                 m_savedParts.Remove(m_selectedResult);
                 if (IsFavouritesMode)
                 {

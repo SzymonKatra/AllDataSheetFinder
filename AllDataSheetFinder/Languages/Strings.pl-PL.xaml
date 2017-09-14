@@ -80,5 +80,8 @@ Jeśli to zignorujesz, powinieneś ręczenie usunąć pozostałe pliki z
     <s:String x:Key="StringUpdateDownloadError">Wystąpił błąd podczas pobierania aktualizacji</s:String>
     <s:String x:Key="StringUpdateExtractError">Wystąpił błąd podczas rozpakowywania aktualizacji</s:String>
     <s:String x:Key="StringNoUpdatesFound">Używasz najnowszej wersji</s:String>
+    <s:String x:Key="StringRemoveError" xml:space="preserve">Wystąpił błąd podczas usuwania noty katalogowej
+Najprawdopodobniej jest otwarta w zewnętrznej aplikacji
+Zamknij notę katalogową aby ją usunąć</s:String>
 
 </ResourceDictionary>
