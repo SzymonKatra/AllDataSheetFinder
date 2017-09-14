@@ -81,5 +81,8 @@ Si vous ignorez ceci, vous devez supprimer manuellement les fichiers restants à
     <s:String x:Key="StringUpdateDownloadError">Une erreur est survenue lors du téléchargement de la mise à jour</s:String>
     <s:String x:Key="StringUpdateExtractError">Une erreur est survenue lors de l'extraction à jour</s:String>
     <s:String x:Key="StringNoUpdatesFound">​​Vous utilisez la dernière version</s:String>
+    <s:String x:Key="StringRemoveError" xml:space="preserve">Une erreur s'est produite lors de la suppression de la fiche technique
+Probablement il est ouvert dans une application externe
+Veuillez fermer la fiche technique pour la supprimer</s:String>
 
 </ResourceDictionary>
