@@ -82,7 +82,7 @@ cp %cd%\AllDataSheetFinder\bin\Release\PdfSharp-wpf.dll %files%
 cp %cd%\AllDataSheetFinder\bin\Release\System.Windows.Interactivity.dll %files%
 cp %cd%\DEPENDENCIES_LICENSES.txt %files%
 cp %cd%\ICONS_LICENSES.txt %files%
-cp %cd%\LICENSE.txt %files%
+cp %cd%\LICENSE %files%
 
 cp %cd%\AllDataSheetFinderUpdater\bin\Release\AllDataSheetFinderUpdater.exe %release%
 
