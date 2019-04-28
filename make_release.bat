@@ -70,8 +70,8 @@ echo Copying files
 cp -r %cd%\AllDataSheetFinder\bin\Release\Languages %files%
 cp %cd%\AllDataSheetFinder\bin\Release\AllDataSheetFinder.exe %files%
 cp %cd%\AllDataSheetFinder\bin\Release\AllDataSheetFinder.exe.config %files%
+cp %cd%\AllDataSheetFinder\bin\Release\DotNetZip.dll %files%
 cp %cd%\AllDataSheetFinder\bin\Release\HtmlAgilityPack.dll %files%
-cp %cd%\AllDataSheetFinder\bin\Release\Ionic.Zip.dll %files%
 cp %cd%\AllDataSheetFinder\bin\Release\MigraDoc.DocumentObjectModel-wpf.dll %files%
 cp %cd%\AllDataSheetFinder\bin\Release\MigraDoc.Rendering-wpf.dll %files%
 cp %cd%\AllDataSheetFinder\bin\Release\MigraDoc.RtfRendering-wpf.dll %files%
