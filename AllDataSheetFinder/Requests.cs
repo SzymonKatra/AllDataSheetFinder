@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace AllDataSheetFinder
     {
         public static HttpWebRequest CreateDefaultRequest(string url)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(url);
+            HttpWebRequest request = WebRequest.CreateHttp(GetValidUri(url));
             request.UserAgent = Global.RequestsUserAgent;
             request.Method = WebRequestMethods.Http.Get;
             return request;
@@ -36,6 +37,12 @@ namespace AllDataSheetFinder
                 }
             }
             return result;
+        }
+
+        private static Uri GetValidUri(string url)
+        {
+            if (url.StartsWith("//")) url = url.Remove(0, 2);
+            return new UriBuilder(url) { Scheme = "http" }.Uri;
         }
     }
 }

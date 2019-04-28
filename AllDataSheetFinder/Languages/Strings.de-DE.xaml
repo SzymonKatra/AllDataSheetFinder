@@ -81,5 +81,8 @@ Wenn Sie dies ignorieren, sollten Sie löschen Sie Dateien manuell restlichen au
     <s:String x:Key="StringUpdateDownloadError">Fehler beim Update das Herunterladen</s:String>
     <s:String x:Key="StringUpdateExtractError">Fehler beim Update Extrahieren</s:String>
     <s:String x:Key="StringNoUpdatesFound">​​Sie die neueste Version mit</s:String>
-    
+    <s:String x:Key="StringRemoveError" xml:space="preserve">Beim Entfernen des Datenblatts ist ein Fehler aufgetreten
+Wahrscheinlich wird es in der externen Anwendung geöffnet
+Bitte schließen Sie das Datenblatt, um es zu entfernen</s:String>
+
 </ResourceDictionary>
